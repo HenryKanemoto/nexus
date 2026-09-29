@@ -1,1 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Sora', sans-serif;
+    background-color: #F6F7FB;
+    color: #0E1A3A;
+  }
+
+  :focus-visible {
+    outline: 2px solid #2F6BFF !important;
+    outline-offset: 2px !important;
+  }
+
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid #2F6BFF !important;
+    outline-offset: 2px !important;
+  }
+}
