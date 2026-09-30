@@ -3,11 +3,13 @@
   "version": 1,
   "cli": {
     "packageManager": "npm",
-    "analytics": "e109136b-eed5-462a-89ad-c2fae9556cb8"
+    "schematicCollections": [
+      "angular-eslint"
+    ]
   },
   "newProjectRoot": "projects",
   "projects": {
-    "frontend": {
+    "app": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -30,9 +32,6 @@
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",
-            "security": {
-              "allowedHosts": []
-            },
             "ssr": {
               "entry": "src/server.ts"
             }
@@ -56,7 +55,8 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "externalDependencies": ["@google/genai"]
             }
           },
           "defaultConfiguration": "production"
@@ -65,16 +65,25 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "frontend:build:production"
+              "buildTarget": "app:build:production"
             },
             "development": {
-              "buildTarget": "frontend:build:development"
+              "buildTarget": "app:build:development"
             }
           },
           "defaultConfiguration": "development"
         },
         "test": {
           "builder": "@angular/build:unit-test"
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }

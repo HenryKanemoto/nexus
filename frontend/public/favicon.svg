@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="116" ry="116" fill="#0b1736"/>
+  
+  <!-- Centered Emblem -->
+  <g transform="translate(256, 256) scale(1.68)">
+    <!-- Blue element -->
+    <path d="M -54, 25 
+             C -110, -5, -106, -78, -46, -96 
+             C 10, -112, 50, -75, 50, -32 
+             L 50, 68 
+             L -24, -42"
+          fill="none" 
+          stroke="#5487ff" 
+          stroke-width="28" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"/>
+
+    <!-- Yellow element -->
+    <path d="M -24, -42 
+             L -24, 68 
+             C -24, 118, 48, 126, 76, 78 
+             C 98, 42, 88, -2, 54, -25"
+          fill="none" 
+          stroke="#f5b300" 
+          stroke-width="28" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"/>
+  </g>
+</svg>

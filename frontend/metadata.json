@@ -1,0 +1,6 @@
+{
+  "name": "Nexus - Gestão de Empréstimos Escolares",
+  "description": "Sistema de gestão e controle de empréstimo de materiais e equipamentos escolares.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
