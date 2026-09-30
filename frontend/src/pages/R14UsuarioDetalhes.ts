@@ -22,7 +22,7 @@ import {Emprestimo} from '../types/models';
           <mat-icon class="text-sm w-4 h-4 flex items-center justify-center group-hover:-translate-x-0.5 transition-transform">
             arrow_back
           </mat-icon>
-          <span><- Voltar</span>
+          <span>Voltar</span>
         </a>
 
         <!-- Sininho -> R17 -->
