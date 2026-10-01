@@ -6,7 +6,4 @@ export class UsuarioController {
 
     constructor(usuarioService: UsuarioService) {}
 
-    @Get
-    
-
 }

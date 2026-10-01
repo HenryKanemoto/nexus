@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Usuario } from '../types/usuario/usuario.interface.js';
-
+import { Usuario } from '../types/Models.js';
 @Injectable()
 export class UsuarioService {
 
@@ -8,10 +7,11 @@ export class UsuarioService {
         {
             "nome": "joao",
             "items_emprestados": [{
+                "id":12,
                 "nome": "PC",
                 "tipo": "Computador",
                 "emprestado": true,
-                "dataEmprestado": "01/01/2026"
+                "dataEmprestado": new Date("2026-01-01")
             }]
         },
     ];
