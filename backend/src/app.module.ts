@@ -23,7 +23,9 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
         password: config.get('DB_PASSWORD'),
         database: config.get('DB_NAME'),
         autoLoadEntities:true,
-        synchronize:false // Essa praga qui muda o banco de dados quando ta true
+        synchronize:false, // Essa praga qui muda o banco de dados quando ta true
+        migrations:['dist/migrations/*.js'],
+        migrationsRun: true,
       })
     }),
     ItemModule,
