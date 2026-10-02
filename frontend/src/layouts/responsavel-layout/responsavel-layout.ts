@@ -213,6 +213,7 @@ export class ResponsavelLayout {
     },
     { rotulo: 'Usuários', rota: '/painel/usuarios', icone: 'group' },
     { rotulo: 'Relatórios', rota: '/painel/relatorios', icone: 'bar_chart' },
+    { rotulo: 'Histórico', rota: '/painel/historico', icone: 'history' },
     { rotulo: 'Configurações', rota: '/painel/configuracoes', icone: 'settings' },
   ];
 
