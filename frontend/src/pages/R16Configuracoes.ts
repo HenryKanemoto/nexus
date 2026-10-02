@@ -1,5 +1,4 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
-import {RouterLink} from '@angular/router';
 import {NexusStore} from '../store/nexus.store';
 import {MatIconModule} from '@angular/material/icon';
 import {PoliticaAtraso} from '../types/models';
@@ -7,7 +6,7 @@ import {PoliticaAtraso} from '../types/models';
 @Component({
   selector: 'app-r16-configuracoes',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, MatIconModule],
+  imports: [MatIconModule],
   template: `
     <div class="space-y-6 font-['Sora',sans-serif] max-w-4xl">
       <!-- Cabeçalho (Wireframe R16) -->
@@ -20,20 +19,6 @@ import {PoliticaAtraso} from '../types/models';
             Definições institucionais de penalidades e conformidade de acervo (RN06)
           </p>
         </div>
-
-        <!-- Sininho -> R17 -->
-        <a
-          routerLink="/painel/notificacoes"
-          class="relative p-2 rounded-xl text-slate-600 hover:text-[#0E1A3A] hover:bg-slate-100 transition-colors"
-          title="Notificações"
-        >
-          <mat-icon class="text-2xl">notifications</mat-icon>
-          @if (store.totalNaoLidas() > 0) {
-            <span class="absolute top-1 right-1 flex items-center justify-center min-w-4 h-4 px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold tabular-nums ring-2 ring-white">
-              {{ store.totalNaoLidas() }}
-            </span>
-          }
-        </a>
       </div>
 
       <!-- Alerta de Sucesso (Wireframe R16: mesma tela + mensagem de sucesso) -->

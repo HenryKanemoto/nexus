@@ -48,20 +48,6 @@ interface ItemRanking {
               <mat-icon class="text-sm w-4 h-4 flex items-center justify-center">expand_more</mat-icon>
             </div>
           </div>
-
-          <!-- Sininho -> R17 -->
-          <a
-            routerLink="/painel/notificacoes"
-            class="relative p-2 rounded-xl text-slate-600 hover:text-[#0E1A3A] hover:bg-slate-100 transition-colors"
-            title="Notificações"
-          >
-            <mat-icon class="text-2xl">notifications</mat-icon>
-            @if (store.totalNaoLidas() > 0) {
-              <span class="absolute top-1 right-1 flex items-center justify-center min-w-4 h-4 px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold tabular-nums ring-2 ring-white">
-                {{ store.totalNaoLidas() }}
-              </span>
-            }
-          </a>
         </div>
       </div>
 

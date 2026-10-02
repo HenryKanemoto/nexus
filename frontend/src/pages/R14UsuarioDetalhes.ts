@@ -12,7 +12,7 @@ import {Emprestimo} from '../types/models';
   imports: [RouterLink, MatIconModule, StatusBadge],
   template: `
     <div class="space-y-8 font-['Sora',sans-serif] max-w-7xl">
-      <!-- Barra Superior: Link "<- Voltar" para R13 + Sininho -> R17 (Wireframe R14) -->
+      <!-- Barra Superior: Link "<- Voltar" para R13 (Wireframe R14) -->
       <div class="flex items-center justify-between pb-2 border-b border-slate-200">
         <!-- Link "<- Voltar" -> R13 -->
         <a
@@ -23,20 +23,6 @@ import {Emprestimo} from '../types/models';
             arrow_back
           </mat-icon>
           <span>Voltar</span>
-        </a>
-
-        <!-- Sininho -> R17 -->
-        <a
-          routerLink="/painel/notificacoes"
-          class="relative p-2 rounded-xl text-slate-600 hover:text-[#0E1A3A] hover:bg-slate-100 transition-colors"
-          title="Notificações"
-        >
-          <mat-icon class="text-2xl">notifications</mat-icon>
-          @if (store.totalNaoLidas() > 0) {
-            <span class="absolute top-1 right-1 flex items-center justify-center min-w-4 h-4 px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold tabular-nums ring-2 ring-white">
-              {{ store.totalNaoLidas() }}
-            </span>
-          }
         </a>
       </div>
 

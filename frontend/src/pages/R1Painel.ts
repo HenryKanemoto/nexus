@@ -22,9 +22,6 @@ type FiltroListaPainel = 'todos' | 'atrasados' | 'ativos' | 'aprovados';
             Visão geral da operação do acervo, pendências e retiradas do dia
           </p>
         </div>
-
-        <!-- Sininho -> R17 Notificações -->
-        
       </div>
 
       <!-- Feedback de Sucesso (vindo de Retirada R5 ou Devolução R6) -->

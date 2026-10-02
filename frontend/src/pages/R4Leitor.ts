@@ -8,16 +8,16 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import {isPlatformBrowser} from '@angular/common';
-import {Router, RouterLink} from '@angular/router';
-import {NexusStore} from '../store/nexus.store';
-import {MatIconModule} from '@angular/material/icon';
-import {Html5Qrcode} from 'html5-qrcode';
+import { isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
+import { NexusStore } from '../store/nexus.store';
+import { MatIconModule } from '@angular/material/icon';
+import { Html5Qrcode } from 'html5-qrcode';
 
 @Component({
   selector: 'app-r4-leitor',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, MatIconModule],
+  imports: [MatIconModule],
   template: `
     <div class="space-y-4 sm:space-y-6 font-['Sora',sans-serif] max-w-3xl mx-auto">
       <!-- Cabeçalho (Wireframe R4) -->
@@ -30,20 +30,6 @@ import {Html5Qrcode} from 'html5-qrcode';
             Escaneie o código do item para registrar retiradas (RN05) ou devoluções
           </p>
         </div>
-
-        <!-- Sininho -> R17 -->
-        <a
-          routerLink="/painel/notificacoes"
-          class="relative p-2 rounded-xl text-slate-600 hover:text-[#0E1A3A] hover:bg-slate-100 transition-colors"
-          title="Notificações"
-        >
-          <mat-icon class="text-2xl">notifications</mat-icon>
-          @if (store.totalNaoLidas() > 0) {
-            <span class="absolute top-1 right-1 flex items-center justify-center min-w-4 h-4 px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold tabular-nums ring-2 ring-white">
-              {{ store.totalNaoLidas() }}
-            </span>
-          }
-        </a>
       </div>
 
       <!-- Aviso Explicativo de Estado ou Erro (Wireframe R4) -->

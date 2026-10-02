@@ -1,13 +1,13 @@
-import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
-import {Router, RouterLink} from '@angular/router';
-import {NexusStore} from '../store/nexus.store';
-import {MatIconModule} from '@angular/material/icon';
-import {StatusBadge} from '../components/status-badge/status-badge';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { NexusStore } from '../store/nexus.store';
+import { MatIconModule } from '@angular/material/icon';
+import { StatusBadge } from '../components/status-badge/status-badge';
 
 @Component({
   selector: 'app-r13-usuarios',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, MatIconModule, StatusBadge],
+  imports: [MatIconModule, StatusBadge],
   template: `
     <div class="space-y-6 font-['Sora',sans-serif] max-w-7xl">
       <!-- Cabeçalho (Wireframe R13) -->
@@ -20,20 +20,6 @@ import {StatusBadge} from '../components/status-badge/status-badge';
             Cadastro de alunos, professores e responsáveis pelo acervo escolar
           </p>
         </div>
-
-        <!-- Sininho -> R17 -->
-        <a
-          routerLink="/painel/notificacoes"
-          class="relative p-2 rounded-xl text-slate-600 hover:text-[#0E1A3A] hover:bg-slate-100 transition-colors"
-          title="Notificações"
-        >
-          <mat-icon class="text-2xl">notifications</mat-icon>
-          @if (store.totalNaoLidas() > 0) {
-            <span class="absolute top-1 right-1 flex items-center justify-center min-w-4 h-4 px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold tabular-nums ring-2 ring-white">
-              {{ store.totalNaoLidas() }}
-            </span>
-          }
-        </a>
       </div>
 
       <!-- Campo de Busca por Nome ou Matrícula (Wireframe R13) -->

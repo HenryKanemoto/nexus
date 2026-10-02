@@ -1,13 +1,13 @@
-import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {NexusStore} from '../store/nexus.store';
-import {MatIconModule} from '@angular/material/icon';
-import {Item} from '../types/models';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NexusStore } from '../store/nexus.store';
+import { MatIconModule } from '@angular/material/icon';
+import { Item } from '../types/models';
 
 @Component({
   selector: 'app-r8-item-form',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, MatIconModule],
+  imports: [MatIconModule],
   template: `
     <div class="space-y-6 font-['Sora',sans-serif] max-w-5xl">
       <!-- Cabeçalho (Wireframe R8) -->
@@ -20,20 +20,6 @@ import {Item} from '../types/models';
             {{ modoEdicao() ? 'Atualize as informações do equipamento' : 'Cadastre um novo equipamento no acervo escolar' }}
           </p>
         </div>
-
-        <!-- Sininho -> R17 -->
-        <a
-          routerLink="/painel/notificacoes"
-          class="relative p-2 rounded-xl text-slate-600 hover:text-[#0E1A3A] hover:bg-slate-100 transition-colors"
-          title="Notificações"
-        >
-          <mat-icon class="text-2xl">notifications</mat-icon>
-          @if (store.totalNaoLidas() > 0) {
-            <span class="absolute top-1 right-1 flex items-center justify-center min-w-4 h-4 px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold tabular-nums ring-2 ring-white">
-              {{ store.totalNaoLidas() }}
-            </span>
-          }
-        </a>
       </div>
 
       <!-- Alerta de Erro de Validação -->
