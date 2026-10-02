@@ -157,14 +157,14 @@ interface ErrosFormulario {
                     type="button"
                     (click)="perfil.set('aluno')"
                     class="py-2.5 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                    [class.bg-[#2F6BFF]]="perfil() === 'aluno'"
+                    [style.background-color]="perfil() === 'aluno' ? '#2F6BFF' : null"
                     [class.text-white]="perfil() === 'aluno'"
-                    [class.border-[#2F6BFF]]="perfil() === 'aluno'"
+                    [style.border-color]="perfil() === 'aluno' ? '#2F6BFF' : null"
                     [class.bg-slate-50]="perfil() !== 'aluno'"
                     [class.text-slate-700]="perfil() !== 'aluno'"
                     [class.border-slate-200]="perfil() !== 'aluno'"
                   >
-                    <mat-icon class="text-sm w-4 h-4 flex items-center justify-center">school</mat-icon>
+                    <mat-icon style="width: 20px; height: 20px; font-size: 20px;" class="!overflow-visible flex items-center justify-center">school</mat-icon>
                     Aluno
                   </button>
 
@@ -172,14 +172,14 @@ interface ErrosFormulario {
                     type="button"
                     (click)="perfil.set('professor')"
                     class="py-2.5 px-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                    [class.bg-[#2F6BFF]]="perfil() === 'professor'"
+                    [style.background-color]="perfil() === 'professor' ? '#2F6BFF' : null"
                     [class.text-white]="perfil() === 'professor'"
-                    [class.border-[#2F6BFF]]="perfil() === 'professor'"
+                    [style.border-color]="perfil() === 'professor' ? '#2F6BFF' : null"
                     [class.bg-slate-50]="perfil() !== 'professor'"
                     [class.text-slate-700]="perfil() !== 'professor'"
                     [class.border-slate-200]="perfil() !== 'professor'"
                   >
-                    <mat-icon class="text-sm w-4 h-4 flex items-center justify-center">psychology</mat-icon>
+                    <mat-icon style="width: 20px; height: 20px; font-size: 20px;" class="!overflow-visible flex items-center justify-center">psychology</mat-icon>
                     Professor
                   </button>
                 </div>
