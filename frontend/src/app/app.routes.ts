@@ -169,6 +169,11 @@ export const routes: Routes = [
         loadComponent: () => import('../pages/R16Configuracoes').then((m) => m.R16Configuracoes),
       },
       {
+        path: 'historico',
+        title: 'Histórico de Movimentações | Nexus',
+        loadComponent: () => import('../pages/R18Historico').then((m) => m.R18Historico),
+      },
+      {
         path: 'notificacoes',
         title: 'Notificações da Gestão | Nexus',
         loadComponent: () => import('../pages/R17Notificacoes').then((m) => m.R17Notificacoes),
