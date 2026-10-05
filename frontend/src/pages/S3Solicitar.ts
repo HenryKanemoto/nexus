@@ -141,7 +141,6 @@ interface DiaCalendario {
                   <span class="w-3 h-3 rounded bg-[#F2B705] border border-[#0E1A3A]"></span>
                   Data selecionada: <strong class="text-slate-800">{{ dataDevolucaoFormatada() }}</strong>
                 </span>
-                <span class="text-slate-400">RN02</span>
               </div>
             </div>
 

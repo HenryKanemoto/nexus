@@ -286,7 +286,7 @@ interface ItemRanking {
       <!-- Nota de Rodapé explicativa conforme Wireframe R15 -->
       <div class="text-center text-xs text-slate-500 pt-2">
         <span class="text-rose-600 font-semibold">•</span>
-        <span class="ml-1">clicar em um item dos rankings leva à ficha do item (<strong>R9</strong>)</span>
+        <span class="ml-1">clicar em um item dos rankings leva à ficha do item</span>
       </div>
     </div>
   `,

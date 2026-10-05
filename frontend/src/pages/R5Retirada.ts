@@ -73,7 +73,7 @@ import {formatDateShort} from '../lib/date-utils';
                 <div class="p-3.5 rounded-xl bg-blue-50/70 border border-blue-200 text-xs text-blue-900 flex items-start gap-2.5">
                   <mat-icon class="text-base text-[#2F6BFF] shrink-0 mt-0.5">info</mat-icon>
                   <p class="leading-relaxed">
-                    Ao confirmar a retirada, o empréstimo entra em curso oficial (<strong>RN05</strong>) e a contagem do prazo passa a valer a partir deste momento no relógio virtual.
+                    Ao confirmar a retirada, o empréstimo entra em curso oficial e a contagem do prazo passa a valer a partir deste momento no relógio virtual.
                   </p>
                 </div>
               </div>
