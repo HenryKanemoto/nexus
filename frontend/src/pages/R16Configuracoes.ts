@@ -16,7 +16,7 @@ import {PoliticaAtraso} from '../types/models';
             Configurações
           </h1>
           <p class="text-xs text-slate-500 mt-1">
-            Definições institucionais de penalidades e conformidade de acervo (RN06)
+            Definições institucionais de penalidades e conformidade de acervo
           </p>
         </div>
       </div>
@@ -165,7 +165,7 @@ import {PoliticaAtraso} from '../types/models';
 
         <!-- Nota Informativa RN06 -->
         <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-[11px] text-slate-500 leading-relaxed">
-          <strong>Regra Institucional (RN06):</strong> A política selecionada será aplicada aos próximos atrasos calculados pelo relógio virtual do sistema e aos retornos de materiais realizados a partir deste momento.
+          <strong>Regra Institucional:</strong> A política selecionada será aplicada aos próximos atrasos calculados pelo relógio virtual do sistema e aos retornos de materiais realizados a partir deste momento.
         </div>
       </div>
     </div>
@@ -190,7 +190,7 @@ export class R16Configuracoes {
     const novaPolitica = this.politicaSelecionada();
     this.store.alterarPoliticaAtraso(novaPolitica);
     this.mensagemSucesso.set(
-      'Configurações salvas com sucesso! A nova política institucional de atraso foi atualizada no sistema (RN06).'
+      'Configurações salvas com sucesso! A nova política institucional de atraso foi atualizada no sistema.'
     );
   }
 }

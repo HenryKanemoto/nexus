@@ -17,7 +17,7 @@ import { Categoria } from '../types/models';
             {{ modoEdicao() ? 'Editar categoria' : 'Nova categoria' }}
           </h1>
           <p class="text-xs text-slate-500 mt-1">
-            Configuração de limites e prazos de empréstimo (RN02, RN03)
+            Configuração de limites e prazos de empréstimo
           </p>
         </div>
       </div>
@@ -76,7 +76,7 @@ import { Categoria } from '../types/models';
                 required
                 class="block w-full rounded-xl border border-slate-300 py-2.5 px-3.5 text-xs text-slate-800 font-bold focus:border-[#2F6BFF] focus:outline-hidden focus:ring-1 focus:ring-[#2F6BFF]"
               />
-              <span class="text-[10px] text-slate-400 mt-0.5 block">Número inteiro maior que zero (RN02)</span>
+              <span class="text-[10px] text-slate-400 mt-0.5 block">Número inteiro maior que zero</span>
             </div>
 
             <!-- Limite por pessoa -->
@@ -95,7 +95,7 @@ import { Categoria } from '../types/models';
                 required
                 class="block w-full rounded-xl border border-slate-300 py-2.5 px-3.5 text-xs text-slate-800 font-bold focus:border-[#2F6BFF] focus:outline-hidden focus:ring-1 focus:ring-[#2F6BFF]"
               />
-              <span class="text-[10px] text-slate-400 mt-0.5 block">Número inteiro maior que zero (RN03)</span>
+              <span class="text-[10px] text-slate-400 mt-0.5 block">Número inteiro maior que zero</span>
             </div>
           </div>
 
@@ -175,13 +175,13 @@ export class R11CategoriaForm {
 
     const prazo = parseInt(prazoStr, 10);
     if (isNaN(prazo) || prazo <= 0 || !Number.isInteger(Number(prazoStr))) {
-      this.erroValidacao.set('O prazo máximo em dias deve ser um número inteiro maior que zero (RN02).');
+      this.erroValidacao.set('O prazo máximo em dias deve ser um número inteiro maior que zero.');
       return;
     }
 
     const limite = parseInt(limiteStr, 10);
     if (isNaN(limite) || limite <= 0 || !Number.isInteger(Number(limiteStr))) {
-      this.erroValidacao.set('O limite por pessoa deve ser um número inteiro maior que zero (RN03).');
+      this.erroValidacao.set('O limite por pessoa deve ser um número inteiro maior que zero.');
       return;
     }
 

@@ -17,7 +17,7 @@ import {calculateDiasAtraso, formatDateShort} from '../lib/date-utils';
             Registrar devolução
           </h1>
           <p class="text-xs text-slate-500 mt-1">
-            Encerramento do empréstimo, verificação de integridade e aplicação de regras de atraso (RN06, RN07)
+            Encerramento do empréstimo, verificação de integridade e aplicação de regras de atraso
           </p>
         </div>
       </div>
@@ -124,7 +124,7 @@ import {calculateDiasAtraso, formatDateShort} from '../lib/date-utils';
                     required
                   ></textarea>
                   <p class="text-[11px] text-rose-600 font-medium">
-                    marcado: item vai para manutenção + ocorrência no histórico (RN07)
+                    marcado: item vai para manutenção + ocorrência no histórico
                   </p>
                 </div>
               }

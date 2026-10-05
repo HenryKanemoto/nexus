@@ -44,7 +44,7 @@ interface ErrosFormulario {
           <div class="p-3.5 rounded-xl bg-blue-50 border border-blue-100 text-xs text-blue-900 flex items-start gap-2.5">
             <mat-icon class="text-base text-[#2F6BFF] shrink-0 mt-0.5">info</mat-icon>
             <div class="leading-relaxed">
-              <strong>Regra de Cadastro (RN08):</strong> Novas contas são criadas com status
+              <strong>Regra de Cadastro:</strong> Novas contas são criadas com status
               <span class="font-semibold text-blue-800">pendente</span> e necessitam de aprovação
               de um responsável antes de permitir empréstimos.
             </div>

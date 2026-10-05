@@ -17,7 +17,7 @@ import { formatDateShort } from '../lib/date-utils';
             Contas pendentes
           </h1>
           <p class="text-xs text-slate-500 mt-1">
-            Novos cadastros de alunos e professores aguardando liberação de acesso (RN08)
+            Novos cadastros de alunos e professores aguardando liberação de acesso
           </p>
         </div>
       </div>
@@ -55,7 +55,7 @@ import { formatDateShort } from '../lib/date-utils';
             </span>
           </div>
           <span class="text-xs text-slate-500">
-            Aprovação libera acesso ao catálogo e solicitações (RN08)
+            Aprovação libera acesso ao catálogo e solicitações
           </span>
         </div>
 
@@ -193,7 +193,7 @@ import { formatDateShort } from '../lib/date-utils';
               </div>
               <div>
                 <h3 class="font-bold text-base text-[#0E1A3A]">Confirmar Recusa de Conta</h3>
-                <p class="text-xs text-slate-500">A conta será marcada como recusada (RN08)</p>
+                <p class="text-xs text-slate-500">A conta será marcada como recusada</p>
               </div>
             </div>
 

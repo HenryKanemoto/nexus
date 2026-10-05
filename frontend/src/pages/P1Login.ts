@@ -124,7 +124,6 @@ import {Usuario} from '../types/models';
             </p>
           </div>
 
-          <!-- BLOCO DEMO: Botões de demonstração (fácil de remover depois) -->
           <div class="pt-4 border-t border-dashed border-slate-200">
             <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider text-center mb-2.5">
               Demonstração (1 clique preenche e entra)
@@ -153,16 +152,14 @@ import {Usuario} from '../types/models';
               <button
                 type="button"
                 (click)="preencherEEntrar('responsavel')"
-                class="py-2 px-2 text-center rounded-lg border border-blue-200 bg-blue-50/70 hover:bg-blue-100/70 hover:border-blue-300 text-[#2F6BFF] transition-colors cursor-pointer text-left"
+                class="py-2 px-2 text-center rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 text-slate-700 transition-colors cursor-pointer text-left"
                 title="Marta Ribeiro (Responsável Acervo)"
               >
-                <div class="text-[11px] font-bold text-[#2F6BFF] truncate">Responsável</div>
-                <div class="text-[10px] text-blue-700 truncate">Marta R.</div>
+                <div class="text-[11px] font-bold text-slate-800 truncate">Responsável</div>
+                <div class="text-[10px] text-slate-500 truncate">Marta R.</div>
               </button>
             </div>
           </div>
-          <!-- FIM DO BLOCO DEMO -->
-
         </div>
       </div>
 
@@ -175,8 +172,8 @@ export class P1Login {
   private readonly store = inject(NexusStore);
   private readonly router = inject(Router);
 
-  readonly identificador = signal('marta@escola.edu.br');
-  readonly senha = signal('123456');
+  readonly identificador = signal('');
+  readonly senha = signal('');
   readonly mostrarSenha = signal(false);
   readonly mensagemErro = signal<string | null>(null);
 

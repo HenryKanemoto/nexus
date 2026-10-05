@@ -161,7 +161,7 @@ interface ItemHistorico {
                     </span>
                   </div>
                   <p class="text-[11px] text-amber-700 font-medium mt-1">
-                    Aviso: retire no setor de materiais hoje antes que o pedido expire (RN04).
+                    Aviso: retire no setor de materiais hoje antes que o pedido expire.
                   </p>
                 </div>
               </div>
@@ -170,7 +170,7 @@ interface ItemHistorico {
               <div class="text-right sm:text-right shrink-0">
                 <span class="inline-flex items-center gap-1 text-xs font-semibold text-amber-800 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200">
                   <mat-icon class="text-xs w-3.5 h-3.5 flex items-center justify-center">store</mat-icon>
-                  Retirar com QR do Item (RN05)
+                  Retirar com QR do Item
                 </span>
               </div>
             </div>
@@ -378,7 +378,7 @@ interface ItemHistorico {
                   @case ('expirado') {
                     <span class="px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-700 font-semibold text-xs flex items-center gap-1">
                       <mat-icon class="text-xs w-3.5 h-3.5 flex items-center justify-center">timer_off</mat-icon>
-                      Expirado (RN04)
+                      Expirado
                     </span>
                   }
                 }
@@ -515,7 +515,7 @@ export class S4MeusEmprestimos {
         situacaoFinal: sol.status === 'recusada' ? 'recusado' : 'expirado',
         rotuloSituacao: sol.status === 'recusada' ? 'Recusado' : 'Expirado',
         dataEvento: sol.avaliadoEm || sol.criadoEm,
-        detalhe: sol.status === 'expirada' ? 'Não retirado no dia da aprovação (RN04)' : undefined,
+        detalhe: sol.status === 'expirada' ? 'Não retirado no dia da aprovação' : undefined,
       });
     });
 
@@ -579,7 +579,7 @@ export class S4MeusEmprestimos {
   lembrarResponsavel(solicitacaoId: string) {
     const res = this.store.enviarLembrete(solicitacaoId);
     if (res.sucesso) {
-      this.mensagemSucesso.set('Lembrete enviado ao responsável com sucesso! (RN10)');
+      this.mensagemSucesso.set('Lembrete enviado ao responsável com sucesso!');
     }
   }
 

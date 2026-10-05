@@ -27,7 +27,7 @@ import { Html5Qrcode } from 'html5-qrcode';
             Leitor de QR code
           </h1>
           <p class="text-xs text-slate-500 mt-0.5 sm:mt-1">
-            Escaneie o código do item para registrar retiradas (RN05) ou devoluções
+            Escaneie o código do item para registrar retiradas ou devoluções
           </p>
         </div>
       </div>
@@ -271,7 +271,7 @@ export class R4Leitor {
       );
     } else if (item.status === 'solicitado') {
       this.mensagemAviso.set(
-        `O item "${item.nome}" (${item.patrimonio}) possui uma solicitação ainda pendente de análise. O responsável deve aprová-la primeiro em "Solicitações pendentes" (R2).`
+        `O item "${item.nome}" (${item.patrimonio}) possui uma solicitação ainda pendente de análise. O responsável deve aprová-la primeiro em "Solicitações pendentes".`
       );
     } else if (item.status === 'manutencao') {
       this.mensagemAviso.set(

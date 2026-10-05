@@ -17,7 +17,7 @@ import {formatDateShort} from '../lib/date-utils';
             Confirmar retirada
           </h1>
           <p class="text-xs text-slate-500 mt-1">
-            Entrega do equipamento ao solicitante. O prazo oficial inicia neste momento (RN05)
+            Entrega do equipamento ao solicitante. O prazo oficial inicia neste momento
           </p>
         </div>
       </div>
@@ -175,7 +175,7 @@ export class R5Retirada {
     if (res.sucesso) {
       // Volta ao painel com mensagem de sucesso
       this.router.navigate(['/painel'], {
-        state: { sucesso: `Retirada registrada com sucesso para "${it.nome}". O prazo oficial começou a contar agora (RN05).` },
+        state: { sucesso: `Retirada registrada com sucesso para "${it.nome}". O prazo oficial começou a contar agora.` },
       });
     }
   }

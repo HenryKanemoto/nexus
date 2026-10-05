@@ -74,7 +74,7 @@ interface ItemRanking {
                 (click)="abrirItem(item.id)"
                 (keydown.enter)="abrirItem(item.id)"
                 class="group cursor-pointer select-none space-y-1.5"
-                title="Ver detalhes de {{ item.nome }} (R9)"
+                title="Ver detalhes de {{ item.nome }}"
               >
                 <div class="flex items-center justify-between text-xs">
                   <span class="font-bold text-slate-800 group-hover:text-[#2F6BFF] transition-colors truncate max-w-[240px]">
@@ -156,7 +156,7 @@ interface ItemRanking {
                       <a
                         [routerLink]="['/painel/itens', atraso.itemId]"
                         class="text-[#2F6BFF] hover:underline font-bold"
-                        title="Ver detalhes do item (R9)"
+                        title="Ver detalhes do item"
                       >
                         {{ it?.nome || 'Item' }}
                       </a>
@@ -211,7 +211,7 @@ interface ItemRanking {
             Itens com mais defeitos
           </h2>
           <span class="text-[11px] text-slate-400 font-medium">
-            Histórico de avarias e ocorrências (RN07)
+            Histórico de avarias e ocorrências
           </span>
         </div>
 
@@ -232,7 +232,7 @@ interface ItemRanking {
                     <a
                       [routerLink]="['/painel/itens', def.id]"
                       class="text-[#2F6BFF] hover:underline font-bold inline-block"
-                      title="Ver ficha do equipamento (R9)"
+                      title="Ver ficha do equipamento"
                     >
                       {{ def.nome }}
                     </a>

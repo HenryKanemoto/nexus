@@ -120,7 +120,7 @@ import {formatDateShort} from '../lib/date-utils';
               } @else {
                 <!-- Se Pendente -->
                 <p class="text-amber-800 leading-relaxed">
-                  Cadastro aguardando liberação e aprovação de um responsável pelo acervo escolar (RN08).
+                  Cadastro aguardando liberação e aprovação de um responsável pelo acervo escolar.
                 </p>
               }
             </div>
@@ -134,7 +134,7 @@ import {formatDateShort} from '../lib/date-utils';
               Ocorrências
             </h2>
             <span class="text-xs text-slate-500">
-              Registros de avarias ou peças danificadas vinculadas (RN07)
+              Registros de avarias ou peças danificadas vinculadas
             </span>
           </div>
 

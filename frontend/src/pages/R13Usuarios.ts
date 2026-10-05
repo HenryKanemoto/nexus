@@ -138,7 +138,7 @@ import { StatusBadge } from '../components/status-badge/status-badge';
 
       <div class="p-3.5 bg-white sm:bg-slate-50/50 rounded-xl sm:rounded-2xl border border-slate-200 text-[11px] text-slate-500 flex items-center justify-between">
         <span>Total: <strong>{{ usuariosFiltrados().length }}</strong> usuário(s)</span>
-        <span class="text-[10px] text-slate-400 italic">Clique na linha ou cartão para ver o histórico (R14)</span>
+        <span class="text-[10px] text-slate-400 italic">Clique na linha ou cartão para ver o histórico</span>
       </div>
     </div>
   `,

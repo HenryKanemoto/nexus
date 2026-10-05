@@ -116,7 +116,7 @@ type FiltroListaPainel = 'todos' | 'atrasados' | 'ativos' | 'aprovados';
             Ler QR code
           </span>
           <span class="text-[10px] text-slate-500 font-medium">
-            Retiradas e Devoluções (R4)
+            Retiradas e Devoluções
           </span>
         </a>
       </div>
@@ -260,7 +260,7 @@ type FiltroListaPainel = 'todos' | 'atrasados' | 'ativos' | 'aprovados';
                       class="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-medium text-[11px] transition-colors shadow-2xs inline-flex items-center gap-1"
                     >
                       <mat-icon class="text-xs w-3.5 h-3.5 flex items-center justify-center">keyboard_return</mat-icon>
-                      Devolver (R6)
+                      Devolver
                     </a>
                   </td>
                 </tr>
@@ -289,7 +289,7 @@ type FiltroListaPainel = 'todos' | 'atrasados' | 'ativos' | 'aprovados';
             </span>
           </div>
           <span class="text-[11px] text-amber-700 font-medium">
-            Expira ao fim do dia se não retirado (RN04)
+            Expira ao fim do dia se não retirado
           </span>
         </div>
 
@@ -325,7 +325,7 @@ type FiltroListaPainel = 'todos' | 'atrasados' | 'ativos' | 'aprovados';
                       class="px-2.5 py-1 rounded-lg bg-[#2F6BFF] hover:bg-blue-600 text-white font-medium text-[11px] transition-colors shadow-2xs inline-flex items-center gap-1"
                     >
                       <mat-icon class="text-xs w-3.5 h-3.5 flex items-center justify-center">qr_code</mat-icon>
-                      Registrar Retirada (R5)
+                      Registrar Retirada
                     </a>
                   </td>
                 </tr>

@@ -16,7 +16,7 @@ import {MatIconModule} from '@angular/material/icon';
             Categorias
           </h1>
           <p class="text-xs text-slate-500 mt-1">
-            Políticas por categoria: prazo máximo (RN02) e limite simultâneo por pessoa (RN03)
+            Políticas por categoria: prazo máximo e limite simultâneo por pessoa
           </p>
         </div>
 
@@ -139,7 +139,7 @@ import {MatIconModule} from '@angular/material/icon';
                 class="w-full py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition-colors flex items-center justify-center gap-1.5 shadow-2xs"
               >
                 <mat-icon class="text-xs w-4 h-4 flex items-center justify-center">edit</mat-icon>
-                <span>Editar categoria (R11)</span>
+                <span>Editar categoria</span>
               </a>
             </div>
           </div>

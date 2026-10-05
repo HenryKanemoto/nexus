@@ -25,7 +25,7 @@ interface ItemManutencaoLinha {
             Manutenção
           </h1>
           <p class="text-xs text-slate-500 mt-1">
-            Equipamentos fora de catálogo aguardando reparo técnico (RN07)
+            Equipamentos fora de catálogo aguardando reparo técnico
           </p>
         </div>
       </div>
@@ -67,7 +67,7 @@ interface ItemManutencaoLinha {
                     <a
                       [routerLink]="['/painel/itens', linha.item.id]"
                       class="group block"
-                      title="Ver detalhes do equipamento (R9)"
+                      title="Ver detalhes do equipamento"
                     >
                       <strong class="font-bold text-[#0E1A3A] group-hover:text-[#2F6BFF] transition-colors block text-xs sm:text-sm">
                         {{ linha.item.nome }}
@@ -157,7 +157,7 @@ interface ItemManutencaoLinha {
 
       <div class="p-3.5 bg-white sm:bg-slate-50/50 rounded-xl sm:rounded-2xl border border-slate-200 text-[11px] text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-1 text-center sm:text-left">
         <span>Itens em manutenção: <strong>{{ itensEmManutencao().length }}</strong></span>
-        <span class="text-[10px] text-slate-400">Consertado: o item volta ao catálogo como "disponível" (RN07)</span>
+        <span class="text-[10px] text-slate-400">Consertado: o item volta ao catálogo como "disponível"</span>
       </div>
     </div>
   `,
@@ -212,7 +212,7 @@ export class R12Manutencao {
     }
 
     this.mensagemSucesso.set(
-      `O equipamento "${linha.item.nome}" (${linha.item.patrimonio}) foi consertado e retornou como DISPONÍVEL ao catálogo escolar (RN07).`
+      `O equipamento "${linha.item.nome}" (${linha.item.patrimonio}) foi consertado e retornou como DISPONÍVEL ao catálogo escolar.`
     );
   }
 }

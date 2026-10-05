@@ -18,7 +18,7 @@ import {differenceInHours, formatDateShort, parseDate} from '../lib/date-utils';
             Solicitações pendentes
           </h1>
           <p class="text-xs text-slate-500 mt-1">
-            Avaliação de pedidos de empréstimo de alunos e professores (RN01)
+            Avaliação de pedidos de empréstimo de alunos e professores
           </p>
         </div>
       </div>
@@ -56,7 +56,7 @@ import {differenceInHours, formatDateShort, parseDate} from '../lib/date-utils';
             </span>
           </div>
           <span class="text-xs text-slate-500">
-            Todo pedido necessita de aprovação prévia (RN01)
+            Todo pedido necessita de aprovação prévia
           </span>
         </div>
 
@@ -83,7 +83,7 @@ import {differenceInHours, formatDateShort, parseDate} from '../lib/date-utils';
                       @if (s.lembreteEnviadoEm) {
                         <span
                           class="px-1.5 py-0.5 rounded bg-amber-100 border border-amber-300 text-amber-900 font-bold text-[10px] shrink-0"
-                          title="Este solicitante enviou um lembrete de cobrança (RN10)"
+                          title="Este solicitante enviou um lembrete de cobrança"
                         >
                           (!) Lembrete
                         </span>
@@ -218,7 +218,7 @@ import {differenceInHours, formatDateShort, parseDate} from '../lib/date-utils';
             </span>
           </div>
           <span class="text-[11px] text-amber-700 font-medium">
-            não retirado até o fim do dia -> expira (RN04)
+            não retirado até o fim do dia -> expira
           </span>
         </div>
 
@@ -304,7 +304,7 @@ import {differenceInHours, formatDateShort, parseDate} from '../lib/date-utils';
                   class="w-full py-2 rounded-xl bg-[#2F6BFF] hover:bg-blue-600 text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5 shadow-2xs"
                 >
                   <mat-icon class="text-xs w-3.5 h-3.5 flex items-center justify-center">qr_code_scanner</mat-icon>
-                  <span>Registrar Retirada (R5)</span>
+                  <span>Registrar Retirada</span>
                 </a>
               </div>
             </div>
@@ -366,7 +366,7 @@ import {differenceInHours, formatDateShort, parseDate} from '../lib/date-utils';
                 class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-xs cursor-pointer flex items-center gap-1.5"
               >
                 <mat-icon class="text-xs w-3.5 h-3.5 flex items-center justify-center">close</mat-icon>
-                <span>Confirmar Recusa (RN09)</span>
+                <span>Confirmar Recusa</span>
               </button>
             </div>
           </div>

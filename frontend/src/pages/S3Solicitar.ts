@@ -151,7 +151,7 @@ interface DiaCalendario {
               <div class="p-4 sm:p-5 rounded-2xl border-2 border-dashed border-slate-300 bg-white/70 space-y-2">
                 <div class="flex items-center gap-2 text-xs font-bold text-[#0E1A3A]">
                   <mat-icon class="text-base text-[#2F6BFF]">warning_amber</mat-icon>
-                  <span>Atenção: Retirada no mesmo dia (RN04)</span>
+                  <span>Atenção: Retirada no mesmo dia</span>
                 </div>
                 <p class="text-xs text-slate-600 leading-relaxed">
                   Se aprovado, retire o item no <strong>MESMO DIA</strong>. Senão o pedido expira automaticamente ao fim do expediente e o equipamento retorna para o acervo.

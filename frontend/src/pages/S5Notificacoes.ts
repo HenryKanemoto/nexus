@@ -81,7 +81,7 @@ import {Notificacao, TipoNotificacao} from '../types/models';
 
             <!-- Seta indicativa para S4 -->
             <div class="hidden sm:flex items-center text-slate-400 group-hover:text-[#2F6BFF] group-hover:translate-x-0.5 transition-all text-xs font-semibold shrink-0 gap-1 pt-1">
-              <span>Ver em S4</span>
+              <span>Ver em</span><strong>Meus empréstimos</strong>
               <mat-icon class="text-sm">arrow_forward</mat-icon>
             </div>
           </div>

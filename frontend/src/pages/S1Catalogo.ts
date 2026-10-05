@@ -15,7 +15,7 @@ import {MatIconModule} from '@angular/material/icon';
           <div class="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-start gap-3">
             <mat-icon class="text-rose-600 shrink-0 mt-0.5">lock</mat-icon>
             <div>
-              <strong class="font-bold">Conta Bloqueada por Pendência de Atraso (RN06):</strong>
+              <strong class="font-bold">Conta Bloqueada por Pendência de Atraso:</strong>
               <p class="mt-0.5 text-rose-700">
                 Você possui itens com devolução em atraso. É possível visualizar os itens do catálogo, mas novas solicitações estão suspensas até a devolução na coordenação.
               </p>
@@ -40,7 +40,7 @@ import {MatIconModule} from '@angular/material/icon';
           Catálogo
         </h1>
         <p class="text-xs text-slate-500 mt-1">
-          Materiais e equipamentos disponíveis para solicitação de empréstimo (RN09)
+          Materiais e equipamentos disponíveis para solicitação de empréstimo
         </p>
       </div>
 
