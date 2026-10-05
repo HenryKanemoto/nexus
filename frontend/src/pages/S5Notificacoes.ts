@@ -103,7 +103,7 @@ import {Notificacao, TipoNotificacao} from '../types/models';
         <span class="inline-block w-3 h-3 rounded-full bg-[#FEF9C3] border border-amber-300"></span>
         <span>amarelo = não lida</span>
         <span>·</span>
-        <span>clicar no aviso leva a <strong>Meus empréstimos (S4)</strong></span>
+        <span>clicar no aviso leva a <strong>Meus empréstimos</strong></span>
       </div>
     </div>
   `,

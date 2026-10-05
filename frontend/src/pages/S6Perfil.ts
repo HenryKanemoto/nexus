@@ -98,7 +98,7 @@ import {formatDateShort} from '../lib/date-utils';
                       class="text-[#2F6BFF] hover:underline font-bold inline-flex items-center gap-1 group"
                     >
                       <span>Ir para o item atrasado</span>
-                      <span class="text-xs group-hover:translate-x-0.5 transition-transform">-> S4</span>
+                      <span class="text-xs group-hover:translate-x-0.5 transition-transform">-> Meus empréstimos</span>
                     </a>
                   </div>
                 </div>
