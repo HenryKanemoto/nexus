@@ -60,7 +60,7 @@ import {Usuario} from '../types/models';
                   type="text"
                   [value]="identificador()"
                   (input)="identificador.set($any($event.target).value); mensagemErro.set(null)"
-                  placeholder="ex: ana.souza@escola.edu.br ou ALU-1001"
+                  placeholder="ex: camila@escola.edu.br ou ALU-0001"
                   required
                   autocomplete="username"
                   class="block w-full rounded-xl border border-slate-300 bg-white py-2.5 pl-10 pr-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#2F6BFF] focus:outline-hidden focus:ring-1 focus:ring-[#2F6BFF]"
