@@ -108,7 +108,7 @@ import {StatusBadge} from '../components/status-badge/status-badge';
                   <span>Atalho de Demonstração</span>
                 </div>
                 <p class="text-[11px] text-slate-600 mb-2.5 leading-relaxed">
-                  Para testar o fluxo de aprovação sem precisar trocar para o login da responsável Marta, você pode aprovar imediatamente:
+                  Para testar o fluxo de aprovação sem precisar trocar para o login da responsável Enzo, você pode aprovar imediatamente:
                 </p>
                 <button
                   type="button"

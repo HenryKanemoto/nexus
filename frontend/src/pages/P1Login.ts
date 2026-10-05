@@ -133,30 +133,30 @@ import {Usuario} from '../types/models';
                 type="button"
                 (click)="preencherEEntrar('aluno')"
                 class="py-2 px-2 text-center rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 text-slate-700 transition-colors cursor-pointer text-left"
-                title="Ana Souza (Aluna Ativa)"
+                title="Camila Cristina (Aluna Ativa)"
               >
                 <div class="text-[11px] font-bold text-slate-800 truncate">Aluno</div>
-                <div class="text-[10px] text-slate-500 truncate">Ana Souza</div>
+                <div class="text-[10px] text-slate-500 truncate">Camila Cristina</div>
               </button>
 
               <button
                 type="button"
                 (click)="preencherEEntrar('professor')"
                 class="py-2 px-2 text-center rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 text-slate-700 transition-colors cursor-pointer text-left"
-                title="Prof. Carlos Mendes (Professor Ativo)"
+                title="Prof. Gustavo Machado (Professor Ativo)"
               >
                 <div class="text-[11px] font-bold text-slate-800 truncate">Professor</div>
-                <div class="text-[10px] text-slate-500 truncate">Prof. Carlos</div>
+                <div class="text-[10px] text-slate-500 truncate">Prof. Gustavo</div>
               </button>
 
               <button
                 type="button"
                 (click)="preencherEEntrar('responsavel')"
                 class="py-2 px-2 text-center rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 text-slate-700 transition-colors cursor-pointer text-left"
-                title="Marta Ribeiro (Responsável Acervo)"
+                title="Enzo Capiel (Responsável Acervo)"
               >
                 <div class="text-[11px] font-bold text-slate-800 truncate">Responsável</div>
-                <div class="text-[10px] text-slate-500 truncate">Marta R.</div>
+                <div class="text-[10px] text-slate-500 truncate">Enzo Capiel</div>
               </button>
             </div>
           </div>
@@ -183,13 +183,13 @@ export class P1Login {
 
   preencherEEntrar(perfil: 'aluno' | 'professor' | 'responsavel') {
     if (perfil === 'aluno') {
-      this.identificador.set('ana.souza@escola.edu.br');
+      this.identificador.set('camila@escola.edu.br');
       this.senha.set('123456');
     } else if (perfil === 'professor') {
-      this.identificador.set('carlos.mendes@escola.edu.br');
+      this.identificador.set('gustavo@escola.edu.br');
       this.senha.set('123456');
     } else {
-      this.identificador.set('marta@escola.edu.br');
+      this.identificador.set('enzo@escola.edu.br');
       this.senha.set('123456');
     }
     this.mensagemErro.set(null);

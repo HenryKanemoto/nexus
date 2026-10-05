@@ -45,7 +45,38 @@ function getInitialDemoState(): NexusState {
   const agoraIso = baseDate.toISOString();
 
   // Usuários
-  const usuarios: Usuario[] = [];
+  const usuarios: Usuario[] = [
+    {
+      id: 'user-enzo',
+      nome: 'Enzo Capiel',
+      email: 'enzo@escola.edu.br',
+      matricula: 'RESP-001',
+      senha: '123456',
+      perfil: 'responsavel',
+      status: 'ativa',
+      criadoEm: agoraIso,
+    },
+    {
+      id: 'user-gusta',
+      nome: 'Gustavo Machado',
+      email: 'gustavo@escola.edu.br',
+      matricula: 'PROF-001',
+      senha: '123456',
+      perfil: 'professor',
+      status: 'ativa',
+      criadoEm: agoraIso,
+    },
+    {
+      id: 'user-camila',
+      nome: 'Camila Cristina',
+      email: 'camila@escola.edu.br',
+      matricula: 'ALU-0001',
+      senha: '123456',
+      perfil: 'aluno',
+      status: 'ativa',
+      criadoEm: agoraIso,
+    }
+  ];
 
   // Categorias
   const categorias: Categoria[] = [
@@ -158,7 +189,7 @@ function getInitialDemoState(): NexusState {
       descricao: 'Mini PC 4GB RAM com cartão microSD 64GB e fonte oficial.',
       patrimonio: 'NX-0008',
       codigoQr: 'NX-ELET-003',
-      status: 'disponivel', // Solicitado por Ana Souza há 20min
+      status: 'disponivel',
     },
     {
       id: 'item-09',
@@ -185,7 +216,7 @@ function getInitialDemoState(): NexusState {
       descricao: 'Parafusadeira/Furadeira sem fio com bateria e carregador.',
       patrimonio: 'NX-0011',
       codigoQr: 'NX-FERR-002',
-      status: 'disponivel', // Em manutenção com ocorrência
+      status: 'disponivel',
     },
     {
       id: 'item-12',
