@@ -20,7 +20,7 @@ import {
   formatDateShort,
   isDayEnded,
   parseDate,
-  toDateInputValue,
+  // toDateInputValue,
 } from '../lib/date-utils';
 
 const STORAGE_KEY = 'nexus_app_state_v2';
@@ -41,91 +41,11 @@ export interface NexusState {
 function getInitialDemoState(): NexusState {
   // Start simulated clock today at 09:00:00
   const baseDate = new Date();
-  baseDate.setHours(9, 0, 0, 0);
+  baseDate.setHours(6, 0, 0, 0);
   const agoraIso = baseDate.toISOString();
 
-  // Reference dates relative to agora
-  const ha3Horas = addHours(baseDate, -3).toISOString();
-  const ha2Horas = addHours(baseDate, -2).toISOString();
-  const ha20Minutos = new Date(baseDate.getTime() - 20 * 60 * 1000).toISOString();
-  const hojeAs8e30 = new Date(baseDate);
-  hojeAs8e30.setHours(8, 30, 0, 0);
-  const hojeAs8e30Iso = hojeAs8e30.toISOString();
-
-  const ontem = addDays(baseDate, -1);
-  const ha2Dias = addDays(baseDate, -2);
-  const ha5Dias = addDays(baseDate, -5);
-  const ha10Dias = addDays(baseDate, -10);
-  const ha7Dias = addDays(baseDate, -7);
-  const amanha = addDays(baseDate, 1);
-  const daquiA2Dias = addDays(baseDate, 2);
-  const daquiA3Dias = addDays(baseDate, 3);
-  const daquiA7Dias = addDays(baseDate, 7);
-
-  // Usuários de demonstração (senha padrão de todos: 123456 conforme especificação)
-  const usuarios: Usuario[] = [
-    {
-      id: 'user-marta',
-      nome: 'Marta Ribeiro',
-      email: 'marta@escola.edu.br',
-      matricula: 'RESP-001',
-      senha: '123456',
-      perfil: 'responsavel',
-      status: 'ativa',
-      criadoEm: ha10Dias.toISOString(),
-    },
-    {
-      id: 'user-ana',
-      nome: 'Ana Souza',
-      email: 'ana.souza@escola.edu.br',
-      matricula: 'ALU-1001',
-      senha: '123456',
-      perfil: 'aluno',
-      status: 'ativa',
-      criadoEm: ha10Dias.toISOString(),
-    },
-    {
-      id: 'user-carlos',
-      nome: 'Prof. Carlos Mendes',
-      email: 'carlos.mendes@escola.edu.br',
-      matricula: 'PROF-2001',
-      senha: '123456',
-      perfil: 'professor',
-      status: 'ativa',
-      criadoEm: ha10Dias.toISOString(),
-    },
-    {
-      id: 'user-bruno',
-      nome: 'Bruno Lima',
-      email: 'bruno.lima@escola.edu.br',
-      matricula: 'ALU-1002',
-      senha: '123456',
-      perfil: 'aluno',
-      status: 'bloqueada', // bloqueado devido ao item atrasado (política rígida)
-      criadoEm: ha10Dias.toISOString(),
-    },
-    {
-      id: 'user-elisa',
-      nome: 'Elisa Rocha',
-      email: 'elisa.rocha@escola.edu.br',
-      matricula: 'ALU-1003',
-      senha: '123456',
-      perfil: 'aluno',
-      status: 'suspensa', // suspensa por mais 2 dias
-      suspensoAte: daquiA2Dias.toISOString(),
-      criadoEm: ha10Dias.toISOString(),
-    },
-    {
-      id: 'user-diego',
-      nome: 'Diego Alves',
-      email: 'diego.alves@escola.edu.br',
-      matricula: 'ALU-1004',
-      senha: '123456',
-      perfil: 'aluno',
-      status: 'pendente', // recém-cadastrado, aguardando aprovação
-      criadoEm: ha20Minutos,
-    },
-  ];
+  // Usuários
+  const usuarios: Usuario[] = [];
 
   // Categorias
   const categorias: Categoria[] = [
@@ -139,7 +59,7 @@ function getInitialDemoState(): NexusState {
     {
       id: 'cat-notebooks',
       nome: 'Notebooks',
-      prazoMaxDias: 3,
+      prazoMaxDias: 2,
       limitePorPessoa: 1,
       descricao: 'Computadores portáteis para atividades pedagógicas e acadêmicas.',
     },
@@ -147,7 +67,7 @@ function getInitialDemoState(): NexusState {
       id: 'cat-eletronica',
       nome: 'Kits de eletrônica',
       prazoMaxDias: 7,
-      limitePorPessoa: 2,
+      limitePorPessoa: 3,
       descricao: 'Plataformas de prototipagem Arduino, Raspberry Pi e componentes.',
     },
     {
@@ -160,7 +80,7 @@ function getInitialDemoState(): NexusState {
     {
       id: 'cat-laboratorio',
       nome: 'Instrumentos de laboratório',
-      prazoMaxDias: 3,
+      prazoMaxDias: 2,
       limitePorPessoa: 2,
       descricao: 'Microscópios, balanças de precisão e sensores laboratoriais.',
     },
@@ -184,7 +104,7 @@ function getInitialDemoState(): NexusState {
       descricao: 'Projetor 4000 lumens de alto contraste para auditório.',
       patrimonio: 'NX-0002',
       codigoQr: 'NX-PROJ-002',
-      status: 'reservado', // pedido aprovado hoje aguardando retirada
+      status: 'disponivel',
     },
     {
       id: 'item-03',
@@ -193,7 +113,7 @@ function getInitialDemoState(): NexusState {
       descricao: 'Intel Core i5 11ª Gen, 16GB RAM, SSD 256GB, tela 14".',
       patrimonio: 'NX-0003',
       codigoQr: 'NX-NOTE-001',
-      status: 'emprestado', // Emprestado para Ana Souza
+      status: 'disponivel', // Emprestado para Ana Souza
     },
     {
       id: 'item-04',
@@ -202,7 +122,7 @@ function getInitialDemoState(): NexusState {
       descricao: 'Intel Core i5 11ª Gen, 16GB RAM, SSD 256GB, tela 14".',
       patrimonio: 'NX-0004',
       codigoQr: 'NX-NOTE-002',
-      status: 'atrasado', // Bruno Lima atrasado há 2 dias
+      status: 'disponivel', // Bruno Lima atrasado há 2 dias
     },
     {
       id: 'item-05',
@@ -220,7 +140,7 @@ function getInitialDemoState(): NexusState {
       descricao: 'Placa Uno R3 com cabos, protoboard, LEDs e sensores.',
       patrimonio: 'NX-0006',
       codigoQr: 'NX-ELET-001',
-      status: 'solicitado', // Solicitado pelo Prof. Carlos há 3h (permite lembrete)
+      status: 'disponivel', // Solicitado pelo Prof. Carlos há 3h (permite lembrete)
     },
     {
       id: 'item-07',
@@ -238,7 +158,7 @@ function getInitialDemoState(): NexusState {
       descricao: 'Mini PC 4GB RAM com cartão microSD 64GB e fonte oficial.',
       patrimonio: 'NX-0008',
       codigoQr: 'NX-ELET-003',
-      status: 'solicitado', // Solicitado por Ana Souza há 20min
+      status: 'disponivel', // Solicitado por Ana Souza há 20min
     },
     {
       id: 'item-09',
@@ -265,7 +185,7 @@ function getInitialDemoState(): NexusState {
       descricao: 'Parafusadeira/Furadeira sem fio com bateria e carregador.',
       patrimonio: 'NX-0011',
       codigoQr: 'NX-FERR-002',
-      status: 'manutencao', // Em manutenção com ocorrência
+      status: 'disponivel', // Em manutenção com ocorrência
     },
     {
       id: 'item-12',
@@ -306,263 +226,20 @@ function getInitialDemoState(): NexusState {
   ];
 
   // Solicitações
-  const solicitacoes: Solicitacao[] = [
-    // 1 pedido aprovado aguardando retirada hoje (Projetor BenQ)
-    {
-      id: 'solic-01',
-      solicitanteId: 'user-carlos',
-      itemId: 'item-02',
-      avaliadoPor: 'user-marta',
-      devolucaoDesejada: toDateInputValue(amanha),
-      status: 'aprovada',
-      criadoEm: hojeAs8e30Iso,
-      avaliadoEm: hojeAs8e30Iso,
-    },
-    // 1 pedido pendente há 3 horas (Kit Arduino #1) - permite lembrete
-    {
-      id: 'solic-02',
-      solicitanteId: 'user-carlos',
-      itemId: 'item-06',
-      devolucaoDesejada: toDateInputValue(daquiA7Dias),
-      status: 'pendente',
-      criadoEm: ha3Horas,
-    },
-    // 1 pedido pendente há 20 minutos (Kit Raspberry Pi 4)
-    {
-      id: 'solic-03',
-      solicitanteId: 'user-ana',
-      itemId: 'item-08',
-      devolucaoDesejada: toDateInputValue(daquiA3Dias),
-      status: 'pendente',
-      criadoEm: ha20Minutos,
-    },
-    // Solicitação histórica concluída da Ana (Notebook #1)
-    {
-      id: 'solic-04',
-      solicitanteId: 'user-ana',
-      itemId: 'item-03',
-      avaliadoPor: 'user-marta',
-      devolucaoDesejada: toDateInputValue(amanha),
-      status: 'concluida',
-      criadoEm: ontem.toISOString(),
-      avaliadoEm: ontem.toISOString(),
-    },
-    // Solicitação histórica concluída do Bruno (Notebook #2)
-    {
-      id: 'solic-05',
-      solicitanteId: 'user-bruno',
-      itemId: 'item-04',
-      avaliadoPor: 'user-marta',
-      devolucaoDesejada: toDateInputValue(ha2Dias),
-      status: 'concluida',
-      criadoEm: ha5Dias.toISOString(),
-      avaliadoEm: ha5Dias.toISOString(),
-    },
-    // 3 solicitações passadas concluídas
-    {
-      id: 'solic-06',
-      solicitanteId: 'user-carlos',
-      itemId: 'item-13',
-      avaliadoPor: 'user-marta',
-      devolucaoDesejada: toDateInputValue(ha7Dias),
-      status: 'concluida',
-      criadoEm: ha10Dias.toISOString(),
-      avaliadoEm: ha10Dias.toISOString(),
-    },
-    {
-      id: 'solic-07',
-      solicitanteId: 'user-ana',
-      itemId: 'item-10',
-      avaliadoPor: 'user-marta',
-      devolucaoDesejada: toDateInputValue(ha5Dias),
-      status: 'concluida',
-      criadoEm: ha7Dias.toISOString(),
-      avaliadoEm: ha7Dias.toISOString(),
-    },
-    {
-      id: 'solic-08',
-      solicitanteId: 'user-bruno',
-      itemId: 'item-12',
-      avaliadoPor: 'user-marta',
-      devolucaoDesejada: toDateInputValue(ha7Dias),
-      status: 'concluida',
-      criadoEm: ha10Dias.toISOString(),
-      avaliadoEm: ha10Dias.toISOString(),
-    },
-  ];
+  const solicitacoes: Solicitacao[] = [];
 
   // Empréstimos
-  const emprestimos: Emprestimo[] = [
-    // 1 empréstimo ativo da Ana (Notebook Dell #1)
-    {
-      id: 'emp-01',
-      solicitacaoId: 'solic-04',
-      itemId: 'item-03',
-      usuarioId: 'user-ana',
-      registradoPor: 'user-marta',
-      retiradoEm: ontem.toISOString(),
-      devolucaoPrevista: toDateInputValue(amanha),
-      diasAtraso: 0,
-    },
-    // 1 empréstimo do Bruno atrasado há 2 dias (Notebook Dell #2)
-    {
-      id: 'emp-02',
-      solicitacaoId: 'solic-05',
-      itemId: 'item-04',
-      usuarioId: 'user-bruno',
-      registradoPor: 'user-marta',
-      retiradoEm: ha5Dias.toISOString(),
-      devolucaoPrevista: toDateInputValue(ha2Dias),
-      diasAtraso: 2,
-    },
-    // 3 empréstimos antigos já devolvidos
-    {
-      id: 'emp-03',
-      solicitacaoId: 'solic-06',
-      itemId: 'item-13',
-      usuarioId: 'user-carlos',
-      registradoPor: 'user-marta',
-      retiradoEm: ha10Dias.toISOString(),
-      devolucaoPrevista: toDateInputValue(ha7Dias),
-      devolvidoEm: ha7Dias.toISOString(),
-      diasAtraso: 0,
-    },
-    {
-      id: 'emp-04',
-      solicitacaoId: 'solic-07',
-      itemId: 'item-10',
-      usuarioId: 'user-ana',
-      registradoPor: 'user-marta',
-      retiradoEm: ha7Dias.toISOString(),
-      devolucaoPrevista: toDateInputValue(ha5Dias),
-      devolvidoEm: ha5Dias.toISOString(),
-      diasAtraso: 0,
-    },
-    {
-      id: 'emp-05',
-      solicitacaoId: 'solic-08',
-      itemId: 'item-12',
-      usuarioId: 'user-bruno',
-      registradoPor: 'user-marta',
-      retiradoEm: ha10Dias.toISOString(),
-      devolucaoPrevista: toDateInputValue(ha7Dias),
-      devolvidoEm: ha7Dias.toISOString(),
-      diasAtraso: 0,
-    },
-  ];
+  const emprestimos: Emprestimo[] = [];
 
-  // 1 item em manutenção com ocorrência (Parafusadeira Bosch 12V)
-  const ocorrencias: Ocorrencia[] = [
-    {
-      id: 'ocorr-01',
-      itemId: 'item-11',
-      usuarioId: 'user-carlos',
-      descricao: 'Mandril travado ao fixar broca 8mm, motor esquentando.',
-      status: 'aberta',
-      criadoEm: ha2Dias.toISOString(),
-    },
-  ];
+  // Ocorrências
+  const ocorrencias: Ocorrencia[] = [];
 
-  // Notificações iniciais demonstrativas (Wireframes S5 e R17)
-  const notificacoes: Notificacao[] = [
-    // Para Marta (Responsável - R17):
-    {
-      id: 'notif-resp-01',
-      usuarioId: 'user-marta',
-      tipo: 'novo_pedido',
-      mensagem: 'Novo pedido: Prof. Carlos pediu Kit Arduino Iniciante #1.',
-      lida: false, // Amarela no wireframe R17
-      criadoEm: ha20Minutos,
-      destino: '/painel/solicitacoes',
-    },
-    {
-      id: 'notif-resp-02',
-      usuarioId: 'user-marta',
-      tipo: 'lembrete',
-      mensagem: 'Lembrete: pedido de Ana Souza aguarda há 2 h.',
-      lida: false, // Amarela no wireframe R17
-      criadoEm: ha20Minutos,
-      destino: '/painel/solicitacoes',
-    },
-    {
-      id: 'notif-resp-03',
-      usuarioId: 'user-marta',
-      tipo: 'nova_conta',
-      mensagem: 'Nova conta aguardando aprovação: Diego Alves.',
-      lida: true, // Lida (fundo branco)
-      criadoEm: ha20Minutos,
-      destino: '/painel/contas',
-    },
-    {
-      id: 'notif-resp-04',
-      usuarioId: 'user-marta',
-      tipo: 'atraso',
-      mensagem: 'Bruno Lima está atrasado com Notebook Dell #2.',
-      lida: true, // Lida (fundo branco)
-      criadoEm: ha20Minutos,
-      destino: '/painel',
-    },
-
-    // Para Solicitantes (Wireframe S5):
-    {
-      id: 'notif-solic-01',
-      usuarioId: 'user-carlos',
-      tipo: 'aprovacao',
-      mensagem: 'Seu pedido de Projetor BenQ foi aprovado. Retire hoje.',
-      lida: false, // Amarela no wireframe S5
-      criadoEm: ha2Horas,
-      destino: '/meus-emprestimos',
-    },
-    {
-      id: 'notif-solic-02',
-      usuarioId: 'user-ana',
-      tipo: 'prazo_proximo',
-      mensagem: 'O prazo de Notebook Dell #1 termina amanhã.',
-      lida: false, // Amarela no wireframe S5
-      criadoEm: ha2Horas,
-      destino: '/meus-emprestimos',
-    },
-    {
-      id: 'notif-solic-03',
-      usuarioId: 'user-ana',
-      tipo: 'recusa',
-      mensagem: 'Seu pedido de Câmera Canon EOS Rebel foi recusado.',
-      lida: true, // Lida no wireframe S5
-      criadoEm: ha2Horas,
-      destino: '/meus-emprestimos',
-    },
-    {
-      id: 'notif-solic-04',
-      usuarioId: 'user-ana',
-      tipo: 'expiracao',
-      mensagem: 'Seu pedido de Tablet Samsung Galaxy Tab expirou.',
-      lida: true, // Lida no wireframe S5
-      criadoEm: ha2Horas,
-      destino: '/meus-emprestimos',
-    },
-    {
-      id: 'notif-solic-05',
-      usuarioId: 'user-bruno',
-      tipo: 'atraso',
-      mensagem: 'Notebook Dell #2 está atrasado.',
-      lida: true, // Lida no wireframe S5
-      criadoEm: ha2Horas,
-      destino: '/meus-emprestimos',
-    },
-    {
-      id: 'notif-solic-06',
-      usuarioId: 'user-carlos',
-      tipo: 'prazo_proximo',
-      mensagem: 'O prazo de Projetor BenQ termina amanhã.',
-      lida: true,
-      criadoEm: ha2Horas,
-      destino: '/meus-emprestimos',
-    },
-  ];
+  // Notificações
+  const notificacoes: Notificacao[] = [];
 
   return {
     agora: agoraIso,
-    usuarioLogadoId: 'user-marta', // Inicia logado como Marta (responsável) para fácil demonstração
+    usuarioLogadoId: '',
     configuracao: {
       politicaAtraso: 'rigida',
     },

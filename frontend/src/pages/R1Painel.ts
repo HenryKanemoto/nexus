@@ -322,9 +322,9 @@ type FiltroListaPainel = 'todos' | 'atrasados' | 'ativos' | 'aprovados';
                   <td class="p-3 text-right">
                     <a
                       [routerLink]="['/painel/retirada', solic.itemId]"
-                      class="px-2.5 py-1 rounded-lg bg-[#2F6BFF] hover:bg-blue-600 text-white font-medium text-[11px] transition-colors shadow-2xs inline-flex items-center gap-1"
+                      class="px-2.5 py-1 rounded-lg bg-[#2F6BFF] hover:bg-blue-600 text-white font-medium text-[11px] transition-colors shadow-2xs inline-flex items-center gap-1.5 whitespace-nowrap"
                     >
-                      <mat-icon class="text-xs w-3.5 h-3.5 flex items-center justify-center">qr_code</mat-icon>
+                      <mat-icon class="!w-4 !h-4 !text-[16px] !leading-none flex items-center justify-center">qr_code</mat-icon>
                       Registrar Retirada
                     </a>
                   </td>
