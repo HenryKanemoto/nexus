@@ -148,11 +148,11 @@ export class R17Notificacoes {
     switch (n.tipo) {
       case 'novo_pedido':
       case 'lembrete':
-        return { rota: '/painel/solicitacoes', label: '-> R2' };
+        return { rota: '/painel/solicitacoes', label: '-> Solicitações' };
       case 'nova_conta':
-        return { rota: '/painel/contas', label: '-> R3' };
+        return { rota: '/painel/contas', label: '-> Contas' };
       case 'atraso':
-        return { rota: '/painel', label: '-> R1' };
+        return { rota: '/painel', label: '-> Painel' };
       default:
         return { rota: n.destino || '/painel', label: 'Acessar' };
     }
