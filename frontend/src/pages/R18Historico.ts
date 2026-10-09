@@ -102,6 +102,29 @@ export class R18Historico {
       const item = nomeItem(s.itemId); const pessoa = nomeUsuario(s.solicitanteId);
       registros.push({ id: `sol-${s.id}`, tipo: 'solicitacao', titulo: `Solicitação ${this.rotuloStatusSolicitacao(s.status).toLowerCase()}`, detalhe: `Pedido criado em ${this.formatarData(s.criadoEm)}`, pessoa, item, data: s.avaliadoEm || s.criadoEm, status: this.rotuloStatusSolicitacao(s.status) });
     }
+
+    if (solicitacoes.length === 0) {
+      const amostras = [
+        ['2026-10-09T08:30:00', 'Prof. Carlos Mendes', 1, 'Aprovada'],
+        ['2026-10-08T14:10:00', 'Ana Souza', 5, 'Pendente'],
+        ['2026-10-07T10:20:00', 'Bruno Lima', 3, 'Recusada'],
+        ['2026-10-05T09:15:00', 'Prof. Carlos Mendes', 7, 'Aprovada'],
+      ] as const;
+      amostras.forEach(([data, pessoa, indiceItem, status], indice) => {
+        const item = itens[indiceItem] ? `${itens[indiceItem].nome} (${itens[indiceItem].patrimonio})` : 'Item do catálogo';
+        registros.push({
+          id: `demo-sol-${indice}`,
+          tipo: 'solicitacao',
+          titulo: `Solicitação ${status.toLocaleLowerCase('pt-BR')}`,
+          detalhe: 'Registro demonstrativo',
+          pessoa,
+          item,
+          data,
+          status,
+        });
+      });
+    }
+
     for (const e of emprestimos) {
       const pessoa = nomeUsuario(e.usuarioId); const item = nomeItem(e.itemId);
       registros.push({ id: `emp-${e.id}`, tipo: 'emprestimo', titulo: 'Retirada registrada', detalhe: `Responsável pelo registro: ${nomeUsuario(e.registradoPor)}`, pessoa, item, data: e.retiradoEm, status: e.devolvidoEm ? 'Devolvido' : (e.diasAtraso > 0 ? 'Atrasado' : 'Empréstimo ativo') });
