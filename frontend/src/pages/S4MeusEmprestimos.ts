@@ -3,6 +3,8 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {NexusStore} from '../store/nexus.store';
 import {MatIconModule} from '@angular/material/icon';
 import {Item} from '../types/models';
+import {iconeCategoria, plural} from '../lib/categoria-utils';
+import {ItemThumb} from '../components/item-thumb/item-thumb';
 import {
   differenceInHours,
   formatDateShort,
@@ -25,380 +27,8 @@ interface ItemHistorico {
 @Component({
   selector: 'app-s4-meus-emprestimos',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, MatIconModule],
-  template: `
-    <div class="space-y-6 font-['Sora',sans-serif] max-w-5xl">
-      <!-- Mensagem de Sucesso (vindo de S3 Solicitar ou Ações) -->
-      @if (mensagemSucesso()) {
-        <div
-          role="status"
-          class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 flex items-center justify-between gap-3 shadow-2xs animate-fadeIn"
-        >
-          <div class="flex items-center gap-2.5">
-            <mat-icon class="text-emerald-600 shrink-0">check_circle</mat-icon>
-            <span class="font-medium leading-relaxed">{{ mensagemSucesso() }}</span>
-          </div>
-          <button
-            type="button"
-            (click)="mensagemSucesso.set(null)"
-            class="text-emerald-600 hover:text-emerald-800 cursor-pointer p-1"
-          >
-            <mat-icon class="text-base w-4 h-4 flex items-center justify-center">close</mat-icon>
-          </button>
-        </div>
-      }
-
-      <!-- Título da Tela (Wireframe S4) -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-[#0E1A3A]">
-            Meus empréstimos
-          </h1>
-          <p class="text-xs text-slate-500 mt-1">
-            Gerencie seus pedidos em análise, empréstimos em andamento e histórico
-          </p>
-        </div>
-
-        <a
-          routerLink="/catalogo"
-          class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#2F6BFF] hover:bg-blue-600 text-white text-xs font-semibold transition-colors shadow-2xs cursor-pointer self-start sm:self-auto"
-        >
-          <mat-icon class="text-sm w-4 h-4 flex items-center justify-center">add_circle</mat-icon>
-          <span>Novo Pedido no Catálogo</span>
-        </a>
-      </div>
-
-      <!-- Abas de Navegação (Wireframe S4) -->
-      <div class="flex items-center gap-2 border-b border-slate-200/90 pb-px">
-        <button
-          type="button"
-          (click)="mudarAba('pendentes')"
-          class="py-2.5 px-4 rounded-t-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer border-b-2 -mb-px"
-          [class.border-[#2F6BFF]]="abaAtiva() === 'pendentes'"
-          [class.text-[#2F6BFF]]="abaAtiva() === 'pendentes'"
-          [class.bg-white]="abaAtiva() === 'pendentes'"
-          [class.border-transparent]="abaAtiva() !== 'pendentes'"
-          [class.text-slate-600]="abaAtiva() !== 'pendentes'"
-          [class.hover:text-slate-900]="abaAtiva() !== 'pendentes'"
-        >
-          <span>Pendentes</span>
-          <span
-            class="px-2 py-0.5 rounded-full text-[11px] font-bold"
-            [class.bg-blue-100]="abaAtiva() === 'pendentes'"
-            [class.text-blue-700]="abaAtiva() === 'pendentes'"
-            [class.bg-slate-100]="abaAtiva() !== 'pendentes'"
-            [class.text-slate-600]="abaAtiva() !== 'pendentes'"
-          >
-            {{ totalPendentes() }}
-          </span>
-        </button>
-
-        <button
-          type="button"
-          (click)="mudarAba('ativos')"
-          class="py-2.5 px-4 rounded-t-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer border-b-2 -mb-px"
-          [class.border-[#2F6BFF]]="abaAtiva() === 'ativos'"
-          [class.text-[#2F6BFF]]="abaAtiva() === 'ativos'"
-          [class.bg-white]="abaAtiva() === 'ativos'"
-          [class.border-transparent]="abaAtiva() !== 'ativos'"
-          [class.text-slate-600]="abaAtiva() !== 'ativos'"
-          [class.hover:text-slate-900]="abaAtiva() !== 'ativos'"
-        >
-          <span>Ativos</span>
-          <span
-            class="px-2 py-0.5 rounded-full text-[11px] font-bold"
-            [class.bg-blue-100]="abaAtiva() === 'ativos'"
-            [class.text-blue-700]="abaAtiva() === 'ativos'"
-            [class.bg-slate-100]="abaAtiva() !== 'ativos'"
-            [class.text-slate-600]="abaAtiva() !== 'ativos'"
-          >
-            {{ totalAtivos() }}
-          </span>
-        </button>
-
-        <button
-          type="button"
-          (click)="mudarAba('historico')"
-          class="py-2.5 px-4 rounded-t-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer border-b-2 -mb-px"
-          [class.border-[#2F6BFF]]="abaAtiva() === 'historico'"
-          [class.text-[#2F6BFF]]="abaAtiva() === 'historico'"
-          [class.bg-white]="abaAtiva() === 'historico'"
-          [class.border-transparent]="abaAtiva() !== 'historico'"
-          [class.text-slate-600]="abaAtiva() !== 'historico'"
-          [class.hover:text-slate-900]="abaAtiva() !== 'historico'"
-        >
-          <span>Histórico</span>
-          <span class="text-[11px] font-normal text-slate-400">
-            ({{ listaHistorico().length }})
-          </span>
-        </button>
-      </div>
-
-      <!-- CONTEÚDO DAS ABAS (Wireframe S4) -->
-
-      <!-- 1. ABA PENDENTES (Pedidos aguardando análise e aprovados aguardando retirada) -->
-      @if (abaAtiva() === 'pendentes') {
-        <div class="space-y-4">
-          <!-- A) Pedidos Aprovados Aguardando Retirada HOJE (RN04) -->
-          @for (solic of pedidosAprovados(); track solic.id) {
-            @let item = getItem(solic.itemId);
-            <div class="p-5 rounded-2xl bg-white border border-amber-300 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <!-- Esquerda: Thumbnail e Informações -->
-              <div class="flex items-start sm:items-center gap-4">
-                <div class="w-14 h-14 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 shrink-0">
-                  <mat-icon class="text-2xl">{{ getIconeCategoria(item?.categoriaId) }}</mat-icon>
-                </div>
-                <div>
-                  <h3 class="font-bold text-sm text-[#0E1A3A]">
-                    {{ item?.nome }}
-                  </h3>
-                  <div class="flex flex-wrap items-center gap-2 mt-1">
-                    <span class="px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-800 font-bold text-xs border border-amber-200/80">
-                      Aprovado — retire HOJE
-                    </span>
-                    <span class="text-xs text-slate-500">
-                      aprovado {{ formatarHora(solic.avaliadoEm || solic.criadoEm) }}
-                    </span>
-                  </div>
-                  <p class="text-[11px] text-amber-700 font-medium mt-1">
-                    Aviso: retire no setor de materiais hoje antes que o pedido expire.
-                  </p>
-                </div>
-              </div>
-
-              <!-- Direita: Destino / Retirada -->
-              <div class="text-right sm:text-right shrink-0">
-                <span class="inline-flex items-center gap-1 text-xs font-semibold text-amber-800 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200">
-                  <mat-icon class="text-xs w-3.5 h-3.5 flex items-center justify-center">store</mat-icon>
-                  Retirar com QR do Item
-                </span>
-              </div>
-            </div>
-          }
-
-          <!-- B) Pedidos Aguardando Análise (com Botão Lembrar Responsável RN10) -->
-          @for (solic of pedidosAguardandoAnalise(); track solic.id) {
-            @let item = getItem(solic.itemId);
-            @let podeLembrar = store.podeEnviarLembrete(solic);
-            @let tempoDecorrido = getTempoDecorrido(solic.criadoEm);
-
-            <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <!-- Esquerda: Thumbnail e Informações -->
-              <div class="flex items-start sm:items-center gap-4">
-                <div class="w-14 h-14 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-[#0E1A3A] shrink-0">
-                  <mat-icon class="text-2xl">{{ getIconeCategoria(item?.categoriaId) }}</mat-icon>
-                </div>
-                <div>
-                  <h3 class="font-bold text-sm text-[#0E1A3A]">
-                    {{ item?.nome }}
-                  </h3>
-                  <div class="flex flex-wrap items-center gap-2 mt-1">
-                    <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 font-semibold text-xs border border-slate-200">
-                      Aguardando análise
-                    </span>
-                    <span class="text-xs text-slate-500">
-                      {{ tempoDecorrido }}
-                    </span>
-                  </div>
-                  <div class="text-[11px] text-slate-400 mt-1">
-                    Devolução pretendida: {{ formatarData(solic.devolucaoDesejada) }}
-                  </div>
-                </div>
-              </div>
-
-              <!-- Direita: Botão "Lembrar responsável" (Wireframe S4 / RN10) -->
-              <div class="flex items-center gap-2 shrink-0">
-                @if (solic.lembreteEnviadoEm) {
-                  <span class="px-3 py-1.5 rounded-xl bg-slate-100 border border-slate-200 text-slate-600 text-xs font-medium flex items-center gap-1.5">
-                    <mat-icon class="text-xs w-3.5 h-3.5 flex items-center justify-center text-emerald-600">done</mat-icon>
-                    <span>Lembrete já enviado</span>
-                  </span>
-                } @else if (podeLembrar) {
-                  <!-- Botão ativo após 2h sem análise (RN10) -->
-                  <button
-                    type="button"
-                    (click)="lembrarResponsavel(solic.id)"
-                    class="px-4 py-2 rounded-xl border border-[#2F6BFF] bg-blue-50/60 hover:bg-[#2F6BFF] text-[#2F6BFF] hover:text-white text-xs font-semibold transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <mat-icon class="text-xs w-3.5 h-3.5 flex items-center justify-center">notifications_active</mat-icon>
-                    <span>Lembrar responsável</span>
-                  </button>
-                } @else {
-                  <span
-                    class="text-[11px] text-slate-400 bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200"
-                    title="O botão ficará disponível após 2 horas no relógio virtual"
-                  >
-                    Lembrete em {{ getHorasRestantesParaLembrete(solic.criadoEm) }}
-                  </span>
-                }
-              </div>
-            </div>
-          } @empty {
-            @if (pedidosAprovados().length === 0) {
-              <div class="py-16 px-4 rounded-2xl border border-dashed border-slate-300 bg-white text-center space-y-2">
-                <mat-icon class="text-3xl text-slate-400">inventory_2</mat-icon>
-                <h3 class="text-sm font-semibold text-slate-700">
-                  Nenhum pedido pendente
-                </h3>
-                <p class="text-xs text-slate-500">
-                  Você não tem solicitações em análise nem retiradas pendentes para hoje.
-                </p>
-              </div>
-            }
-          }
-        </div>
-      }
-
-      <!-- 2. ABA ATIVOS (Empréstimos em andamento com retirada realizada) -->
-      @if (abaAtiva() === 'ativos') {
-        <div class="space-y-4">
-          @for (emp of listaEmprestimosAtivos(); track emp.id) {
-            @let item = getItem(emp.itemId);
-            @let estaAtrasado = emp.diasAtraso > 0;
-            @let diasRestantes = getDiasRestantes(emp.devolucaoPrevista);
-
-            <div
-              class="p-5 rounded-2xl bg-white border shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all"
-              [class.border-rose-300]="estaAtrasado"
-              [class.bg-rose-50/30]="estaAtrasado"
-              [class.border-slate-200/90]="!estaAtrasado"
-            >
-              <!-- Esquerda: Thumbnail e Informações -->
-              <div class="flex items-start sm:items-center gap-4">
-                <div
-                  class="w-14 h-14 rounded-xl flex items-center justify-center shrink-0 border"
-                  [class.bg-rose-100]="estaAtrasado"
-                  [class.text-rose-700]="estaAtrasado"
-                  [class.border-rose-200]="estaAtrasado"
-                  [class.bg-blue-50]="!estaAtrasado"
-                  [class.text-[#2F6BFF]]="!estaAtrasado"
-                  [class.border-blue-100]="!estaAtrasado"
-                >
-                  <mat-icon class="text-2xl">{{ getIconeCategoria(item?.categoriaId) }}</mat-icon>
-                </div>
-
-                <div>
-                  <div class="flex items-center gap-2">
-                    <h3 class="font-bold text-sm text-[#0E1A3A]">
-                      {{ item?.nome }}
-                    </h3>
-                    <span class="font-mono text-[10px] text-slate-400 bg-white px-1.5 py-0.5 rounded border border-slate-200">
-                      {{ item?.patrimonio }}
-                    </span>
-                  </div>
-
-                  <div class="flex flex-wrap items-center gap-3 text-xs text-slate-600 mt-1.5">
-                    <span>Retirado em: <strong class="text-slate-800">{{ formatarData(emp.retiradoEm) }}</strong></span>
-                    <span>·</span>
-                    <span>Devolver até: <strong class="text-slate-800">{{ formatarData(emp.devolucaoPrevista) }}</strong></span>
-                  </div>
-
-                  <div class="text-[11px] text-slate-500 mt-1">
-                    Prazo: {{ diasRestantes }}
-                  </div>
-                </div>
-              </div>
-
-              <!-- Direita: Selo de Situação (Wireframe S4: Selo vermelho ATRASADO quando aplicável) -->
-              <div class="shrink-0 flex items-center gap-2">
-                @if (estaAtrasado) {
-                  <!-- Selo Vermelho ATRASADO -->
-                  <div class="px-3.5 py-1.5 rounded-xl bg-rose-600 text-white font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-xs animate-pulse">
-                    <mat-icon class="text-sm w-4 h-4 flex items-center justify-center">warning</mat-icon>
-                    <span>ATRASADO ({{ emp.diasAtraso }} {{ emp.diasAtraso === 1 ? 'dia' : 'dias' }})</span>
-                  </div>
-                } @else {
-                  <span class="px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 font-semibold text-xs flex items-center gap-1.5">
-                    <mat-icon class="text-xs w-3.5 h-3.5 flex items-center justify-center">sync</mat-icon>
-                    <span>Em empréstimo</span>
-                  </span>
-                }
-              </div>
-            </div>
-          } @empty {
-            <div class="py-16 px-4 rounded-2xl border border-dashed border-slate-300 bg-white text-center space-y-2">
-              <mat-icon class="text-3xl text-slate-400">check_circle_outline</mat-icon>
-              <h3 class="text-sm font-semibold text-slate-700">
-                Nenhum empréstimo ativo no momento
-              </h3>
-              <p class="text-xs text-slate-500">
-                Você não possui nenhum material ou equipamento em mãos atualmente.
-              </p>
-            </div>
-          }
-        </div>
-      }
-
-      <!-- 3. ABA HISTÓRICO (Pedidos e empréstimos encerrados com situação final) -->
-      @if (abaAtiva() === 'historico') {
-        <div class="space-y-3">
-          @for (hist of listaHistorico(); track hist.id) {
-            <div class="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-600 shrink-0">
-                  <mat-icon class="text-lg">{{ getIconeCategoria(hist.item?.categoriaId) }}</mat-icon>
-                </div>
-                <div>
-                  <h4 class="font-bold text-sm text-[#0E1A3A]">
-                    {{ hist.item?.nome || 'Equipamento' }}
-                  </h4>
-                  <div class="text-[11px] text-slate-500 mt-0.5 flex items-center gap-2">
-                    <span class="font-mono">{{ hist.item?.patrimonio }}</span>
-                    <span>·</span>
-                    <span>Data: {{ formatarData(hist.dataEvento) }}</span>
-                    @if (hist.detalhe) {
-                      <span>·</span>
-                      <span class="text-slate-600 italic">{{ hist.detalhe }}</span>
-                    }
-                  </div>
-                </div>
-              </div>
-
-              <!-- Selo de Situação Final (Wireframe S4) -->
-              <div class="shrink-0">
-                @switch (hist.situacaoFinal) {
-                  @case ('devolvido') {
-                    <span class="px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 font-semibold text-xs flex items-center gap-1">
-                      <mat-icon class="text-xs w-3.5 h-3.5 flex items-center justify-center">done_all</mat-icon>
-                      Devolvido
-                    </span>
-                  }
-                  @case ('devolvido_defeito') {
-                    <span class="px-2.5 py-1 rounded-lg bg-purple-50 border border-purple-200 text-purple-700 font-semibold text-xs flex items-center gap-1">
-                      <mat-icon class="text-xs w-3.5 h-3.5 flex items-center justify-center">build</mat-icon>
-                      Devolvido com defeito
-                    </span>
-                  }
-                  @case ('recusado') {
-                    <span class="px-2.5 py-1 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 font-semibold text-xs flex items-center gap-1">
-                      <mat-icon class="text-xs w-3.5 h-3.5 flex items-center justify-center">cancel</mat-icon>
-                      Recusado
-                    </span>
-                  }
-                  @case ('expirado') {
-                    <span class="px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-700 font-semibold text-xs flex items-center gap-1">
-                      <mat-icon class="text-xs w-3.5 h-3.5 flex items-center justify-center">timer_off</mat-icon>
-                      Expirado
-                    </span>
-                  }
-                }
-              </div>
-            </div>
-          } @empty {
-            <div class="py-16 px-4 rounded-2xl border border-dashed border-slate-300 bg-white text-center space-y-2">
-              <mat-icon class="text-3xl text-slate-400">history</mat-icon>
-              <h3 class="text-sm font-semibold text-slate-700">
-                Nenhum registro no histórico
-              </h3>
-              <p class="text-xs text-slate-500">
-                Você ainda não possui empréstimos devolvidos ou solicitações concluídas.
-              </p>
-            </div>
-          }
-        </div>
-      }
-    </div>
-  `,
+  imports: [RouterLink, MatIconModule, ItemThumb],
+  templateUrl: './S4MeusEmprestimos.html',
 })
 export class S4MeusEmprestimos {
   private readonly route = inject(ActivatedRoute);
@@ -407,6 +37,15 @@ export class S4MeusEmprestimos {
 
   readonly abaAtiva = signal<AbaEmprestimos>('pendentes');
   readonly mensagemSucesso = signal<string | null>(null);
+
+  readonly plural = plural;
+
+  readonly situacoes: Record<ItemHistorico['situacaoFinal'], {icone: string; classe: string}> = {
+    devolvido: {icone: 'done_all', classe: 'bg-ok-soft text-ok'},
+    devolvido_defeito: {icone: 'build', classe: 'bg-maint-soft text-maint'},
+    recusado: {icone: 'block', classe: 'bg-danger-soft text-danger'},
+    expirado: {icone: 'timer_off', classe: 'bg-warn-soft text-warn'},
+  };
 
   constructor() {
     // Ler aba da query string (?aba=pendentes | ativos | historico)
@@ -469,6 +108,12 @@ export class S4MeusEmprestimos {
   });
 
   readonly totalAtivos = computed(() => this.listaEmprestimosAtivos().length);
+
+  readonly abas = computed<{id: AbaEmprestimos; rotulo: string; total: number}[]>(() => [
+    {id: 'pendentes', rotulo: 'Pendentes', total: this.totalPendentes()},
+    {id: 'ativos', rotulo: 'Com você', total: this.totalAtivos()},
+    {id: 'historico', rotulo: 'Histórico', total: this.listaHistorico().length},
+  ]);
 
   // 4. Histórico Encerrado
   readonly listaHistorico = computed<ItemHistorico[]>(() => {
@@ -584,19 +229,6 @@ export class S4MeusEmprestimos {
   }
 
   getIconeCategoria(categoriaId?: string): string {
-    switch (categoriaId) {
-      case 'cat-projetores':
-        return 'videocam';
-      case 'cat-notebooks':
-        return 'laptop_chromebook';
-      case 'cat-eletronica':
-        return 'developer_board';
-      case 'cat-ferramentas':
-        return 'handyman';
-      case 'cat-laboratorio':
-        return 'biotech';
-      default:
-        return 'inventory_2';
-    }
+    return iconeCategoria(categoriaId);
   }
 }

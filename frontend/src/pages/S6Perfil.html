@@ -1,0 +1,109 @@
+<div class="page max-w-4xl">
+  @if (usuario(); as u) {
+    <header class="flex flex-col items-start gap-5 sm:flex-row sm:items-center">
+      <span class="avatar size-20 text-2xl">{{ iniciais() }}</span>
+      <div class="min-w-0 flex-1">
+        <p class="page-eyebrow">{{ perfil() }}</p>
+        <h1 class="page-title mt-1">{{ u.nome }}</h1>
+        <p class="mt-1 flex flex-wrap items-center gap-2 text-sm text-ink-soft">
+          {{ u.email }}
+          <span class="tag">{{ u.matricula }}</span>
+        </p>
+      </div>
+      <app-status-badge [status]="u.status" />
+    </header>
+
+    <!-- Situação da conta -->
+    <section
+      class="alert"
+      [class.alert-ok]="u.status === 'ativa'"
+      [class.alert-danger]="u.status === 'bloqueada'"
+      [class.alert-warn]="u.status === 'suspensa' || u.status === 'pendente'"
+      aria-label="Situação da conta"
+    >
+      @switch (u.status) {
+        @case ('bloqueada') {
+          @let atrasado = itemAtrasadoInfo();
+          <mat-icon class="icon-sm">lock</mat-icon>
+          <div class="flex-1">
+            <p class="font-semibold">Conta bloqueada</p>
+            <p class="mt-0.5">
+              @if (atrasado) {
+                "{{ atrasado.itemNome }}" está atrasado há {{ plural(atrasado.dias, 'dia') }}.
+              } @else {
+                Há uma devolução em atraso na sua conta.
+              }
+              Devolva o item para liberar novos pedidos.
+            </p>
+            <a routerLink="/meus-emprestimos" [queryParams]="{aba: 'ativos'}" class="mt-2 inline-flex items-center gap-1 font-semibold underline underline-offset-4">
+              Ver item atrasado
+              <mat-icon class="icon-xs">arrow_forward</mat-icon>
+            </a>
+          </div>
+        }
+        @case ('suspensa') {
+          <mat-icon class="icon-sm">hourglass_empty</mat-icon>
+          <div>
+            <p class="font-semibold">Suspensa até {{ formatarData(u.suspensoAte) }}</p>
+            <p class="mt-0.5">
+              Consequência da política de atraso na última devolução. O acesso volta automaticamente depois dessa data.
+            </p>
+          </div>
+        }
+        @case ('ativa') {
+          <mat-icon class="icon-sm">verified</mat-icon>
+          <p>Conta em dia. Você pode pedir equipamentos dentro dos limites de cada categoria.</p>
+        }
+        @default {
+          <mat-icon class="icon-sm">hourglass_top</mat-icon>
+          <p>Cadastro esperando a aprovação de um responsável do acervo.</p>
+        }
+      }
+    </section>
+
+    <!-- Ocorrências -->
+    <section class="card">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Ocorrências</h2>
+          <p class="text-sm text-ink-muted">Defeitos registrados em devoluções feitas por você.</p>
+        </div>
+      </div>
+      @if (ocorrencias().length > 0) {
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Data</th>
+                <th>Descrição</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (ocorr of ocorrencias(); track ocorr.id) {
+                @let it = getItem(ocorr.itemId);
+                <tr>
+                  <td>
+                    <p class="font-medium">{{ it?.nome || 'Equipamento' }}</p>
+                    <p class="font-mono text-xs text-ink-muted">{{ it?.patrimonio }}</p>
+                  </td>
+                  <td class="whitespace-nowrap tabular-nums">{{ formatarData(ocorr.criadoEm) }}</td>
+                  <td class="text-ink-soft">{{ ocorr.descricao }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <p class="px-6 py-10 text-center text-sm text-ink-muted">Nenhuma ocorrência registrada.</p>
+      }
+    </section>
+
+    <div>
+      <button type="button" (click)="sair()" class="btn btn-danger-ghost">
+        <mat-icon class="icon-sm">logout</mat-icon>
+        Sair da conta
+      </button>
+    </div>
+  }
+</div>

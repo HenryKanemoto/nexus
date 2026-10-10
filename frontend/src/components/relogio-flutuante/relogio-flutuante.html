@@ -1,0 +1,88 @@
+<div
+  class="fixed right-3 z-50 max-w-[calc(100vw-1.5rem)] sm:right-5"
+  [class]="acimaDaNavegacao() ? 'bottom-[5.25rem] md:bottom-5' : 'bottom-3 sm:bottom-5'"
+>
+  @if (!aberto()) {
+    <button
+      type="button"
+      (click)="aberto.set(true)"
+      class="flex items-center gap-2.5 rounded-full bg-ink py-2 pl-3 pr-4 text-white shadow-pop transition-colors hover:bg-ink-hover"
+      aria-label="Abrir painel de demonstração"
+    >
+      <span class="relative flex size-2">
+        <span class="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-60"></span>
+        <span class="relative inline-flex size-2 rounded-full bg-accent"></span>
+      </span>
+      <span class="font-mono text-xs tabular-nums">{{ dataFormatada() }}</span>
+    </button>
+  } @else {
+    <section class="w-[calc(100vw-1.5rem)] max-w-sm rounded-card bg-ink p-5 text-white shadow-pop" aria-label="Painel de demonstração">
+      <header class="flex items-start justify-between gap-3">
+        <div>
+          <p class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-accent">Modo demonstração</p>
+          <p class="mt-1 font-display text-xl font-semibold tabular-nums">{{ dataFormatada() }}</p>
+        </div>
+        <button
+          type="button"
+          (click)="aberto.set(false)"
+          class="btn-icon size-8 text-white/60 hover:bg-white/10 hover:text-white"
+          aria-label="Recolher painel"
+        >
+          <mat-icon class="icon-sm">close</mat-icon>
+        </button>
+      </header>
+
+      <div class="mt-5">
+        <p class="mb-2 text-xs text-white/60">Avançar o relógio (dispara as rotinas automáticas)</p>
+        <div class="grid grid-cols-3 gap-2">
+          @for (passo of passos; track passo.rotulo) {
+            <button
+              type="button"
+              (click)="passo.acao()"
+              class="h-9 rounded-control bg-white/10 font-mono text-xs font-medium transition-colors hover:bg-accent hover:text-ink"
+            >
+              {{ passo.rotulo }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="mt-5 border-t border-white/10 pt-4">
+        <p class="mb-2 text-xs text-white/60">Entrar como</p>
+        <div class="grid max-h-40 grid-cols-2 gap-2 overflow-y-auto pr-1">
+          @for (user of store.usuarios(); track user.id) {
+            <button
+              type="button"
+              (click)="trocarUsuario(user.id)"
+              class="rounded-control px-2.5 py-2 text-left transition-colors"
+              [class]="
+                store.usuarioLogado()?.id === user.id ? 'bg-accent text-ink' : 'bg-white/5 text-white hover:bg-white/10'
+              "
+            >
+              <span class="block truncate text-xs font-medium">{{ user.nome }}</span>
+              <span class="block truncate text-[0.6875rem] opacity-70">{{ user.perfil }} · {{ user.status }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="mt-5 flex items-center justify-between border-t border-white/10 pt-4 font-mono text-[0.6875rem]">
+        <span class="text-white/60">política <span class="text-white">{{ store.configuracao().politicaAtraso }}</span></span>
+        <span>
+          <span class="text-accent">{{ store.solicitacoesPendentesCount() }} pendentes</span>
+          <span class="text-white/40"> · </span>
+          <span class="text-[#ff9b94]">{{ store.emprestimosAtrasadosCount() }} atrasados</span>
+        </span>
+      </div>
+
+      <button
+        type="button"
+        (click)="reiniciarDados()"
+        class="mt-4 flex h-9 w-full items-center justify-center gap-2 rounded-control border border-white/15 text-xs font-medium text-white/80 transition-colors hover:border-[#ff9b94] hover:text-[#ff9b94]"
+      >
+        <mat-icon class="icon-sm">restart_alt</mat-icon>
+        Reiniciar dados de demonstração
+      </button>
+    </section>
+  }
+</div>

@@ -1,0 +1,68 @@
+<div class="page max-w-3xl">
+  <a routerLink="/painel/leitor" class="back-link">
+    <mat-icon class="icon-sm">arrow_back</mat-icon>
+    Leitor de QR
+  </a>
+
+  @if (item(); as i) {
+    @if (solicitacao(); as solic) {
+      @let user = getUsuario(solic.solicitanteId);
+
+      <header>
+        <p class="page-eyebrow">Pedido aprovado</p>
+        <h1 class="page-title mt-1">Confirmar retirada</h1>
+        <p class="page-subtitle">Entregue o equipamento ao solicitante. O prazo de devolução começa a contar agora.</p>
+      </header>
+
+      <section class="card overflow-hidden">
+        <div class="flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:p-6">
+          <app-item-thumb [item]="i" [tamanhoIcone]="40" class="size-24 shrink-0 rounded-control" />
+          <div class="min-w-0">
+            <h2 class="font-display text-2xl font-semibold leading-tight">{{ i.nome }}</h2>
+            <p class="mt-2 flex flex-wrap gap-2">
+              <span class="tag">{{ i.patrimonio }}</span>
+              <span class="tag">{{ i.codigoQr }}</span>
+            </p>
+          </div>
+        </div>
+
+        <dl class="grid border-t border-line sm:grid-cols-2">
+          <div class="flex items-center gap-3 border-b border-line p-5 sm:border-b-0 sm:border-r sm:p-6">
+            <span class="avatar size-10 text-sm">{{ iniciais(user?.nome) }}</span>
+            <div class="min-w-0">
+              <dt class="text-xs text-ink-muted">Solicitante</dt>
+              <dd class="truncate font-medium">{{ user?.nome }}</dd>
+              <dd class="text-xs capitalize text-ink-muted">{{ user?.perfil }} · <span class="font-mono">{{ user?.matricula }}</span></dd>
+            </div>
+          </div>
+          <div class="p-5 sm:p-6">
+            <dt class="text-xs text-ink-muted">Devolver até</dt>
+            <dd class="mt-1 font-display text-2xl font-semibold">{{ formatarData(solic.devolucaoDesejada) }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+        <a routerLink="/painel/leitor" class="btn btn-secondary btn-lg">Cancelar</a>
+        <button type="button" (click)="executarConfirmacaoRetirada()" class="btn btn-primary btn-lg">
+          <mat-icon class="icon-sm">check</mat-icon>
+          Confirmar retirada
+        </button>
+      </div>
+    } @else {
+      <div class="card empty">
+        <mat-icon class="icon-xl">warning_amber</mat-icon>
+        <p class="empty-title">Nenhum pedido aprovado para este item</p>
+        <p class="empty-text">"{{ i.nome }}" ({{ i.patrimonio }}) não tem retirada marcada no momento.</p>
+        <a routerLink="/painel/leitor" class="btn btn-secondary btn-sm mt-3">Voltar ao leitor</a>
+      </div>
+    }
+  } @else {
+    <div class="card empty">
+      <mat-icon class="icon-xl">help_outline</mat-icon>
+      <p class="empty-title">Item não encontrado</p>
+      <p class="empty-text">Esse identificador não existe no acervo.</p>
+      <a routerLink="/painel/leitor" class="btn btn-secondary btn-sm mt-3">Voltar ao leitor</a>
+    </div>
+  }
+</div>

@@ -1,0 +1,166 @@
+<div class="min-h-screen px-5 py-8 sm:px-8">
+  <header class="mx-auto flex max-w-xl items-center justify-between">
+    <a routerLink="/login" aria-label="Nexus, voltar para o login"><app-logo [tamanho]="30" /></a>
+    <a routerLink="/login" class="back-link">
+      <mat-icon class="icon-sm">arrow_back</mat-icon>
+      Voltar ao login
+    </a>
+  </header>
+
+  <main class="mx-auto mt-10 max-w-xl">
+    <p class="page-eyebrow">Nova conta</p>
+    <h1 class="page-title mt-2">Crie sua conta de solicitante</h1>
+    <p class="page-subtitle">
+      Depois do cadastro, um responsável do acervo precisa aprovar sua conta. Só então você poderá pedir empréstimos.
+    </p>
+
+    @if (erros().geral) {
+      <div role="alert" class="alert alert-danger mt-6">
+        <mat-icon class="icon-sm">error_outline</mat-icon>
+        <p>{{ erros().geral }}</p>
+      </div>
+    }
+
+    <form (submit)="submeterCadastro($event)" class="card card-pad mt-8 flex flex-col gap-5" novalidate>
+      <fieldset class="field">
+        <legend class="label mb-1.5">Eu sou</legend>
+        <div class="grid grid-cols-2 gap-3">
+          @for (opcao of perfis; track opcao.valor) {
+            <label
+              class="flex cursor-pointer items-center gap-3 rounded-control border px-4 py-3 transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ink"
+              [class]="perfil() === opcao.valor ? 'border-ink bg-ink text-white' : 'border-line-strong hover:border-ink'"
+            >
+              <input
+                type="radio"
+                name="perfil"
+                class="sr-only"
+                [value]="opcao.valor"
+                [checked]="perfil() === opcao.valor"
+                (change)="perfil.set(opcao.valor)"
+              />
+              <mat-icon [class.text-accent]="perfil() === opcao.valor">{{ opcao.icone }}</mat-icon>
+              <span class="text-sm font-medium">{{ opcao.rotulo }}</span>
+            </label>
+          }
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <label for="nome" class="label">Nome completo</label>
+        <input
+          id="nome"
+          type="text"
+          class="input"
+          [class.input-invalid]="erros().nome"
+          [value]="nome()"
+          (input)="nome.set($any($event.target).value); limparErro('nome')"
+          placeholder="Lucas de Oliveira"
+          autocomplete="name"
+          [attr.aria-invalid]="!!erros().nome"
+          aria-describedby="nome-erro"
+        />
+        @if (erros().nome) {
+          <p id="nome-erro" class="field-error">{{ erros().nome }}</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="email" class="label">E-mail institucional</label>
+        <input
+          id="email"
+          type="email"
+          class="input"
+          [class.input-invalid]="erros().email"
+          [value]="email()"
+          (input)="email.set($any($event.target).value); limparErro('email')"
+          placeholder="lucas.oliveira@escola.edu.br"
+          autocomplete="email"
+          [attr.aria-invalid]="!!erros().email"
+          aria-describedby="email-erro"
+        />
+        @if (erros().email) {
+          <p id="email-erro" class="field-error">{{ erros().email }}</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="matricula" class="label">Matrícula</label>
+        <input
+          id="matricula"
+          type="text"
+          class="input font-mono uppercase"
+          [class.input-invalid]="erros().matricula"
+          [value]="matricula()"
+          (input)="matricula.set($any($event.target).value.toUpperCase()); limparErro('matricula')"
+          placeholder="ALU-1090"
+          [attr.aria-invalid]="!!erros().matricula"
+          aria-describedby="matricula-erro"
+        />
+        @if (erros().matricula) {
+          <p id="matricula-erro" class="field-error">{{ erros().matricula }}</p>
+        }
+      </div>
+
+      <div class="grid gap-5 sm:grid-cols-2">
+        <div class="field">
+          <label for="senha" class="label">Senha</label>
+          <div class="relative">
+            <input
+              id="senha"
+              class="input pr-11"
+              [class.input-invalid]="erros().senha"
+              [type]="mostrarSenha() ? 'text' : 'password'"
+              [value]="senha()"
+              (input)="senha.set($any($event.target).value); limparErro('senha')"
+              placeholder="Mínimo 6 caracteres"
+              autocomplete="new-password"
+              [attr.aria-invalid]="!!erros().senha"
+              aria-describedby="senha-erro"
+            />
+            <button
+              type="button"
+              (click)="alternarMostrarSenha()"
+              class="btn-icon absolute right-0.5 top-0.5"
+              [attr.aria-label]="mostrarSenha() ? 'Ocultar senhas' : 'Mostrar senhas'"
+            >
+              <mat-icon class="icon-sm">{{ mostrarSenha() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </div>
+          @if (erros().senha) {
+            <p id="senha-erro" class="field-error">{{ erros().senha }}</p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="confirmacaoSenha" class="label">Confirmar senha</label>
+          <input
+            id="confirmacaoSenha"
+            class="input"
+            [class.input-invalid]="erros().confirmacaoSenha"
+            [type]="mostrarSenha() ? 'text' : 'password'"
+            [value]="confirmacaoSenha()"
+            (input)="confirmacaoSenha.set($any($event.target).value); limparErro('confirmacaoSenha')"
+            placeholder="Repita a senha"
+            autocomplete="new-password"
+            [attr.aria-invalid]="!!erros().confirmacaoSenha"
+            aria-describedby="confirmacao-erro"
+          />
+          @if (erros().confirmacaoSenha) {
+            <p id="confirmacao-erro" class="field-error">{{ erros().confirmacaoSenha }}</p>
+          }
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg btn-block mt-2">Criar conta</button>
+    </form>
+
+    <p class="mt-6 text-center text-sm text-ink-soft">
+      Já tem conta?
+      <a routerLink="/login" class="font-medium text-ink underline decoration-accent decoration-2 underline-offset-4 hover:decoration-ink">
+        Entrar
+      </a>
+    </p>
+  </main>
+</div>
+
+<app-relogio-flutuante />

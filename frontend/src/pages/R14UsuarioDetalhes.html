@@ -1,0 +1,98 @@
+<div class="page">
+  <a routerLink="/painel/usuarios" class="back-link">
+    <mat-icon class="icon-sm">arrow_back</mat-icon>
+    Usuários
+  </a>
+
+  @if (usuario(); as u) {
+    <header class="flex flex-col gap-5 sm:flex-row sm:items-center">
+      <span class="avatar size-16 text-xl">{{ getIniciais(u.nome) }}</span>
+      <div class="min-w-0 flex-1">
+        <h1 class="page-title">{{ u.nome }}</h1>
+        <p class="mt-1 flex flex-wrap items-center gap-2 text-sm text-ink-soft">
+          {{ rotuloPerfil(u.perfil) }} · {{ u.email }}
+          <span class="tag">{{ u.matricula }}</span>
+        </p>
+      </div>
+      <div class="flex flex-col items-start gap-2 sm:items-end">
+        <app-status-badge [status]="u.status" />
+        @if (u.suspensoAte) {
+          <span class="text-xs text-maint">até {{ formatarData(u.suspensoAte) }}</span>
+        }
+        @if (u.perfil !== 'responsavel') {
+          @if (u.status === 'ativa') {
+            <button type="button" (click)="store.bloquearUsuario(u.id)" class="btn btn-danger-ghost btn-sm">
+              <mat-icon class="icon-sm">lock</mat-icon>
+              Bloquear conta
+            </button>
+          } @else if (u.status === 'bloqueada' || u.status === 'suspensa') {
+            <button type="button" (click)="store.desbloquearUsuario(u.id)" class="btn btn-secondary btn-sm">
+              <mat-icon class="icon-sm">lock_open</mat-icon>
+              Reativar conta
+            </button>
+          }
+        }
+      </div>
+    </header>
+
+    <div class="grid grid-cols-3 gap-3 sm:gap-4">
+      <div class="stat">
+        <span class="stat-label">{{ totalEmprestimos() === 1 ? 'Empréstimo' : 'Empréstimos' }}</span>
+        <span class="stat-value">{{ totalEmprestimos() }}</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">{{ totalAtrasos() === 1 ? 'Atraso' : 'Atrasos' }}</span>
+        <span class="stat-value" [class.text-danger]="totalAtrasos() > 0">{{ totalAtrasos() }}</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">{{ totalOcorrencias() === 1 ? 'Ocorrência' : 'Ocorrências' }}</span>
+        <span class="stat-value" [class.text-maint]="totalOcorrencias() > 0">{{ totalOcorrencias() }}</span>
+      </div>
+    </div>
+
+    <section class="card" aria-labelledby="titulo-emprestimos">
+      <div class="card-header">
+        <h2 id="titulo-emprestimos" class="card-title">Empréstimos</h2>
+      </div>
+      @if (emprestimosUsuario().length > 0) {
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Retirada</th>
+                <th>Devolução</th>
+                <th class="text-right">Situação final</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (emp of emprestimosUsuario(); track emp.id) {
+                @let item = getItem(emp.itemId);
+                @let situacao = getSituacaoFinal(emp);
+                <tr>
+                  <td>
+                    <p class="font-medium">{{ item?.nome || 'Equipamento' }}</p>
+                    <p class="font-mono text-xs text-ink-muted">{{ item?.patrimonio }}</p>
+                  </td>
+                  <td class="whitespace-nowrap tabular-nums">{{ formatarData(emp.retiradoEm) }}</td>
+                  <td class="whitespace-nowrap tabular-nums">{{ emp.devolvidoEm ? formatarData(emp.devolvidoEm) : '—' }}</td>
+                  <td class="text-right">
+                    <span class="inline-flex whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-medium {{ situacao.classeCss }}">{{ situacao.texto }}</span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <p class="px-6 py-10 text-center text-sm text-ink-muted">Nenhum empréstimo registrado.</p>
+      }
+    </section>
+  } @else {
+    <div class="card empty">
+      <mat-icon class="icon-xl">help_outline</mat-icon>
+      <p class="empty-title">Usuário não encontrado</p>
+      <a routerLink="/painel/usuarios" class="btn btn-secondary btn-sm mt-3">Voltar para usuários</a>
+    </div>
+  }
+</div>

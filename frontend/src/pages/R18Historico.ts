@@ -19,67 +19,7 @@ interface RegistroHistorico {
   selector: 'app-r18-historico',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatIconModule],
-  template: `
-    <div class="max-w-7xl space-y-6 font-['Sora',sans-serif]">
-      <header class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div>
-          <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-[#0E1A3A]">Histórico</h1>
-          <p class="text-xs text-slate-500 mt-1">Registro das movimentações do acervo e das atividades do sistema</p>
-        </div>
-        <div class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-500">
-          <mat-icon class="text-base">history</mat-icon>
-          {{ registrosFiltrados().length }} registros encontrados
-        </div>
-      </header>
-
-      <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
-        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-2xs"><p class="text-xs text-slate-500">Solicitações</p><p class="mt-2 text-2xl font-bold text-[#0E1A3A]">{{ contar('solicitacao') }}</p></div>
-        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-2xs"><p class="text-xs text-slate-500">Empréstimos e devoluções</p><p class="mt-2 text-2xl font-bold text-[#0E1A3A]">{{ contarEmprestimosDevolucoes() }}</p></div>
-        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-2xs"><p class="text-xs text-slate-500">Ocorrências de manutenção</p><p class="mt-2 text-2xl font-bold text-[#0E1A3A]">{{ store.ocorrencias().length }}</p></div>
-        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-2xs"><p class="text-xs text-slate-500">Itens cadastrados</p><p class="mt-2 text-2xl font-bold text-[#0E1A3A]">{{ store.itens().length }}</p></div>
-      </section>
-
-      <section class="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-2xs space-y-4">
-        <div class="flex items-center gap-2"><mat-icon class="text-[#2F6BFF]">filter_list</mat-icon><h2 class="font-bold text-sm text-[#0E1A3A]">Filtrar movimentações</h2></div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
-          <label class="text-xs font-semibold text-slate-600">Tipo de movimentação
-            <select [value]="tipo()" (change)="tipo.set($any($event.target).value)" class="mt-1.5 block w-full rounded-xl border border-slate-300 bg-white p-2.5 text-xs text-slate-800 focus:border-[#2F6BFF] focus:outline-none">
-              <option value="todos">Todos os tipos</option><option value="solicitacao">Solicitações</option><option value="emprestimo">Empréstimos / retiradas</option><option value="devolucao">Devoluções</option><option value="manutencao">Manutenção</option><option value="cadastro">Cadastro de itens (visão atual)</option>
-            </select>
-          </label>
-          <label class="text-xs font-semibold text-slate-600">Buscar pessoa ou item
-            <input [value]="busca()" (input)="busca.set($any($event.target).value)" placeholder="Nome, patrimônio ou descrição" class="mt-1.5 block w-full rounded-xl border border-slate-300 p-2.5 text-xs text-slate-800 focus:border-[#2F6BFF] focus:outline-none" />
-          </label>
-          <label class="text-xs font-semibold text-slate-600">A partir de
-            <input type="date" [value]="dataInicio()" (change)="dataInicio.set($any($event.target).value)" class="mt-1.5 block w-full rounded-xl border border-slate-300 p-2.5 text-xs text-slate-800 focus:border-[#2F6BFF] focus:outline-none" />
-          </label>
-          <label class="text-xs font-semibold text-slate-600">Até
-            <input type="date" [value]="dataFim()" (change)="dataFim.set($any($event.target).value)" class="mt-1.5 block w-full rounded-xl border border-slate-300 p-2.5 text-xs text-slate-800 focus:border-[#2F6BFF] focus:outline-none" />
-          </label>
-        </div>
-        <div class="flex justify-end"><button type="button" (click)="limparFiltros()" class="rounded-lg px-3 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100">Limpar filtros</button></div>
-      </section>
-
-      <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xs">
-        <div class="flex items-center justify-between border-b border-slate-100 px-4 py-4 sm:px-5"><h2 class="text-sm font-bold text-[#0E1A3A]">Movimentações registradas</h2><span class="text-[11px] text-slate-400">Mais recentes primeiro</span></div>
-        <div class="hidden md:block overflow-x-auto">
-          <table class="w-full text-left text-xs"><thead class="bg-slate-50 text-slate-600"><tr><th class="p-4">Data e hora</th><th class="p-4">Movimentação</th><th class="p-4">Pessoa</th><th class="p-4">Item</th><th class="p-4">Status</th></tr></thead>
-            <tbody class="divide-y divide-slate-100">
-              @for (r of registrosFiltrados(); track r.id) {
-                <tr class="hover:bg-slate-50/70"><td class="p-4 whitespace-nowrap text-slate-500">{{ formatarData(r.data) }}</td><td class="p-4"><div class="flex items-center gap-2"><span class="flex h-8 w-8 items-center justify-center rounded-lg" [class.bg-blue-50]="r.tipo === 'solicitacao' || r.tipo === 'emprestimo'" [class.text-blue-700]="r.tipo === 'solicitacao' || r.tipo === 'emprestimo'" [class.bg-emerald-50]="r.tipo === 'devolucao'" [class.text-emerald-700]="r.tipo === 'devolucao'" [class.bg-amber-50]="r.tipo === 'manutencao'" [class.text-amber-700]="r.tipo === 'manutencao'" [class.bg-slate-100]="r.tipo === 'cadastro'" [class.text-slate-700]="r.tipo === 'cadastro'"><mat-icon class="text-base">{{ icone(r.tipo) }}</mat-icon></span><div><strong class="block text-slate-800">{{ r.titulo }}</strong><span class="mt-0.5 block text-[10px] text-slate-500">{{ r.detalhe }}</span></div></div></td><td class="p-4 text-slate-700">{{ r.pessoa }}</td><td class="p-4 text-slate-700">{{ r.item }}</td><td class="p-4"><span class="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold text-slate-600">{{ r.status }}</span></td></tr>
-              } @empty { <tr><td colspan="5" class="p-12 text-center"><mat-icon class="text-3xl text-slate-300">manage_search</mat-icon><p class="mt-2 text-sm font-semibold text-slate-600">Nenhuma movimentação encontrada</p><p class="mt-1 text-xs text-slate-400">Tente alterar os filtros de pesquisa.</p></td></tr> }
-            </tbody>
-          </table>
-        </div>
-        <div class="space-y-3 p-3 md:hidden">
-          @for (r of registrosFiltrados(); track r.id) {
-            <article class="rounded-xl border border-slate-200 p-3"><div class="flex items-start gap-3"><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-700"><mat-icon>{{ icone(r.tipo) }}</mat-icon></span><div class="min-w-0 flex-1"><div class="flex items-start justify-between gap-2"><strong class="text-xs text-[#0E1A3A]">{{ r.titulo }}</strong><span class="shrink-0 rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-600">{{ r.status }}</span></div><p class="mt-1 text-[11px] text-slate-500">{{ r.detalhe }}</p><p class="mt-2 text-[11px] text-slate-700">{{ r.pessoa }} · {{ r.item }}</p><p class="mt-2 text-[10px] text-slate-400">{{ formatarData(r.data) }}</p></div></div></article>
-          } @empty { <p class="p-8 text-center text-xs text-slate-400">Nenhuma movimentação encontrada.</p> }
-        </div>
-      </section>
-      <p class="text-[11px] leading-relaxed text-slate-400">Observação: o histórico é montado a partir dos registros que o sistema já mantém. Alterações antigas de cadastro que não foram registradas previamente não podem ser reconstruídas retroativamente.</p>
-    </div>
-  `,
+  templateUrl: './R18Historico.html',
 })
 export class R18Historico {
   readonly store = inject(NexusStore);
@@ -157,6 +97,7 @@ export class R18Historico {
   contarEmprestimosDevolucoes() { return this.registros().filter(r => r.tipo === 'emprestimo' || r.tipo === 'devolucao').length; }
   formatarData(iso: string) { return iso ? formatDateShort(iso) : 'Data não registrada'; }
   icone(tipo: Exclude<TipoHistorico, 'todos'>) { return ({solicitacao:'assignment', emprestimo:'outbox', devolucao:'move_to_inbox', manutencao:'build', cadastro:'inventory_2'})[tipo]; }
+  classeIcone(tipo: Exclude<TipoHistorico, 'todos'>) { return ({solicitacao:'bg-info-soft text-info', emprestimo:'bg-accent-soft text-warn', devolucao:'bg-ok-soft text-ok', manutencao:'bg-maint-soft text-maint', cadastro:'bg-sunken text-ink-soft'})[tipo]; }
   rotuloStatusSolicitacao(status: string) { return ({pendente:'Pendente', aprovada:'Aprovada', recusada:'Recusada', expirada:'Expirada', concluida:'Concluída'} as Record<string,string>)[status] || status; }
   limparFiltros() { this.tipo.set('todos'); this.busca.set(''); this.dataInicio.set(''); this.dataFim.set(''); }
 }

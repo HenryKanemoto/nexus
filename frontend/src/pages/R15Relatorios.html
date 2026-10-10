@@ -1,0 +1,137 @@
+<div class="page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">Relatórios</h1>
+      <p class="page-subtitle">Circulação dos itens, atrasos e defeitos no período. Clique em um item para abrir a ficha.</p>
+    </div>
+    <div class="flex gap-1 self-start rounded-full border border-line-strong bg-surface p-1 sm:self-auto" role="group" aria-label="Período">
+      @for (p of periodos; track p.valor) {
+        <button
+          type="button"
+          (click)="periodoSelecionado.set(p.valor)"
+          class="h-8 rounded-full px-3 text-sm font-medium transition-colors"
+          [class]="periodoSelecionado() === p.valor ? 'bg-ink text-white' : 'text-ink-soft hover:text-ink'"
+          [attr.aria-pressed]="periodoSelecionado() === p.valor"
+        >
+          {{ p.rotulo }}
+        </button>
+      }
+    </div>
+  </header>
+
+  <!-- Números do período -->
+  <div class="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
+    <div class="stat">
+      <span class="stat-label">Empréstimos</span>
+      <span class="stat-value">{{ emprestimosPeriodo().length }}</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Atrasados agora</span>
+      <span class="stat-value" [class.text-danger]="atrasosAgoraCount() > 0">{{ atrasosAgoraCount() }}</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Com atraso no período</span>
+      <span class="stat-value">{{ atrasosNoPeriodoCount() }}</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Defeitos no período</span>
+      <span class="stat-value">{{ ocorrenciasPeriodo().length }}</span>
+    </div>
+  </div>
+
+  <div class="grid items-start gap-6 lg:grid-cols-2">
+    <!-- Ranking: série única, uma cor, valor rotulado no fim da barra -->
+    <section class="card" aria-labelledby="titulo-ranking">
+      <div class="card-header">
+        <h2 id="titulo-ranking" class="card-title">Itens mais emprestados</h2>
+        <span class="text-xs text-ink-muted">top 5</span>
+      </div>
+      @if (rankingMaisEmprestados().length > 0) {
+        <ol class="flex flex-col gap-1 p-3 sm:p-4">
+          @for (item of rankingMaisEmprestados(); track item.id) {
+            <li>
+              <a
+                [routerLink]="['/painel/itens', item.id]"
+                class="group block rounded-control px-2 py-2 transition-colors hover:bg-paper"
+                [title]="item.nome + ': ' + plural(item.total, 'empréstimo')"
+              >
+                <span class="flex items-baseline justify-between gap-3 text-sm">
+                  <span class="truncate group-hover:underline">{{ item.nome }}</span>
+                  <span class="shrink-0 font-mono text-xs text-ink-soft tabular-nums">{{ item.total }}</span>
+                </span>
+                <span class="mt-1.5 block h-2 overflow-hidden rounded-full bg-sunken">
+                  <span
+                    class="block h-full rounded-full bg-ink transition-[width] duration-500"
+                    [style.width.%]="getPorcentagemBarra(item.total)"
+                  ></span>
+                </span>
+              </a>
+            </li>
+          }
+        </ol>
+      } @else {
+        <p class="px-6 py-10 text-center text-sm text-ink-muted">Nenhum empréstimo no período.</p>
+      }
+    </section>
+
+    <!-- Atrasos -->
+    <section class="card" aria-labelledby="titulo-atrasos">
+      <div class="card-header">
+        <h2 id="titulo-atrasos" class="card-title">Atrasos no período</h2>
+      </div>
+      @if (listaAtrasos().length > 0) {
+        <ul class="divide-y divide-line">
+          @for (atraso of listaAtrasos(); track atraso.id) {
+            @let user = getUsuario(atraso.usuarioId);
+            @let it = getItem(atraso.itemId);
+            <li class="flex items-center gap-4 px-5 py-3 sm:px-6">
+              <div class="min-w-0 flex-1">
+                <p class="truncate font-medium">{{ user?.nome || 'Usuário' }}</p>
+                <a [routerLink]="['/painel/itens', atraso.itemId]" class="block truncate text-xs text-ink-muted hover:text-ink hover:underline">
+                  {{ it?.nome || 'Item' }}
+                </a>
+              </div>
+              <span class="shrink-0 font-mono text-sm font-semibold text-danger">{{ plural(atraso.diasAtraso, 'dia') }}</span>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="px-6 py-10 text-center text-sm text-ink-muted">Nenhum atraso no período.</p>
+      }
+    </section>
+  </div>
+
+  <!-- Defeitos -->
+  <section class="card" aria-labelledby="titulo-defeitos">
+    <div class="card-header">
+      <h2 id="titulo-defeitos" class="card-title">Itens com mais defeitos</h2>
+    </div>
+    @if (rankingDefeitos().length > 0) {
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Categoria</th>
+              <th class="text-right">Ocorrências</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (def of rankingDefeitos(); track def.id) {
+              <tr>
+                <td>
+                  <a [routerLink]="['/painel/itens', def.id]" class="font-medium hover:underline">{{ def.nome }}</a>
+                  <p class="font-mono text-xs text-ink-muted">{{ def.patrimonio }}</p>
+                </td>
+                <td class="text-ink-soft">{{ def.categoriaNome }}</td>
+                <td class="text-right font-mono font-semibold tabular-nums">{{ def.total }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <p class="px-6 py-10 text-center text-sm text-ink-muted">Nenhum defeito registrado no período.</p>
+    }
+  </section>
+</div>

@@ -1,13 +1,24 @@
+export declare const STATUS_ITEM: readonly ["disponivel", "solicitado", "reservado", "emprestado", "atrasado", "manutencao"];
+export type StatusItem = typeof STATUS_ITEM[number];
 export interface Item {
-    id: number;
+    id: string;
+    categoriaId: string;
     nome: string;
-    tipo: string;
-    emprestado: boolean;
-    dataEmprestado: Date;
+    descricao: string;
+    patrimonio: string;
+    codigoQr: string;
+    foto?: string | null;
+    status: StatusItem;
 }
 export interface ItemRequestDTO {
+    id?: string;
+    categoriaId: string;
     nome: string;
-    tipo: string;
+    descricao?: string;
+    patrimonio: string;
+    codigoQr: string;
+    foto?: string | null;
+    status?: StatusItem;
 }
 export interface Usuario {
     nome: string;

@@ -10,11 +10,13 @@ let UsuarioService = class UsuarioService {
         {
             "nome": "joao",
             "items_emprestados": [{
-                    "id": 12,
-                    "nome": "PC",
-                    "tipo": "Computador",
-                    "emprestado": true,
-                    "dataEmprestado": new Date("2026-01-01")
+                    "id": "item-03",
+                    "categoriaId": "cat-notebooks",
+                    "nome": "Notebook Dell Latitude 3420 #1",
+                    "descricao": "Intel Core i5 11ª Gen, 16GB RAM, SSD 256GB, tela 14\".",
+                    "patrimonio": "NX-0003",
+                    "codigoQr": "NX-NOTE-001",
+                    "status": "emprestado"
                 }]
         },
     ];

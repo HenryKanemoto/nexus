@@ -1,0 +1,151 @@
+<div class="page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">Solicitações</h1>
+      <p class="page-subtitle">Todo pedido precisa da sua aprovação. Depois de aprovado, a retirada é no mesmo dia.</p>
+    </div>
+  </header>
+
+  @if (feedbackMensagem()) {
+    <div role="status" class="alert alert-ok items-center">
+      <mat-icon class="icon-sm">check_circle</mat-icon>
+      <p class="flex-1">{{ feedbackMensagem() }}</p>
+      <button type="button" (click)="feedbackMensagem.set(null)" class="btn-icon size-8" aria-label="Fechar aviso">
+        <mat-icon class="icon-sm">close</mat-icon>
+      </button>
+    </div>
+  }
+
+  <!-- Pedidos aguardando análise -->
+  <section class="card" aria-labelledby="titulo-pendentes">
+    <div class="card-header">
+      <h2 id="titulo-pendentes" class="card-title flex items-center gap-2">
+        Aguardando análise
+        <span class="count">{{ solicitacoesPendentes().length }}</span>
+      </h2>
+    </div>
+
+    @if (solicitacoesPendentes().length > 0) {
+      <ul class="divide-y divide-line">
+        @for (s of solicitacoesPendentes(); track s.id) {
+          @let item = getItem(s.itemId);
+          @let user = getUsuario(s.solicitanteId);
+          <li class="grid gap-3 px-5 py-4 sm:px-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_auto] md:items-center md:gap-6">
+            <div class="min-w-0">
+              <p class="flex flex-wrap items-center gap-2 font-medium">
+                {{ user?.nome || 'Solicitante' }}
+                @if (s.lembreteEnviadoEm) {
+                  <span class="inline-flex items-center gap-1 rounded-full bg-accent px-2 py-0.5 text-[0.6875rem] font-semibold" title="O solicitante enviou um lembrete">
+                    <mat-icon class="icon-xs">notifications_active</mat-icon>
+                    lembrete
+                  </span>
+                }
+              </p>
+              <p class="text-xs text-ink-muted">
+                <span class="capitalize">{{ user?.perfil }}</span> · <span class="font-mono">{{ user?.matricula }}</span>
+              </p>
+            </div>
+
+            <div class="min-w-0">
+              <p class="truncate">{{ item?.nome }}</p>
+              <p class="text-xs text-ink-muted">
+                <span class="font-mono">{{ item?.patrimonio }}</span> · devolver até {{ formatarData(s.devolucaoDesejada) }} · há
+                {{ getTempoDecorrido(s.criadoEm) }}
+              </p>
+            </div>
+
+            <div class="flex gap-2">
+              <button type="button" (click)="abrirModalRecusa(s)" class="btn btn-secondary btn-sm flex-1 md:flex-none">Recusar</button>
+              <button type="button" (click)="aprovarPedido(s.id)" class="btn btn-ok btn-sm flex-1 md:flex-none" title="O item fica reservado para retirada hoje">
+                <mat-icon class="icon-sm">check</mat-icon>
+                Aprovar
+              </button>
+            </div>
+          </li>
+        }
+      </ul>
+    } @else {
+      <div class="empty">
+        <mat-icon class="icon-xl">inbox</mat-icon>
+        <p class="empty-title">Nada para analisar</p>
+        <p class="empty-text">Novos pedidos de alunos e professores aparecem aqui.</p>
+      </div>
+    }
+  </section>
+
+  <!-- Aprovados aguardando retirada (RN04) -->
+  <section class="card" aria-labelledby="titulo-aprovados">
+    <div class="card-header">
+      <div>
+        <h2 id="titulo-aprovados" class="card-title flex items-center gap-2">
+          Aprovados, aguardando retirada
+          <span class="count">{{ pedidosAprovadosHoje().length }}</span>
+        </h2>
+        <p class="text-xs text-ink-muted">Se não forem retirados até o fim do dia, os pedidos expiram.</p>
+      </div>
+    </div>
+
+    @if (pedidosAprovadosHoje().length > 0) {
+      <ul class="divide-y divide-line">
+        @for (solic of pedidosAprovadosHoje(); track solic.id) {
+          @let item = getItem(solic.itemId);
+          @let user = getUsuario(solic.solicitanteId);
+          <li class="grid gap-3 px-5 py-4 sm:px-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_auto] md:items-center md:gap-6">
+            <div class="min-w-0">
+              <p class="font-medium">{{ user?.nome }}</p>
+              <p class="text-xs text-ink-muted">
+                <span class="capitalize">{{ user?.perfil }}</span> · <span class="font-mono">{{ user?.matricula }}</span>
+              </p>
+            </div>
+            <div class="min-w-0">
+              <p class="truncate">{{ item?.nome }}</p>
+              <p class="text-xs text-ink-muted">
+                <span class="font-mono">{{ item?.codigoQr }}</span> · aprovado às {{ formatarHora(solic.avaliadoEm || solic.criadoEm) }}
+              </p>
+            </div>
+            <a [routerLink]="['/painel/retirada', solic.itemId]" class="btn btn-primary btn-sm">
+              <mat-icon class="icon-sm">qr_code_scanner</mat-icon>
+              Registrar retirada
+            </a>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="px-6 py-10 text-center text-sm text-ink-muted">Nenhum pedido aprovado aguardando retirada.</p>
+    }
+  </section>
+
+  <!-- Confirmação de recusa -->
+  @if (solicitacaoParaRecusar(); as solic) {
+    @let it = getItem(solic.itemId);
+    @let usr = getUsuario(solic.solicitanteId);
+    <app-modal rotulo="titulo-recusa" (fechar)="solicitacaoParaRecusar.set(null)">
+        <div>
+          <h3 id="titulo-recusa" class="modal-title">Recusar pedido?</h3>
+          <p class="mt-1 text-sm text-ink-soft">O item volta para o catálogo como disponível e a pessoa é avisada.</p>
+        </div>
+
+        <dl class="rounded-control bg-paper p-4 text-sm">
+          <div class="flex justify-between gap-4"><dt class="text-ink-muted">Solicitante</dt><dd>{{ usr?.nome }}</dd></div>
+          <div class="mt-1 flex justify-between gap-4"><dt class="text-ink-muted">Item</dt><dd class="text-right">{{ it?.nome }}</dd></div>
+          <div class="mt-1 flex justify-between gap-4"><dt class="text-ink-muted">Devolução</dt><dd>{{ formatarData(solic.devolucaoDesejada) }}</dd></div>
+        </dl>
+
+        <div class="field">
+          <label for="motivoRecusa" class="label">Motivo <span class="font-normal text-ink-muted">(opcional)</span></label>
+          <input
+            id="motivoRecusa"
+            type="text"
+            #motivoInput
+            class="input"
+            placeholder="Equipamento reservado para manutenção preventiva"
+          />
+        </div>
+
+        <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <button type="button" (click)="solicitacaoParaRecusar.set(null)" class="btn btn-secondary">Cancelar</button>
+          <button type="button" (click)="confirmarRecusa(solic.id, motivoInput.value)" class="btn btn-danger">Recusar pedido</button>
+        </div>
+    </app-modal>
+  }
+</div>

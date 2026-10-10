@@ -1,0 +1,71 @@
+<div class="flex min-h-screen flex-col px-5 py-8 sm:px-8">
+  <header class="mx-auto w-full max-w-md">
+    <app-logo [tamanho]="30" />
+  </header>
+
+  <main class="mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-10">
+    <div
+      class="flex size-14 items-center justify-center rounded-card"
+      [class]="estaAprovada() ? 'bg-ok-soft text-ok' : 'bg-accent-soft text-warn'"
+    >
+      <mat-icon class="icon-lg">{{ estaAprovada() ? 'verified' : 'hourglass_top' }}</mat-icon>
+    </div>
+
+    @if (estaAprovada()) {
+      <h1 class="page-title mt-6">Conta aprovada</h1>
+      <p class="page-subtitle">Tudo certo! Você já pode pedir materiais e equipamentos pelo catálogo.</p>
+    } @else {
+      <h1 class="page-title mt-6">Cadastro recebido</h1>
+      <p class="page-subtitle">
+        Sua conta foi criada e está esperando a aprovação de um responsável do acervo. Você receberá uma notificação assim
+        que ela for analisada.
+      </p>
+    }
+
+    <dl class="card mt-8 divide-y divide-line text-sm">
+      <div class="flex items-center justify-between gap-4 px-5 py-3">
+        <dt class="text-ink-muted">Nome</dt>
+        <dd class="truncate font-medium">{{ nomeExibido() }}</dd>
+      </div>
+      <div class="flex items-center justify-between gap-4 px-5 py-3">
+        <dt class="text-ink-muted">E-mail</dt>
+        <dd class="truncate">{{ emailExibido() }}</dd>
+      </div>
+      @if (matriculaExibida()) {
+        <div class="flex items-center justify-between gap-4 px-5 py-3">
+          <dt class="text-ink-muted">Matrícula</dt>
+          <dd class="tag">{{ matriculaExibida() }}</dd>
+        </div>
+      }
+      <div class="flex items-center justify-between gap-4 px-5 py-3">
+        <dt class="text-ink-muted">Situação</dt>
+        <dd><app-status-badge [status]="estaAprovada() ? 'ativa' : 'pendente'" /></dd>
+      </div>
+    </dl>
+
+    <div class="mt-6 flex flex-col gap-3">
+      @if (estaAprovada()) {
+        <a routerLink="/catalogo" class="btn btn-primary btn-lg btn-block">
+          Ir para o catálogo
+          <mat-icon class="icon-sm">arrow_forward</mat-icon>
+        </a>
+      }
+      <button type="button" (click)="voltarAoLogin()" class="btn btn-secondary btn-lg btn-block">Voltar ao login</button>
+    </div>
+
+    @if (!estaAprovada()) {
+      <section class="mt-8 rounded-card border border-dashed border-line-strong p-4">
+        <p class="page-eyebrow">Atalho de demonstração</p>
+        <p class="mt-2 text-sm text-ink-soft">
+          Para testar o fluxo sem entrar como responsável, aprove esta conta agora.
+        </p>
+        <button type="button" (click)="simularAprovacao()" class="btn btn-sm btn-accent mt-3">
+          <mat-icon class="icon-sm">check</mat-icon>
+          Simular aprovação
+        </button>
+      </section>
+    }
+  </main>
+</div>
+
+<app-relogio-flutuante />
