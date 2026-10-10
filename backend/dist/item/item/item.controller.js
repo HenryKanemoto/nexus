@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Put } from '@nestjs/common';
 import { ItemService } from './item.service.js';
 let ItemController = class ItemController {
     itemService;
@@ -20,8 +20,20 @@ let ItemController = class ItemController {
     verItens() {
         return this.itemService.findall();
     }
+    verItem(id) {
+        return this.itemService.findOne(id);
+    }
     adcionarItens(itemRequestDTO) {
-        this.itemService.save(itemRequestDTO);
+        return this.itemService.save(itemRequestDTO);
+    }
+    salvarItem(id, itemRequestDTO) {
+        return this.itemService.upsert(id, itemRequestDTO);
+    }
+    alterarStatus(id, status) {
+        return this.itemService.alterarStatus(id, status);
+    }
+    removerItem(id) {
+        return this.itemService.remove(id);
     }
 };
 __decorate([
@@ -31,12 +43,43 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ItemController.prototype, "verItens", null);
 __decorate([
+    Get(':id'),
+    __param(0, Param('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ItemController.prototype, "verItem", null);
+__decorate([
     Post(),
     __param(0, Body()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], ItemController.prototype, "adcionarItens", null);
+__decorate([
+    Put(':id'),
+    __param(0, Param('id')),
+    __param(1, Body()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], ItemController.prototype, "salvarItem", null);
+__decorate([
+    Patch(':id/status'),
+    __param(0, Param('id')),
+    __param(1, Body('status')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], ItemController.prototype, "alterarStatus", null);
+__decorate([
+    Delete(':id'),
+    HttpCode(204),
+    __param(0, Param('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ItemController.prototype, "removerItem", null);
 ItemController = __decorate([
     Controller('item'),
     __metadata("design:paramtypes", [ItemService])

@@ -1,7 +1,13 @@
+import { type StatusItem } from "../../types/Models.js";
 export declare class ItemEntity {
-    id: number;
+    id: string;
+    categoriaId: string;
     nome: string;
-    tipo: string;
-    emprestado: 'True' | 'False';
-    dataEmprestado: Date | null;
+    descricao: string;
+    patrimonio: string;
+    codigoQr: string;
+    foto: string | null;
+    status: StatusItem;
+    criadoEm: Date;
+    atualizadoEm: Date;
 }

@@ -1,25 +1,42 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Entity, PrimaryColumn, Column, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import { STATUS_ITEM, type StatusItem } from "../../types/Models.js";
 
 @Entity('itens')
 export class ItemEntity {
 
-    @PrimaryGeneratedColumn()
-    id:number;
+    @PrimaryColumn({length:64})
+    id:string;
 
-    @Column({length:50, nullable:false})
+    @Column({length:64})
+    categoriaId:string;
+
+    @Column({length:120})
     nome:string;
 
-    @Column({length:50, nullable:false})
-    tipo:string;
+    @Column({type:'text'})
+    descricao:string;
+
+    @Column({length:40, unique:true})
+    patrimonio:string;
+
+    @Column({length:60, unique:true})
+    codigoQr:string;
+
+    // Foto em data URL (base64), por isso longtext
+    @Column({type:'longtext', nullable:true})
+    foto:string|null;
 
     @Column({
         type:'enum',
-        enum:['True', 'False'],
-        default: 'False'
+        enum:STATUS_ITEM,
+        default:'disponivel'
     })
-    emprestado: 'True'|'False';
-    
-    @Column({name:'dataEmprestado',type: 'datetime', nullable:true})
-    dataEmprestado:Date|null;
+    status:StatusItem;
+
+    @CreateDateColumn()
+    criadoEm:Date;
+
+    @UpdateDateColumn()
+    atualizadoEm:Date;
 
 }

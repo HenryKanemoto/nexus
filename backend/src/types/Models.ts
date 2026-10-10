@@ -1,14 +1,35 @@
-export interface Item{
-    id:number,
+export const STATUS_ITEM = [
+    'disponivel',
+    'solicitado',
+    'reservado',
+    'emprestado',
+    'atrasado',
+    'manutencao',
+] as const;
+
+export type StatusItem = typeof STATUS_ITEM[number];
+
+export interface Item {
+    id: string,
+    categoriaId: string,
     nome: string,
-    tipo: string,
-    emprestado: boolean,
-    dataEmprestado: Date
+    descricao: string,
+    patrimonio: string,
+    codigoQr: string,
+    foto?: string | null,
+    status: StatusItem,
 }
 
-export interface ItemRequestDTO{
+// Corpo aceito em POST /item e PUT /item/:id. O id é opcional no POST (gerado pelo servidor).
+export interface ItemRequestDTO {
+    id?: string,
+    categoriaId: string,
     nome: string,
-    tipo: string
+    descricao?: string,
+    patrimonio: string,
+    codigoQr: string,
+    foto?: string | null,
+    status?: StatusItem,
 }
 
 export interface Usuario {
