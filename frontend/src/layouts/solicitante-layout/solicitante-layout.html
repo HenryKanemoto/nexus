@@ -1,0 +1,107 @@
+<div class="flex min-h-screen flex-col bg-paper">
+  <header class="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur">
+    <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+      <div class="flex items-center gap-8">
+        <a routerLink="/catalogo" aria-label="Nexus, ir para o catálogo">
+          <app-logo [tamanho]="30" />
+        </a>
+
+        <nav class="hidden items-center gap-1 md:flex" aria-label="Navegação principal">
+          @for (link of links; track link.rota) {
+            <a
+              [routerLink]="link.rota"
+              routerLinkActive="!bg-ink !text-white"
+              class="inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm font-medium text-ink-soft transition-colors hover:bg-sunken hover:text-ink"
+            >
+              {{ link.rotulo }}
+            </a>
+          }
+        </nav>
+      </div>
+
+      <div class="flex items-center gap-1 sm:gap-2">
+        <a routerLink="/notificacoes" class="btn-icon relative hidden md:inline-flex" aria-label="Notificações">
+          <mat-icon>notifications_none</mat-icon>
+          @if (store.totalNaoLidas() > 0) {
+            <span class="count absolute -right-0.5 -top-0.5 h-4 min-w-4 px-1 text-[0.625rem]">{{ store.totalNaoLidas() }}</span>
+          }
+        </a>
+
+        <div class="relative">
+          <button
+            type="button"
+            (click)="toggleMenu()"
+            class="flex items-center gap-2.5 rounded-full py-1 pl-1 pr-1 transition-colors hover:bg-sunken sm:pr-3"
+            [attr.aria-expanded]="menuAberto()"
+            aria-haspopup="menu"
+          >
+            <span class="avatar size-8 text-xs">{{ iniciais() }}</span>
+            <span class="hidden text-left sm:block">
+              <span class="block max-w-[140px] truncate text-sm font-medium leading-tight">{{ usuario()?.nome }}</span>
+              <span class="block text-xs leading-tight text-ink-muted">{{ perfil() }}</span>
+            </span>
+          </button>
+
+          @if (menuAberto()) {
+            <div class="fixed inset-0 z-40" (click)="menuAberto.set(false)" aria-hidden="true"></div>
+            <div class="card shadow-pop absolute right-0 z-50 mt-2 w-64 overflow-hidden" role="menu">
+              <div class="border-b border-line px-4 py-3">
+                <p class="truncate text-sm font-medium">{{ usuario()?.nome }}</p>
+                <p class="truncate text-xs text-ink-muted">{{ usuario()?.email }}</p>
+                <p class="tag mt-2">{{ usuario()?.matricula }}</p>
+              </div>
+              <a
+                routerLink="/perfil"
+                (click)="menuAberto.set(false)"
+                role="menuitem"
+                class="flex items-center gap-2.5 px-4 py-2.5 text-sm hover:bg-sunken"
+              >
+                <mat-icon class="icon-sm text-ink-muted">person_outline</mat-icon>
+                Meu perfil
+              </a>
+              <button
+                type="button"
+                (click)="sair()"
+                role="menuitem"
+                class="flex w-full items-center gap-2.5 border-t border-line px-4 py-2.5 text-sm text-danger hover:bg-danger-soft"
+              >
+                <mat-icon class="icon-sm">logout</mat-icon>
+                Sair
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <app-aviso-api />
+
+  <main class="mx-auto w-full max-w-6xl flex-1 px-4 pb-28 pt-6 sm:px-6 sm:pt-8 md:pb-12">
+    <router-outlet />
+  </main>
+
+  <!-- Navegação inferior no celular -->
+  <nav
+    class="fixed inset-x-0 bottom-0 z-40 grid grid-cols-4 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] md:hidden"
+    aria-label="Navegação principal"
+  >
+    @for (link of linksMobile; track link.rota) {
+      <a
+        [routerLink]="link.rota"
+        routerLinkActive="!text-ink [&_.marca]:bg-accent"
+        class="relative flex flex-col items-center gap-0.5 py-2 text-[0.6875rem] font-medium text-ink-muted"
+      >
+        <span class="marca flex h-7 w-12 items-center justify-center rounded-full transition-colors">
+          <mat-icon class="icon-sm">{{ link.icone }}</mat-icon>
+        </span>
+        {{ link.rotulo }}
+        @if (link.rota === '/notificacoes' && store.totalNaoLidas() > 0) {
+          <span class="count absolute right-[calc(50%-1.5rem)] top-1 h-4 min-w-4 px-1 text-[0.625rem]">{{ store.totalNaoLidas() }}</span>
+        }
+      </a>
+    }
+  </nav>
+
+  <app-relogio-flutuante [acimaDaNavegacao]="true" />
+</div>

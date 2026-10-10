@@ -1,0 +1,47 @@
+<div class="page">
+  <header>
+    <h1 class="page-title">Manutenção</h1>
+    <p class="page-subtitle">Equipamentos que voltaram com defeito. Eles ficam fora do catálogo até serem consertados.</p>
+  </header>
+
+  @if (mensagemSucesso()) {
+    <div role="status" class="alert alert-ok items-center">
+      <mat-icon class="icon-sm">check_circle</mat-icon>
+      <p class="flex-1">{{ mensagemSucesso() }}</p>
+      <button type="button" (click)="mensagemSucesso.set(null)" class="btn-icon size-8" aria-label="Fechar aviso">
+        <mat-icon class="icon-sm">close</mat-icon>
+      </button>
+    </div>
+  }
+
+  @if (itensEmManutencao().length > 0) {
+    <ul class="flex flex-col gap-3">
+      @for (linha of itensEmManutencao(); track linha.item.id) {
+        <li class="card flex flex-col gap-4 p-5 md:flex-row md:items-center md:gap-6">
+          <a [routerLink]="['/painel/itens', linha.item.id]" class="group flex min-w-0 items-center gap-3 md:w-72">
+            <app-item-thumb [item]="linha.item" [tamanhoIcone]="22" class="size-12 shrink-0 rounded-control bg-maint-soft text-maint" />
+            <span class="min-w-0">
+              <span class="block truncate font-medium group-hover:underline">{{ linha.item.nome }}</span>
+              <span class="block font-mono text-xs text-ink-muted">{{ linha.item.patrimonio }}</span>
+            </span>
+          </a>
+          <div class="min-w-0 flex-1">
+            <p class="text-sm">{{ linha.ocorrencia?.descricao || 'Defeito informado na devolução.' }}</p>
+            <p class="mt-1 text-xs text-ink-muted">Devolvido por {{ linha.devolvidoPorNome }} · {{ formatarData(linha.dataRegistro) }}</p>
+          </div>
+          <button type="button" (click)="marcarConsertado(linha)" class="btn btn-secondary btn-sm shrink-0">
+            <mat-icon class="icon-sm">handyman</mat-icon>
+            Marcar como consertado
+          </button>
+        </li>
+      }
+    </ul>
+    <p class="text-xs text-ink-muted">Ao marcar como consertado, o item volta ao catálogo como disponível.</p>
+  } @else {
+    <div class="card empty">
+      <mat-icon class="icon-xl">task_alt</mat-icon>
+      <p class="empty-title">Nada em manutenção</p>
+      <p class="empty-text">Todos os equipamentos estão funcionando.</p>
+    </div>
+  }
+</div>

@@ -1,0 +1,97 @@
+<div class="min-h-screen bg-paper">
+  <!-- Fundo escuro atrás do menu no celular -->
+  @if (drawerAberto()) {
+    <div class="fixed inset-0 z-40 bg-ink/40 lg:hidden" (click)="fecharDrawer()" aria-hidden="true"></div>
+  }
+
+  <!-- Menu lateral: gaveta no celular, fixo a partir de lg -->
+  <aside
+    class="fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-line bg-surface transition-transform duration-200 lg:translate-x-0"
+    [class.-translate-x-full]="!drawerAberto()"
+    aria-label="Menu principal"
+  >
+    <div class="flex h-16 shrink-0 items-center justify-between px-5">
+      <a routerLink="/painel" (click)="fecharDrawer()" aria-label="Nexus, ir para o painel">
+        <app-logo [tamanho]="30" />
+      </a>
+      <button type="button" class="btn-icon lg:hidden" (click)="fecharDrawer()" aria-label="Fechar menu">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto px-3 pb-4">
+      @for (grupo of menu; track grupo.titulo) {
+        <p class="px-3 pb-1.5 pt-5 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-ink-muted">
+          {{ grupo.titulo }}
+        </p>
+        <ul class="flex flex-col gap-0.5">
+          @for (item of grupo.itens; track item.rota) {
+            <li>
+              <a
+                [routerLink]="item.rota"
+                (click)="fecharDrawer()"
+                routerLinkActive="is-active bg-ink !text-white"
+                [routerLinkActiveOptions]="{exact: item.rota === '/painel'}"
+                class="group flex h-9 items-center gap-3 rounded-control px-3 text-sm font-medium text-ink-soft transition-colors hover:bg-sunken hover:text-ink"
+              >
+                <mat-icon class="icon-sm text-ink-muted group-[.is-active]:text-accent">{{ item.icone }}</mat-icon>
+                <span class="flex-1">{{ item.rotulo }}</span>
+                @if (item.badge && item.badge() > 0) {
+                  <span class="count">{{ item.badge() }}</span>
+                }
+              </a>
+            </li>
+          }
+        </ul>
+      }
+    </nav>
+
+    <div class="flex shrink-0 items-center gap-3 border-t border-line p-4">
+      <span class="avatar size-9 text-sm">{{ iniciais() }}</span>
+      <div class="min-w-0 flex-1">
+        <p class="truncate text-sm font-medium">{{ store.usuarioLogado()?.nome }}</p>
+        <p class="text-xs text-ink-muted">Responsável</p>
+      </div>
+      <button type="button" class="btn-icon" (click)="sair()" aria-label="Sair" title="Sair">
+        <mat-icon class="icon-sm">logout</mat-icon>
+      </button>
+    </div>
+  </aside>
+
+  <div class="flex min-h-screen min-w-0 flex-col lg:pl-64">
+    <header
+      class="sticky top-0 z-30 flex h-16 items-center justify-between gap-3 border-b border-line bg-paper/90 px-4 backdrop-blur sm:px-6 lg:px-10"
+    >
+      <div class="flex min-w-0 items-center gap-2">
+        <button type="button" class="btn-icon -ml-2 lg:hidden" (click)="toggleDrawer()" aria-label="Abrir menu">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <a routerLink="/painel/configuracoes" class="tag hidden gap-1.5 hover:border-ink sm:inline-flex" title="Política de atraso em vigor">
+          <span class="size-1.5 rounded-full bg-accent-strong"></span>
+          política {{ store.configuracao().politicaAtraso }}
+        </a>
+      </div>
+
+      <div class="flex items-center gap-1 sm:gap-2">
+        <a routerLink="/painel/notificacoes" class="btn-icon relative" aria-label="Notificações">
+          <mat-icon>notifications_none</mat-icon>
+          @if (store.totalNaoLidas() > 0) {
+            <span class="count absolute -right-0.5 -top-0.5 h-4 min-w-4 px-1 text-[0.625rem]">{{ store.totalNaoLidas() }}</span>
+          }
+        </a>
+        <a routerLink="/painel/leitor" class="btn btn-accent btn-sm sm:h-9">
+          <mat-icon class="icon-sm">qr_code_scanner</mat-icon>
+          <span class="hidden sm:inline">Escanear</span>
+        </a>
+      </div>
+    </header>
+
+    <app-aviso-api />
+
+    <main class="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:px-10">
+      <router-outlet />
+    </main>
+  </div>
+
+  <app-relogio-flutuante />
+</div>

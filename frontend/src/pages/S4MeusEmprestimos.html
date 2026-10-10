@@ -1,0 +1,179 @@
+<div class="page">
+  @if (mensagemSucesso()) {
+    <div role="status" class="alert alert-ok items-center">
+      <mat-icon class="icon-sm">check_circle</mat-icon>
+      <p class="flex-1">{{ mensagemSucesso() }}</p>
+      <button type="button" (click)="mensagemSucesso.set(null)" class="btn-icon size-8" aria-label="Fechar aviso">
+        <mat-icon class="icon-sm">close</mat-icon>
+      </button>
+    </div>
+  }
+
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">Meus empréstimos</h1>
+      <p class="page-subtitle">Acompanhe pedidos em análise, itens com você e o que já foi encerrado.</p>
+    </div>
+    <a routerLink="/catalogo" class="btn btn-primary self-start sm:self-auto">
+      <mat-icon class="icon-sm">add</mat-icon>
+      Novo pedido
+    </a>
+  </header>
+
+  <div class="tabs" role="tablist">
+    @for (aba of abas(); track aba.id) {
+      <button
+        type="button"
+        role="tab"
+        (click)="mudarAba(aba.id)"
+        class="tab"
+        [class.tab-active]="abaAtiva() === aba.id"
+        [attr.aria-selected]="abaAtiva() === aba.id"
+      >
+        {{ aba.rotulo }}
+        <span class="font-mono text-xs" [class.text-ink-muted]="abaAtiva() !== aba.id">{{ aba.total }}</span>
+      </button>
+    }
+  </div>
+
+  <!-- PENDENTES: aprovados aguardando retirada + em análise -->
+  @if (abaAtiva() === 'pendentes') {
+    <ul class="flex flex-col gap-3">
+      @for (solic of pedidosAprovados(); track solic.id) {
+        @let item = getItem(solic.itemId);
+        <li class="card flex flex-col gap-4 border-accent-strong p-4 sm:flex-row sm:items-center sm:p-5">
+          @if (item) {
+            <app-item-thumb [item]="item" class="size-14 shrink-0 rounded-control bg-accent-soft" />
+          }
+          <div class="min-w-0 flex-1">
+            <p class="font-semibold">{{ item?.nome }}</p>
+            <p class="mt-0.5 text-sm text-ink-soft">
+              Aprovado às {{ formatarHora(solic.avaliadoEm || solic.criadoEm) }} · retire no setor de materiais antes do fim do dia
+            </p>
+          </div>
+          <span class="inline-flex shrink-0 items-center gap-1.5 self-start rounded-full bg-accent px-3 py-1 text-xs font-semibold sm:self-auto">
+            <mat-icon class="icon-xs">schedule</mat-icon>
+            Retire hoje
+          </span>
+        </li>
+      }
+
+      @for (solic of pedidosAguardandoAnalise(); track solic.id) {
+        @let item = getItem(solic.itemId);
+        @let podeLembrar = store.podeEnviarLembrete(solic);
+        <li class="card flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:p-5">
+          @if (item) {
+            <app-item-thumb [item]="item" class="size-14 shrink-0 rounded-control" />
+          }
+          <div class="min-w-0 flex-1">
+            <p class="font-semibold">{{ item?.nome }}</p>
+            <p class="mt-0.5 text-sm text-ink-soft">
+              Em análise · {{ getTempoDecorrido(solic.criadoEm) }} · devolução pretendida {{ formatarData(solic.devolucaoDesejada) }}
+            </p>
+          </div>
+          <div class="shrink-0">
+            @if (solic.lembreteEnviadoEm) {
+              <span class="inline-flex items-center gap-1.5 text-sm text-ok">
+                <mat-icon class="icon-sm">done</mat-icon>
+                Lembrete enviado
+              </span>
+            } @else if (podeLembrar) {
+              <!-- RN10: liberado após 2 h sem análise, uma única vez -->
+              <button type="button" (click)="lembrarResponsavel(solic.id)" class="btn btn-secondary btn-sm">
+                <mat-icon class="icon-sm">notifications_active</mat-icon>
+                Lembrar responsável
+              </button>
+            } @else {
+              <span class="text-xs text-ink-muted" title="Disponível 2 horas depois do pedido">
+                Lembrete liberado em {{ getHorasRestantesParaLembrete(solic.criadoEm) }}
+              </span>
+            }
+          </div>
+        </li>
+      } @empty {
+        @if (pedidosAprovados().length === 0) {
+          <li class="card empty">
+            <mat-icon class="icon-xl">inbox</mat-icon>
+            <p class="empty-title">Nenhum pedido pendente</p>
+            <p class="empty-text">Você não tem pedidos em análise nem retiradas marcadas para hoje.</p>
+          </li>
+        }
+      }
+    </ul>
+  }
+
+  <!-- ATIVOS: itens retirados e ainda não devolvidos -->
+  @if (abaAtiva() === 'ativos') {
+    <ul class="flex flex-col gap-3">
+      @for (emp of listaEmprestimosAtivos(); track emp.id) {
+        @let item = getItem(emp.itemId);
+        @let estaAtrasado = emp.diasAtraso > 0;
+        <li class="card flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:p-5" [class.border-danger]="estaAtrasado">
+          @if (item) {
+            <app-item-thumb [item]="item" class="size-14 shrink-0 rounded-control" />
+          }
+          <div class="min-w-0 flex-1">
+            <p class="flex flex-wrap items-center gap-2 font-semibold">
+              {{ item?.nome }}
+              <span class="tag">{{ item?.patrimonio }}</span>
+            </p>
+            <p class="mt-0.5 text-sm text-ink-soft">Retirado em {{ formatarData(emp.retiradoEm) }}</p>
+          </div>
+          <div class="shrink-0 sm:text-right">
+            <p class="text-xs text-ink-muted">Devolver até</p>
+            <p class="font-display text-lg font-semibold" [class.text-danger]="estaAtrasado">
+              {{ formatarData(emp.devolucaoPrevista) }}
+            </p>
+            @if (estaAtrasado) {
+              <p class="mt-1 inline-flex items-center gap-1 rounded-full bg-danger px-2.5 py-0.5 text-xs font-semibold text-white">
+                <mat-icon class="icon-xs">warning</mat-icon>
+                Atrasado há {{ plural(emp.diasAtraso, 'dia') }}
+              </p>
+            } @else {
+              <p class="text-xs text-ink-soft">{{ getDiasRestantes(emp.devolucaoPrevista) }}</p>
+            }
+          </div>
+        </li>
+      } @empty {
+        <li class="card empty">
+          <mat-icon class="icon-xl">check_circle_outline</mat-icon>
+          <p class="empty-title">Nenhum empréstimo ativo</p>
+          <p class="empty-text">Você não está com nenhum material ou equipamento agora.</p>
+        </li>
+      }
+    </ul>
+  }
+
+  <!-- HISTÓRICO: devolvidos, recusados e expirados -->
+  @if (abaAtiva() === 'historico') {
+    @if (listaHistorico().length > 0) {
+      <ul class="card divide-y divide-line">
+        @for (hist of listaHistorico(); track hist.id) {
+          @let sit = situacoes[hist.situacaoFinal];
+          <li class="flex flex-col gap-2 px-4 py-3.5 sm:flex-row sm:items-center sm:gap-4 sm:px-5">
+            <div class="min-w-0 flex-1">
+              <p class="font-medium">{{ hist.item?.nome || 'Equipamento' }}</p>
+              <p class="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-ink-muted">
+                <span class="font-mono">{{ hist.item?.patrimonio }}</span>
+                <span>{{ formatarData(hist.dataEvento) }}</span>
+                @if (hist.detalhe) {
+                  <span>· {{ hist.detalhe }}</span>
+                }
+              </p>
+            </div>
+            <span class="inline-flex shrink-0 items-center gap-1.5 self-start rounded-full px-2.5 py-0.5 text-xs font-medium sm:self-auto {{ sit.classe }}">
+              <mat-icon class="icon-xs">{{ sit.icone }}</mat-icon>
+              {{ hist.rotuloSituacao }}
+            </span>
+          </li>
+        }
+      </ul>
+    } @else {
+      <div class="card empty">
+        <mat-icon class="icon-xl">history</mat-icon>
+        <p class="empty-title">Histórico vazio</p>
+        <p class="empty-text">Aqui aparecem empréstimos devolvidos e pedidos recusados ou expirados.</p>
+      </div>
+    }
+  }
+</div>

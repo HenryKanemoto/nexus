@@ -1,0 +1,99 @@
+<div class="page">
+  @if (usuario(); as u) {
+    @if (u.status === 'bloqueada') {
+      <div role="status" class="alert alert-danger">
+        <mat-icon class="icon-sm">lock</mat-icon>
+        <p>
+          <strong class="font-semibold">Conta bloqueada por atraso.</strong>
+          Você pode ver o catálogo, mas novos pedidos ficam suspensos até a devolução do item atrasado.
+        </p>
+      </div>
+    } @else if (u.status === 'suspensa') {
+      <div role="status" class="alert alert-warn">
+        <mat-icon class="icon-sm">hourglass_empty</mat-icon>
+        <p>
+          <strong class="font-semibold">Conta suspensa temporariamente.</strong>
+          Pela política de empréstimos, você não pode pedir itens até o fim do prazo da suspensão.
+        </p>
+      </div>
+    }
+  }
+
+  <header class="page-header">
+    <div>
+      <p class="page-eyebrow">{{ store.itensCatalogo().length }} itens disponíveis</p>
+      <h1 class="page-title mt-1">Catálogo</h1>
+      <p class="page-subtitle">Escolha um equipamento para ver os detalhes e pedir emprestado.</p>
+    </div>
+
+    <div class="input-group w-full sm:w-80">
+      <mat-icon class="icon-sm">search</mat-icon>
+      <input
+        type="search"
+        class="input"
+        [value]="termoBusca()"
+        (input)="termoBusca.set($any($event.target).value)"
+        placeholder="Buscar por nome ou patrimônio"
+        aria-label="Buscar no catálogo"
+      />
+    </div>
+  </header>
+
+  <!-- Filtro por categoria -->
+  <div class="sem-rolagem -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0" role="group" aria-label="Filtrar por categoria">
+    @for (opcao of filtros(); track opcao.id) {
+      <button
+        type="button"
+        (click)="categoriaSelecionada.set(opcao.id)"
+        class="inline-flex h-9 shrink-0 items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors"
+        [class]="
+          categoriaSelecionada() === opcao.id
+            ? 'border-ink bg-ink text-white'
+            : 'border-line-strong bg-surface text-ink-soft hover:border-ink hover:text-ink'
+        "
+        [attr.aria-pressed]="categoriaSelecionada() === opcao.id"
+      >
+        {{ opcao.nome }}
+        <span class="font-mono text-xs opacity-60">{{ opcao.total }}</span>
+      </button>
+    }
+  </div>
+
+  @if (itensFiltrados().length > 0) {
+    <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      @for (item of itensFiltrados(); track item.id) {
+        @let cat = getCategoria(item.categoriaId);
+        <li>
+          <a
+            [routerLink]="['/item', item.id]"
+            class="card group flex h-full flex-col overflow-hidden transition-colors hover:border-ink"
+          >
+            <div class="relative">
+              <app-item-thumb [item]="item" [tamanhoIcone]="44" class="aspect-[16/10] transition-colors group-hover:bg-accent-soft" />
+              <span class="tag absolute left-3 top-3 bg-surface">{{ item.patrimonio }}</span>
+            </div>
+            <div class="flex flex-1 flex-col gap-1 p-4">
+              <h2 class="font-sans text-[0.9375rem] font-semibold leading-snug tracking-normal">{{ item.nome }}</h2>
+              <p class="text-sm text-ink-muted">{{ cat?.nome || 'Geral' }}</p>
+              <p class="mt-auto flex items-center gap-1.5 pt-3 text-xs text-ink-soft">
+                <mat-icon class="icon-xs">schedule</mat-icon>
+                até {{ plural(cat?.prazoMaxDias, 'dia') }} de empréstimo
+              </p>
+            </div>
+          </a>
+        </li>
+      }
+    </ul>
+  } @else {
+    <div class="card empty">
+      <mat-icon class="icon-xl">search_off</mat-icon>
+      <p class="empty-title">Nenhum item disponível aqui agora</p>
+      <p class="empty-text">
+        Os itens podem estar emprestados ou em manutenção. Tente outra categoria ou volte mais tarde.
+      </p>
+      @if (termoBusca() || categoriaSelecionada() !== 'todas') {
+        <button type="button" (click)="limparFiltros()" class="btn btn-secondary btn-sm mt-3">Limpar filtros</button>
+      }
+    </div>
+  }
+</div>

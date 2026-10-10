@@ -1,0 +1,76 @@
+<div class="page">
+  <a routerLink="/catalogo" class="back-link">
+    <mat-icon class="icon-sm">arrow_back</mat-icon>
+    Catálogo
+  </a>
+
+  @if (item(); as i) {
+    @let cat = categoria();
+    @let perm = permissao();
+
+    <div class="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-10">
+      <div class="card overflow-hidden">
+        <app-item-thumb [item]="i" [tamanhoIcone]="96" class="aspect-square" />
+      </div>
+
+      <div class="flex flex-col gap-6">
+        <div>
+          <p class="page-eyebrow">{{ cat?.nome || 'Geral' }}</p>
+          <h1 class="page-title mt-2">{{ i.nome }}</h1>
+          @if (i.descricao) {
+            <p class="mt-3 text-base text-ink-soft">{{ i.descricao }}</p>
+          }
+        </div>
+
+        <dl class="grid grid-cols-2 gap-px overflow-hidden rounded-card border border-line bg-line">
+          <div class="bg-surface p-4">
+            <dt class="text-xs text-ink-muted">Prazo máximo</dt>
+            <dd class="mt-1 font-display text-xl font-semibold">{{ plural(cat?.prazoMaxDias, 'dia') }}</dd>
+          </div>
+          <div class="bg-surface p-4">
+            <dt class="text-xs text-ink-muted">Seu limite na categoria</dt>
+            <dd class="mt-1 font-display text-xl font-semibold" [class.text-danger]="perm.itensAtuais >= perm.limiteMax">
+              {{ perm.itensAtuais }} de {{ perm.limiteMax }}
+            </dd>
+          </div>
+          <div class="col-span-2 flex items-center gap-4 bg-surface p-4">
+            <app-qr-code [valor]="i.codigoQr" [tamanho]="64" class="rounded-md border border-line p-1" />
+            <div class="min-w-0">
+              <dt class="text-xs text-ink-muted">Patrimônio</dt>
+              <dd class="mt-1 flex flex-wrap items-center gap-2">
+                <span class="tag">{{ i.patrimonio }}</span>
+                <span class="font-mono text-xs text-ink-muted">QR {{ i.codigoQr }}</span>
+              </dd>
+            </div>
+          </div>
+        </dl>
+
+        <div class="flex flex-col gap-3">
+          @if (perm.pode) {
+            <a [routerLink]="['/solicitar', i.id]" class="btn btn-primary btn-lg sm:self-start">
+              Pedir emprestado
+              <mat-icon class="icon-sm">arrow_forward</mat-icon>
+            </a>
+            <p class="text-sm text-ink-muted">O responsável analisa o pedido. Depois de aprovado, a retirada é no mesmo dia.</p>
+          } @else {
+            <button type="button" disabled class="btn btn-primary btn-lg sm:self-start">
+              <mat-icon class="icon-sm">lock</mat-icon>
+              Pedir emprestado
+            </button>
+            <div role="status" class="alert alert-danger">
+              <mat-icon class="icon-sm">info</mat-icon>
+              <p>{{ perm.motivo }}</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="card empty">
+      <mat-icon class="icon-xl">help_outline</mat-icon>
+      <p class="empty-title">Item não encontrado</p>
+      <p class="empty-text">Esse equipamento não existe ou foi removido do acervo.</p>
+      <a routerLink="/catalogo" class="btn btn-secondary btn-sm mt-3">Voltar ao catálogo</a>
+    </div>
+  }
+</div>

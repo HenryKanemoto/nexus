@@ -1,25 +1,355 @@
-/* You can add global styles to this file, and also import other style files */
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @import "tailwindcss";
 
+/* ==========================================================================
+   Nexus: sistema visual
+   Inspirado na etiqueta de patrimônio: papel, tinta e um amarelo-sinal.
+   Cores e fontes viram utilitários do Tailwind (bg-paper, text-ink, font-mono...).
+   ========================================================================== */
+
+@theme {
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", "Geist", ui-sans-serif, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-paper: #f4f3ee;
+  --color-surface: #ffffff;
+  --color-sunken: #eceae3;
+  --color-line: #e2e0d8;
+  --color-line-strong: #cbc8bc;
+
+  --color-ink: #16181d;
+  --color-ink-hover: #2c2f37;
+  --color-ink-soft: #4a4e57;
+  --color-ink-muted: #767a84;
+
+  --color-accent: #ffc83d;
+  --color-accent-strong: #e5a800;
+  --color-accent-soft: #fff4d1;
+
+  /* Cores de status (texto escuro sobre fundo claro, sempre com contraste AA) */
+  --color-ok: #17803d;
+  --color-ok-soft: #e3f4e8;
+  --color-warn: #a35a00;
+  --color-warn-soft: #fdf0d9;
+  --color-danger: #c2312b;
+  --color-danger-soft: #fce6e4;
+  --color-info: #2453b8;
+  --color-info-soft: #e5edfb;
+  --color-maint: #7342b5;
+  --color-maint-soft: #f0e8fb;
+
+  --radius-control: 0.625rem;
+  --radius-card: 0.875rem;
+
+  --shadow-pop: 0 12px 32px -8px rgb(22 24 29 / 0.18), 0 2px 6px rgb(22 24 29 / 0.06);
+}
+
 @layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
-    font-family: 'Sora', sans-serif;
-    background-color: #F6F7FB;
-    color: #0E1A3A;
+    @apply bg-paper font-sans text-ink antialiased;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display tracking-tight text-ink;
   }
 
   :focus-visible {
-    outline: 2px solid #2F6BFF !important;
-    outline-offset: 2px !important;
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
   }
 
-  button:focus-visible,
-  a:focus-visible,
-  input:focus-visible,
-  select:focus-visible,
-  textarea:focus-visible {
-    outline: 2px solid #2F6BFF !important;
-    outline-offset: 2px !important;
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-ink);
+  }
+
+  /* Ícones do Material: tamanho padrão alinhado ao texto */
+  .mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+}
+
+@layer components {
+  /* ---------- Ícones ---------- */
+  .mat-icon.icon-xs {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+  .mat-icon.icon-sm {
+    font-size: 17px;
+    width: 17px;
+    height: 17px;
+  }
+  .mat-icon.icon-lg {
+    font-size: 26px;
+    width: 26px;
+    height: 26px;
+  }
+  .mat-icon.icon-xl {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+  }
+
+  /* ---------- Botões ---------- */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-control px-4 h-10 text-sm font-medium whitespace-nowrap select-none cursor-pointer transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-45;
+  }
+  .btn-sm {
+    @apply h-8 px-3 text-[0.8125rem] gap-1.5;
+  }
+  .btn-lg {
+    @apply h-12 px-5 text-[0.9375rem];
+  }
+  .btn-block {
+    @apply w-full;
+  }
+  .btn-primary {
+    @apply bg-ink text-white hover:bg-ink-hover;
+  }
+  .btn-accent {
+    @apply bg-accent text-ink hover:bg-accent-strong;
+  }
+  .btn-secondary {
+    @apply bg-surface text-ink border border-line-strong hover:bg-sunken;
+  }
+  .btn-ghost {
+    @apply bg-transparent text-ink-soft hover:bg-sunken hover:text-ink;
+  }
+  .btn-danger {
+    @apply bg-danger text-white hover:bg-[#a52722];
+  }
+  .btn-danger-ghost {
+    @apply bg-transparent text-danger hover:bg-danger-soft;
+  }
+  .btn-ok {
+    @apply bg-ok text-white hover:bg-[#126a32];
+  }
+  .btn-icon {
+    @apply inline-flex items-center justify-center size-9 rounded-control text-ink-soft hover:bg-sunken hover:text-ink cursor-pointer transition-colors;
+  }
+
+  /* ---------- Superfícies ---------- */
+  .card {
+    @apply bg-surface border border-line rounded-card;
+  }
+  .card-pad {
+    @apply p-5 sm:p-6;
+  }
+  .card-header {
+    @apply flex items-center justify-between gap-3 px-5 sm:px-6 py-4 border-b border-line;
+  }
+  .card-title {
+    @apply font-display text-base font-semibold text-ink;
+  }
+  .divider {
+    @apply border-t border-line;
+  }
+
+  /* ---------- Cabeçalho de página ---------- */
+  .page {
+    @apply flex flex-col gap-6;
+  }
+  .page-header {
+    @apply flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between;
+  }
+  .page-eyebrow {
+    @apply font-mono text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-ink-muted;
+  }
+  .page-title {
+    @apply font-display text-[1.75rem] sm:text-[2rem] leading-tight font-semibold tracking-tight text-ink;
+  }
+  .page-subtitle {
+    @apply mt-1 text-sm text-ink-soft max-w-2xl;
+  }
+  .back-link {
+    @apply inline-flex items-center gap-1 text-sm font-medium text-ink-soft hover:text-ink transition-colors;
+  }
+
+  /* ---------- Formulários ---------- */
+  .field {
+    @apply flex flex-col gap-1.5;
+  }
+  .label {
+    @apply text-[0.8125rem] font-medium text-ink;
+  }
+  .hint {
+    @apply text-xs text-ink-muted;
+  }
+  .field-error {
+    @apply text-xs font-medium text-danger flex items-center gap-1;
+  }
+  .input,
+  .select,
+  .textarea {
+    @apply w-full rounded-control border border-line-strong bg-surface px-3.5 text-sm text-ink placeholder:text-ink-muted transition-colors hover:border-ink-muted focus:border-ink focus:outline-none focus:ring-2 focus:ring-accent/70 disabled:bg-sunken disabled:text-ink-muted;
+  }
+  .input,
+  .select {
+    @apply h-10;
+  }
+  .textarea {
+    @apply py-2.5 min-h-24 resize-y;
+  }
+  .input-invalid {
+    @apply border-danger focus:border-danger focus:ring-danger/25;
+  }
+  .input-group {
+    @apply relative flex items-center;
+  }
+  .input-group > .mat-icon:first-child {
+    @apply absolute left-3 text-ink-muted pointer-events-none;
+  }
+  .input-group > .input {
+    @apply pl-10;
+  }
+
+  /* ---------- Tabelas ---------- */
+  .table-wrap {
+    @apply overflow-x-auto;
+  }
+  .table {
+    @apply w-full text-sm text-left border-collapse;
+  }
+  .table th {
+    @apply px-5 py-3 font-mono text-[0.6875rem] font-medium uppercase tracking-[0.1em] text-ink-muted bg-paper/60 border-b border-line whitespace-nowrap;
+  }
+  .table td {
+    @apply px-5 py-3.5 border-b border-line align-middle;
+  }
+  .table tbody tr:last-child td {
+    @apply border-b-0;
+  }
+  .table tbody tr {
+    @apply transition-colors hover:bg-paper/50;
+  }
+
+  /* ---------- Etiquetas e contadores ---------- */
+  .tag {
+    @apply inline-flex items-center rounded-md border border-line-strong bg-paper px-1.5 py-0.5 font-mono text-[0.75rem] text-ink-soft whitespace-nowrap;
+  }
+  .count {
+    @apply inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-accent text-ink font-mono text-[0.6875rem] font-semibold tabular-nums;
+  }
+  .avatar {
+    @apply inline-flex items-center justify-center shrink-0 rounded-full bg-ink text-white font-display font-semibold;
+  }
+
+  /* ---------- Abas ---------- */
+  /* A linha de base é uma sombra interna: uma borda + margem negativa geraria rolagem vertical no overflow-x */
+  .tabs {
+    @apply sem-rolagem flex gap-1 overflow-x-auto overflow-y-hidden;
+    box-shadow: inset 0 -1px 0 var(--color-line);
+  }
+  .tab {
+    @apply relative inline-flex items-center gap-2 px-3.5 py-2.5 text-sm font-medium text-ink-muted whitespace-nowrap border-b-2 border-transparent hover:text-ink cursor-pointer transition-colors;
+  }
+  .tab-active {
+    @apply text-ink border-ink;
+  }
+
+  /* ---------- Avisos ---------- */
+  .alert {
+    @apply flex items-start gap-3 rounded-control border px-4 py-3 text-sm;
+  }
+  .alert > .mat-icon {
+    @apply mt-px;
+  }
+  .alert-info {
+    @apply bg-info-soft border-info/20 text-[#1b3f8c];
+  }
+  .alert-ok {
+    @apply bg-ok-soft border-ok/20 text-[#11612e];
+  }
+  .alert-warn {
+    @apply bg-warn-soft border-warn/25 text-[#7d4500];
+  }
+  .alert-danger {
+    @apply bg-danger-soft border-danger/20 text-[#94241f];
+  }
+
+  /* ---------- Estado vazio ---------- */
+  .empty {
+    @apply flex flex-col items-center justify-center gap-2 px-6 py-12 text-center;
+  }
+  .empty > .mat-icon {
+    @apply text-ink-muted/60 mb-1;
+  }
+  .empty-title {
+    @apply font-display text-base font-semibold text-ink;
+  }
+  .empty-text {
+    @apply text-sm text-ink-muted max-w-sm;
+  }
+
+  /* ---------- Indicadores ---------- */
+  .stat {
+    @apply bg-surface border border-line rounded-card p-5 flex flex-col gap-1;
+  }
+  .stat-label {
+    @apply text-[0.8125rem] font-medium text-ink-soft;
+  }
+  .stat-value {
+    @apply font-display text-4xl font-semibold tabular-nums tracking-tight text-ink;
+  }
+
+  /* ---------- Diálogos ---------- */
+  .modal-backdrop {
+    @apply fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-ink/45 p-0 sm:p-4;
+  }
+  .modal {
+    @apply w-full sm:max-w-md bg-surface rounded-t-card sm:rounded-card shadow-pop p-6 flex flex-col gap-4 max-h-[90vh] overflow-y-auto;
+  }
+  .modal-title {
+    @apply font-display text-lg font-semibold;
+  }
+}
+
+/* Impressão: quando existe uma .area-impressao na tela (etiqueta do item), só ela vai para o papel */
+@media print {
+  body:has(.area-impressao) * {
+    visibility: hidden;
+  }
+  body:has(.area-impressao) .area-impressao,
+  body:has(.area-impressao) .area-impressao * {
+    visibility: visible;
+  }
+  body:has(.area-impressao) .area-impressao {
+    position: fixed;
+    left: 0;
+    top: 0;
+  }
+}
+
+@utility rounded-control {
+  border-radius: var(--radius-control);
+}
+@utility rounded-card {
+  border-radius: var(--radius-card);
+}
+@utility rounded-t-card {
+  border-top-left-radius: var(--radius-card);
+  border-top-right-radius: var(--radius-card);
+}
+@utility shadow-pop {
+  box-shadow: var(--shadow-pop);
+}
+@utility sem-rolagem {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
   }
 }

@@ -1,0 +1,134 @@
+<div class="page max-w-4xl">
+  @if (item(); as i) {
+    @let cat = categoria();
+
+    <a [routerLink]="['/item', i.id]" class="back-link">
+      <mat-icon class="icon-sm">arrow_back</mat-icon>
+      {{ i.nome }}
+    </a>
+
+    <header>
+      <p class="page-eyebrow">Novo pedido</p>
+      <h1 class="page-title mt-1">Quando você vai devolver?</h1>
+      <p class="page-subtitle">
+        Escolha uma data dentro do prazo da categoria {{ cat?.nome }}: até {{ plural(cat?.prazoMaxDias, 'dia') }} a partir de hoje.
+      </p>
+    </header>
+
+    @if (mensagemErro()) {
+      <div role="alert" class="alert alert-danger">
+        <mat-icon class="icon-sm">error_outline</mat-icon>
+        <p>{{ mensagemErro() }}</p>
+      </div>
+    }
+
+    <div class="grid items-start gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+      <!-- Calendário (RN02: só datas dentro do prazo ficam ativas) -->
+      <section class="card card-pad" aria-label="Escolher data de devolução">
+        <div class="mb-4 flex items-center justify-between">
+          <button
+            type="button"
+            (click)="mesAnterior()"
+            class="btn-icon"
+            [disabled]="!podeVoltarMes()"
+            [class.invisible]="!podeVoltarMes()"
+            aria-label="Mês anterior"
+          >
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          <p class="font-display text-base font-semibold capitalize">{{ nomeMesAno() }}</p>
+          <button type="button" (click)="proximoMes()" class="btn-icon" aria-label="Próximo mês">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-7 text-center font-mono text-[0.6875rem] uppercase text-ink-muted" aria-hidden="true">
+          @for (d of diasSemana; track $index) {
+            <span class="py-1">{{ d }}</span>
+          }
+        </div>
+
+        <div class="mt-1 grid grid-cols-7 gap-y-1 text-center">
+          @for (dia of diasDoCalendario(); track dia.dataIso) {
+            @if (dia.habilitado) {
+              <button
+                type="button"
+                (click)="selecionarData(dia.dataIso)"
+                class="mx-auto flex size-10 items-center justify-center rounded-full text-sm font-medium transition-colors"
+                [class]="dia.selecionado ? 'bg-ink text-white' : 'bg-accent-soft text-ink hover:bg-accent'"
+                [attr.aria-pressed]="dia.selecionado"
+                [attr.aria-label]="'Devolver em ' + dia.numeroDia"
+              >
+                {{ dia.numeroDia }}
+              </button>
+            } @else {
+              <span
+                class="mx-auto flex size-10 items-center justify-center rounded-full text-sm"
+                [class]="dia.mesmoMes ? 'text-ink-muted/50' : 'text-transparent'"
+                [class.ring-1]="dia.hoje"
+                [class.ring-line-strong]="dia.hoje"
+              >
+                {{ dia.numeroDia }}
+              </span>
+            }
+          }
+        </div>
+
+        <p class="mt-4 flex items-center gap-2 border-t border-line pt-4 text-xs text-ink-muted">
+          <span class="size-3 rounded-full bg-accent-soft ring-1 ring-accent"></span>
+          Datas permitidas para devolução
+        </p>
+      </section>
+
+      <!-- Resumo do pedido -->
+      <section class="flex flex-col gap-4" aria-label="Resumo do pedido">
+        <div class="card flex items-center gap-4 p-4">
+          <app-item-thumb [item]="i" class="size-16 shrink-0 rounded-control" />
+          <div class="min-w-0">
+            <p class="truncate font-semibold">{{ i.nome }}</p>
+            <p class="mt-0.5 flex items-center gap-2 text-sm text-ink-muted">
+              {{ cat?.nome || 'Geral' }} <span class="tag">{{ i.patrimonio }}</span>
+            </p>
+          </div>
+        </div>
+
+        <dl class="card divide-y divide-line text-sm">
+          <div class="flex justify-between gap-4 px-5 py-3">
+            <dt class="text-ink-muted">Pedido em</dt>
+            <dd>{{ dataHojeFormatada() }}</dd>
+          </div>
+          <div class="flex justify-between gap-4 px-5 py-3">
+            <dt class="text-ink-muted">Prazo máximo</dt>
+            <dd>{{ plural(cat?.prazoMaxDias, 'dia') }}</dd>
+          </div>
+          <div class="flex items-center justify-between gap-4 px-5 py-3">
+            <dt class="text-ink-muted">Devolver até</dt>
+            <dd class="font-display text-lg font-semibold">{{ dataDevolucaoFormatada() }}</dd>
+          </div>
+        </dl>
+
+        <div class="alert alert-warn">
+          <mat-icon class="icon-sm">schedule</mat-icon>
+          <p>
+            <strong class="font-semibold">Retirada no mesmo dia da aprovação.</strong>
+            Se o item não for retirado até o fim do dia, o pedido expira e o equipamento volta para o acervo.
+          </p>
+        </div>
+
+        <div class="flex flex-col-reverse gap-3 sm:flex-row">
+          <a [routerLink]="['/item', i.id]" class="btn btn-secondary btn-lg">Cancelar</a>
+          <button type="button" (click)="submeterPedido()" class="btn btn-primary btn-lg sm:flex-1">
+            Enviar pedido
+            <mat-icon class="icon-sm">send</mat-icon>
+          </button>
+        </div>
+      </section>
+    </div>
+  } @else {
+    <div class="card empty">
+      <mat-icon class="icon-xl">help_outline</mat-icon>
+      <p class="empty-title">Equipamento não encontrado</p>
+      <a routerLink="/catalogo" class="btn btn-secondary btn-sm mt-3">Voltar ao catálogo</a>
+    </div>
+  }
+</div>
