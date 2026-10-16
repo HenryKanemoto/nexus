@@ -17,13 +17,10 @@ export class S7MeusCodigos {
   readonly store = inject(ProtemStore);
   readonly usuario = computed(() => this.store.usuarioLogado());
 
-  // 3. Empréstimos Ativos
-  readonly listaEmprestimosAtivos = computed(() => {
+  readonly listarSolicitacoes = computed(() => {
     const u = this.usuario();
-    if (!u) return [];
-    return this.store
-      .emprestimos()
-      .filter((e) => e.usuarioId === u.id && !e.devolvidoEm);
+    if (!u) return []; 
+    return this.store.solicitacoes().filter((e) => e.solicitanteId === u.id)
   });
   
   getItem(itemId?: string) {

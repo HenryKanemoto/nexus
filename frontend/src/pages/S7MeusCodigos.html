@@ -13,8 +13,8 @@
   </header>
 
   <ul class="flex flex-col gap-3">
-    @for (emp of listaEmprestimosAtivos(); track emp.id) { @let item =
-    getItem(emp.itemId);
+    @for (sol of listarSolicitacoes(); track sol.id) {
+    @let item = getItem(sol.itemId);
     <li class="card flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:p-5">
       @if (item) {
       <app-item-thumb [item]="item" class="size-14 shrink-0 rounded-control" />
@@ -22,19 +22,38 @@
       <div class="min-w-0 flex-1">
         <p class="font-semibold">{{ item?.nome }}</p>
         <p class="mt-0.5 text-sm text-text-muted">
-          Retirado em {{ formatarData(emp.retiradoEm) }}
+          Criado em {{ formatarData(sol.criadoEm) }}
         </p>
       </div>
       <div class="shrink-0 sm:text-right">
         <p class="text-xs text-text-muted">Código de Retirada:</p>
-        <p class="font-display text-lg font-semibold text-[#f59e0b]">Código</p>
+        @if(sol.status !== 'pendente' && sol.status !== 'recusada' && sol.status !== 'expirada' && sol.status !== 'concluida' ){
+          <p class="font-display text-lg font-semibold text-[#f59e0b]">{{sol.codigoRetirada}}</p>
+        }
+
+        @if(sol.status === 'pendente'){
+           <p class="font-display text-lg font-semibold text-[#0059ff]">Aguardando aprovação</p>
+        }
+
+        @if(sol.status === 'recusada'){
+           <p class="font-display text-lg font-semibold text-[#bd0429]">Solicitacao recusada</p>
+        }
+
+        @if(sol.status === 'expirada'){
+           <p class="font-display text-lg font-semibold text-[#bd0429]">Expirado</p>
+        }
+
+        @if(sol.status === 'concluida'){
+           <p class="font-display text-lg font-semibold text-[#18d611]">Concluida</p>
+        }
+
       </div>
     </li>
     } @empty {
-    <li class="card empty">
+    <li class="card solty">
       <mat-icon class="icon-xl" svgIcon="check_circle_outline" />
-      <p class="empty-title">Nenhum código gerado</p>
-      <p class="empty-text">Você não precisa retirar nenhum material</p>
+      <p class="solty-title">Nenhum código gerado</p>
+      <p class="solty-text">Você não precisa retirar nenhum material</p>
     </li>
     }
   </ul>
