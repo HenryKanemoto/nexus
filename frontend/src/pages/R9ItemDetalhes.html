@@ -140,7 +140,7 @@
     @if (modalEtiquetaAberta()) {
       <app-modal ariaLabel="Etiqueta para impressão" classe="items-center text-center" (fechar)="modalEtiquetaAberta.set(false)">
           <div class="area-impressao w-64 rounded-control border-2 border-ink bg-white p-5 text-ink">
-            <p class="border-b-2 border-ink pb-2 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.16em]">nexus · acervo escolar</p>
+            <p class="border-b-2 border-ink pb-2 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.16em]">Protem · acervo escolar</p>
             <app-qr-code [valor]="i.codigoQr || i.patrimonio" [tamanho]="160" class="mx-auto mt-4" />
             <p class="mt-3 font-display text-base font-semibold leading-tight">{{ i.nome }}</p>
             <p class="mt-1 font-mono text-lg font-semibold">{{ i.patrimonio }}</p>

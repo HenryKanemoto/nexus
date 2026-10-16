@@ -1,6 +1,6 @@
 /**
  * Utility functions for date manipulation and Portuguese formatting
- * in the simulated virtual clock environment of Nexus.
+ * in the simulated virtual clock environment of Protem.
  */
 
 export function parseDate(isoOrDate: string | Date): Date {

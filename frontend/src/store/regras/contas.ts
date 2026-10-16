@@ -116,7 +116,7 @@ export function aprovarUsuario(s: NexusState, usuarioId: string): NexusState {
   const notif = novaNotificacao(
     usuarioId,
     'aprovacao',
-    'Sua conta no Nexus foi aprovada! Você já pode consultar o catálogo e solicitar itens.',
+    'Sua conta no Protem foi aprovada! Você já pode consultar o catálogo e solicitar itens.',
     s.agora,
     '/catalogo',
   );
@@ -133,7 +133,7 @@ export function recusarUsuario(s: NexusState, usuarioId: string, motivo?: string
   const notif = novaNotificacao(
     usuarioId,
     'recusa',
-    `Sua solicitação de cadastro no Nexus não foi aceita.${motivo ? ' Motivo: ' + motivo : ''}`,
+    `Sua solicitação de cadastro no Protem não foi aceita.${motivo ? ' Motivo: ' + motivo : ''}`,
     s.agora,
     '/login',
   );

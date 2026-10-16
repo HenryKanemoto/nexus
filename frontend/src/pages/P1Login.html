@@ -3,7 +3,10 @@
   <aside class="relative hidden overflow-hidden bg-ink p-12 text-white lg:flex lg:flex-col lg:justify-between">
     <div class="flex items-center gap-2.5">
       <app-logo [tamanho]="34" [comNome]="false" />
-      <span class="font-display text-lg font-semibold">nexus</span>
+      <span class="flex flex-col gap-1">
+        <span class="font-display text-lg font-semibold leading-none">Protem</span>
+        <span class="text-xs leading-none text-white/65">Plataforma Web de Empréstimos</span>
+      </span>
     </div>
 
     <div class="relative z-10 max-w-md pb-40">
@@ -37,7 +40,7 @@
   <!-- Formulário -->
   <main class="flex flex-col justify-center px-5 py-12 sm:px-12">
     <div class="mx-auto w-full max-w-sm">
-      <app-logo class="mb-10 lg:hidden" [tamanho]="34" />
+      <app-logo class="mb-10 lg:hidden" [tamanho]="34" [comSubtitulo]="true" />
 
       <h2 class="font-display text-3xl font-semibold tracking-tight">Entrar</h2>
       <p class="mt-1.5 text-sm text-ink-soft">Use seu e-mail institucional ou sua matrícula.</p>

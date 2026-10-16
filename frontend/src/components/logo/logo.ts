@@ -1,6 +1,9 @@
 import {ChangeDetectionStrategy, Component, input} from '@angular/core';
 
-/** Emblema do Nexus (mesmo desenho do favicon) com o nome ao lado. */
+/**
+ * Logotipo do Protem: o ícone quadrado da marca (public/brand/protem_logos/protem_3_prazo_icone.svg,
+ * desenhado aqui inline para não depender de requisição) com o nome ao lado.
+ */
 @Component({
   selector: 'app-logo',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -13,24 +16,36 @@ import {ChangeDetectionStrategy, Component, input} from '@angular/core';
       aria-hidden="true"
       class="shrink-0"
     >
-      <rect width="512" height="512" rx="116" fill="#16181d" />
-      <g
-        transform="translate(256, 256) scale(1.68)"
+      <rect width="512" height="512" rx="116" fill="#EAF1FE" />
+      <path
+        d="M171,400 L171,108 L242,108 A100,100 0 0 1 242,308 L171,308"
         fill="none"
-        stroke-width="28"
+        stroke="#2F6BFF"
+        stroke-width="54"
         stroke-linecap="round"
         stroke-linejoin="round"
-      >
-        <path d="M -54,25 C -110,-5 -106,-78 -46,-96 C 10,-112 50,-75 50,-32 L 50,68 L -24,-42" stroke="#ffffff" />
-        <path d="M -24,-42 L -24,68 C -24,118 48,126 76,78 C 98,42 88,-2 54,-25" stroke="#ffc83d" />
-      </g>
+      />
+      <path
+        d="M256,160 L256,208 L292,208"
+        fill="none"
+        stroke="#F2B705"
+        stroke-width="17"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
     </svg>
     @if (comNome()) {
-      <span class="font-display text-lg font-semibold tracking-tight text-ink leading-none">nexus</span>
+      <span class="flex flex-col gap-1">
+        <span class="font-display text-lg font-semibold tracking-tight text-ink leading-none">Protem</span>
+        @if (comSubtitulo()) {
+          <span class="text-xs leading-none text-ink-muted">Plataforma Web de Empréstimos</span>
+        }
+      </span>
     }
   `,
 })
 export class Logo {
   readonly tamanho = input(32);
   readonly comNome = input(true);
+  readonly comSubtitulo = input(false);
 }
