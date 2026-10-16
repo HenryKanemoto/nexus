@@ -7,6 +7,7 @@ import {FONTE_DE_DADOS} from './fonte-de-dados';
 import * as acervo from './regras/acervo';
 import * as contas from './regras/contas';
 import * as emprestimos from './regras/emprestimos';
+import {garantirCodigosDeRetirada} from './regras/codigos';
 import {executarRotinaAutomatica} from './regras/rotina';
 import * as solicitacoes from './regras/solicitacoes';
 
@@ -78,7 +79,8 @@ export class ProtemStore {
   constructor() {
     // Garante consistência com o relógio virtual antes de qualquer tela ler o estado
     // (aplica expirações, atrasos e suspensões pendentes no estado salvo ou no seed)
-    this.atualizar((s) => executarRotinaAutomatica(s, parseDate(s.agora)));
+    // e dá código de retirada a pedidos aprovados salvos antes de o código existir
+    this.atualizar((s) => executarRotinaAutomatica(garantirCodigosDeRetirada(s), parseDate(s.agora)));
     this.fonte.conectar({
       estado: () => this.state(),
       receberItens: (itens) => this.receberItens(itens),
@@ -240,12 +242,14 @@ export class ProtemStore {
   // RETIRADA E DEVOLUÇÃO (RN05, RN06, RN07)
   // ==========================================
 
-  registrarRetiradaPorQr(codigoQrOuPatrimonio: string, responsavelId: string) {
-    return this.executar((s) => emprestimos.registrarRetiradaPorQr(s, codigoQrOuPatrimonio, responsavelId));
+  registrarRetiradaPorQr(codigoQrOuPatrimonio: string, responsavelId: string, codigoRetirada: string) {
+    return this.executar((s) =>
+      emprestimos.registrarRetiradaPorQr(s, codigoQrOuPatrimonio, responsavelId, codigoRetirada),
+    );
   }
 
-  registrarRetirada(itemId: string, responsavelId: string) {
-    return this.executar((s) => emprestimos.registrarRetirada(s, itemId, responsavelId));
+  registrarRetirada(itemId: string, responsavelId: string, codigoRetirada: string) {
+    return this.executar((s) => emprestimos.registrarRetirada(s, itemId, responsavelId, codigoRetirada));
   }
 
   registrarDevolucao(emprestimoId: string, _responsavelId: string, comDefeito: boolean, descricaoDefeito?: string) {

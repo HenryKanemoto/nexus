@@ -1,7 +1,7 @@
 <div class="grid min-h-screen lg:grid-cols-[1.05fr_1fr]">
   <!-- Painel da marca (só no desktop) -->
   <aside class="relative hidden overflow-hidden bg-brand-navy p-12 text-white lg:flex lg:flex-col lg:justify-between">
-    <app-brand-logo [tamanho]="34" [escuro]="true" [comSubtitulo]="true" />
+    <app-brand-logo variante="icone" [tamanho]="56" />
 
     <div class="relative z-10 max-w-md pb-40">
       <p class="font-mono text-xs uppercase tracking-[0.16em] text-brand-gold">Acervo escolar</p>
@@ -33,7 +33,7 @@
   <!-- Formulário -->
   <main class="flex flex-col justify-center px-5 py-12 sm:px-12">
     <div class="mx-auto w-full max-w-sm">
-      <app-brand-logo class="mb-10 lg:hidden" [tamanho]="34" [comSubtitulo]="true" />
+      <app-brand-logo class="mb-10" variante="horizontal" [tamanho]="56" [comSubtitulo]="true" />
 
       <h2 class="font-display text-3xl font-semibold tracking-tight">Entrar</h2>
       <p class="mt-1.5 text-sm text-text-muted">Use seu e-mail institucional ou sua matrícula.</p>

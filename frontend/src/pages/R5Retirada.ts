@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, computed, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
 import {iconeCategoria} from '../lib/categoria-utils';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {ProtemStore} from '../store/protem.store';
@@ -17,6 +17,8 @@ export class R5Retirada {
   private readonly router = inject(Router);
   readonly store = inject(ProtemStore);
 
+  readonly codigoDigitado = signal('');
+  readonly erro = signal<string | null>(null);
 
   readonly itemId = computed(() => this.route.snapshot.paramMap.get('itemId') || '');
 
@@ -45,18 +47,26 @@ export class R5Retirada {
     return formatDateShort(iso);
   }
 
-  executarConfirmacaoRetirada() {
+  executarConfirmacaoRetirada(event: Event) {
+    event.preventDefault();
     const it = this.item();
     const resp = this.store.usuarioLogado();
     if (!it) return;
 
-    const res = this.store.registrarRetirada(it.id, resp?.id || 'user-marta');
-    if (res.sucesso) {
-      // Volta ao painel com mensagem de sucesso
-      this.router.navigate(['/painel'], {
-        state: { sucesso: `Retirada registrada com sucesso para "${it.nome}". O prazo oficial começou a contar agora.` },
-      });
+    if (!this.codigoDigitado().trim()) {
+      this.erro.set('Digite o código de retirada que a pessoa mostrar no app.');
+      return;
     }
+
+    const res = this.store.registrarRetirada(it.id, resp?.id || '', this.codigoDigitado());
+    if (!res.sucesso) {
+      this.erro.set(res.mensagem);
+      return;
+    }
+    // Volta ao painel com mensagem de sucesso
+    this.router.navigate(['/painel'], {
+      state: { sucesso: `Retirada registrada com sucesso para "${it.nome}". O prazo oficial começou a contar agora.` },
+    });
   }
 
   getIconeCategoria(categoriaId: string): string {

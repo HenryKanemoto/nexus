@@ -1,17 +1,20 @@
 import {addDays, calculateDiasAtraso, formatDateShort, parseDate} from '../../lib/date-utils';
 import {Emprestimo, Ocorrencia, StatusItem, StatusUsuario, Usuario} from '../../types/models';
 import {ProtemState, ResultadoAcao, Transicao, novaNotificacao} from '../estado';
+import {codigoConfere} from './codigos';
 
 export type ResultadoRetirada = ResultadoAcao & {emprestimoId?: string; itemId?: string};
 
 /**
  * RN05: A retirada só é registrada pelo responsável, lendo o QR code do item;
  * o prazo começa a contar nesse momento.
+ * Só libera com o código de retirada que a pessoa recebeu na aprovação (ver ./codigos).
  */
 export function registrarRetiradaPorQr(
   s: ProtemState,
   codigoQrOuPatrimonio: string,
   responsavelId: string,
+  codigoRetirada: string,
 ): Transicao<ResultadoRetirada> {
   const codigo = codigoQrOuPatrimonio.trim().toUpperCase();
   const item = s.itens.find((i) => i.codigoQr.toUpperCase() === codigo || i.patrimonio.toUpperCase() === codigo);
@@ -21,10 +24,15 @@ export function registrarRetiradaPorQr(
       resultado: {sucesso: false, mensagem: `Item não encontrado para o código "${codigoQrOuPatrimonio}".`},
     };
   }
-  return registrarRetirada(s, item.id, responsavelId);
+  return registrarRetirada(s, item.id, responsavelId, codigoRetirada);
 }
 
-export function registrarRetirada(s: ProtemState, itemId: string, responsavelId: string): Transicao<ResultadoRetirada> {
+export function registrarRetirada(
+  s: ProtemState,
+  itemId: string,
+  responsavelId: string,
+  codigoRetirada: string,
+): Transicao<ResultadoRetirada> {
   const item = s.itens.find((i) => i.id === itemId);
   if (!item) return {estado: s, resultado: {sucesso: false, mensagem: 'Item não encontrado.'}};
 
@@ -35,6 +43,16 @@ export function registrarRetirada(s: ProtemState, itemId: string, responsavelId:
       resultado: {
         sucesso: false,
         mensagem: `Não há pedido aprovado aguardando retirada para o item ${item.nome} (${item.patrimonio}).`,
+      },
+    };
+  }
+
+  if (!codigoConfere(solic, codigoRetirada)) {
+    return {
+      estado: s,
+      resultado: {
+        sucesso: false,
+        mensagem: 'Código de retirada incorreto. Peça à pessoa que mostre o código no app, em Meus empréstimos.',
       },
     };
   }

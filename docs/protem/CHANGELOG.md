@@ -134,4 +134,63 @@ Capturas em `antes/` e `depois/`, cada uma também em `sem-cdn/`, com domínios 
 - [ ] **Telas fora da lista de prioridade** (Categorias, Manutenção, Configurações, Perfil, Cadastro e os formulários) receberam os tokens novos, mas não passaram pelo enxugamento completo da Fase 5.
 - [ ] **Cópia de trabalho:** a exclusão de `backend/dist/` que já estava na cópia local não foi incluída em nenhum commit, e o `CLAUDE.md` continua sem versionar. As logos e o favicon antigos do Nexus, que também estavam apagados na cópia local, entraram no commit do favicon novo.
 - [ ] **Fotos do seed do banco** (vindas da `main`) são links para sites de terceiros (Google, Amazon, Mercado Livre...). Elas só aparecem no modo api, podem sair do ar e têm direitos de uso incertos. Vale decidir se a equipe prefere imagens próprias em `public/`, que também funcionariam no modo local.
-- [ ] Abrir o pull request de `refactor/protem-rebrand` para `main`: a branch já está no GitHub.
+- [x] Pull request de `refactor/protem-rebrand` para `main` (PR #2, aceito).
+
+---
+
+# Rodada 2: código de retirada, landing e logo (branch `feat/codigo-retirada-landing`)
+
+Feita a partir da `main` com o trabalho da equipe no código de retirada (`Meus códigos` e geração na aprovação). As regras RN01 a RN10 e o back-end não mudaram.
+
+## O que mudou
+
+- **Código de retirada (segurança na retirada).** O código já era gerado na aprovação e mostrado a quem pediu; agora ele é **conferido**:
+  - A tela "Confirmar retirada" tem o campo "Código de retirada". O responsável digita o código que a pessoa mostra no app, e a retirada só é registrada se ele estiver certo. Maiúsculas, espaços e hífen não importam.
+  - **O responsável não vê o código em nenhuma tela.** O código também nunca aparece na mensagem de erro. O teste ponta a ponta confere isso em 6 telas do responsável.
+  - **Uso único:** o código só vale enquanto o pedido está aprovado. Depois da retirada (concluído) ou da expiração no fim do dia (RN04), ele não vale mais.
+  - **Geração** em regra pura (`store/regras/codigos.ts`), no lugar do `GeradorCodigo`: 6 caracteres sem os que se confundem (0/O, 1/I/L) e sem repetir um código de outro pedido aprovado. Pedidos aprovados salvos antes recebem um código ao carregar.
+  - **Quem pediu vê o código** no cartão "Retire hoje" de Meus empréstimos, em Meus códigos e na notificação de aprovação. Seed: o pedido aprovado do Gustavo tem o código `K7PM4X`.
+- **Meus códigos:** só com os tokens de cor (o laranja `#f59e0b` sobre branco reprovava o AA), estado vazio com a classe certa (antes `solty`, que não existe) e pedidos com código válido primeiro.
+- **Menu inferior do celular:** volta a ter 4 itens (Catálogo, Empréstimos, Avisos e Perfil). Com 5, o quinto caía para uma segunda linha. Meus códigos fica acessível pelo cartão "Retire hoje" e pelo Perfil.
+- **Logo maior no login**, usando os SVGs oficiais de `public/brand` pelo `BrandLogo` (variantes `horizontal` e `icone`), sem redesenhar em texto: ícone de 56 px no painel navy e logo horizontal de 56 px acima do formulário. As outras telas não mudaram.
+- **Landing page em `/`** (o login continua em `/login`), com "Acessar plataforma" e os pacotes do pitch:
+  - Essencial: R$ 2.000, pagamento único, até 100 itens.
+  - Completa: R$ 3.600, pagamento único, até 500 itens.
+  - Suporte mensal: R$ 150 por mês ou R$ 1.500 por ano.
+
+  Inclui a nota "Valores e limites de exemplo, revisados com cada escola". Cada pacote leva a "Acessar plataforma".
+
+## Verificação
+
+| Verificação | Resultado |
+|---|---|
+| Testes do front-end | 89 passam (17 novos: código de retirada e seed) |
+| Lint e build nos modos local e api | passam |
+| Fluxo completo nas 3 políticas, com código errado (bloqueia), código certo (libera) e uso único | passa (build de produção, domínios externos bloqueados) |
+| Código visível para o responsável | não aparece em nenhuma das 6 telas verificadas |
+| Varredura de 36 rotas × 2 tamanhos (com landing e Meus códigos) | sem ícone em texto, sem botão sem nome, sem rolagem horizontal, sem erros no console |
+| Contraste AA (28 rotas × 2 tamanhos) | 0 abaixo do mínimo em 2.282 textos |
+| Back-end e `docker-compose.yml` | sem mudanças |
+
+Capturas em `rodada-2/` (1366×768 e 390×844, com domínios externos bloqueados).
+
+## Ideia para depois: Insumos
+
+Adiado por decisão da equipe. Fica registrado como ideia:
+
+- **O que é:** itens que vão e não voltam (papel, cola, lápis, canetinhas, cartolina...), separados dos empréstimos, com "Insumos" no cabeçalho de alunos e professores.
+- **Regras sugeridas:**
+  - Pedido com aprovação do responsável e código de retirada, como nos empréstimos.
+  - Quantidade limitada por pedido e pelo estoque livre.
+  - Reserva no dia da aprovação, expirando no fim do dia como a RN04.
+  - Baixa no estoque na entrega.
+  - Sem devolução, atraso ou avaria.
+  - Aviso ao responsável quando o estoque ficar baixo.
+- **Telas sugeridas:** catálogo de insumos para quem pede; cadastro e reposição de estoque em Acervo; pedidos numa aba de Solicitações.
+- **Dados:** no navegador nos dois modos. O back-end hoje só guarda os itens do acervo.
+
+## Pendências da rodada 2
+
+- [ ] **Nomes do seed:** "Gustavo Machado" é igual ao nome de um autor do repositório, e "Enzo Capiel" lembra "Enzo Capitani". Se forem pessoas reais, trocar por nomes fictícios, porque o `CLAUDE.md` pede só dados fictícios. Isso aguarda a decisão da equipe.
+- [ ] **Tentativas de código:** não há limite de tentativas erradas na retirada. Com 31 caracteres em 6 posições há cerca de 887 milhões de combinações, e quem digita é o responsável. Avaliar se vale bloquear depois de algumas tentativas.
+- [ ] O código fica no navegador (como pedidos e empréstimos) também no modo api.

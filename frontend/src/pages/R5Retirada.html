@@ -10,7 +10,7 @@
 
       <header>
         <h1 class="page-title">Confirmar retirada</h1>
-        <p class="page-subtitle" title="O prazo de devolução começa a contar na confirmação (RN05).">Entregue o item e confirme.</p>
+        <p class="page-subtitle" title="O prazo de devolução começa a contar na confirmação (RN05).">Peça o código de retirada e confirme.</p>
       </header>
 
       <section class="card flex items-center gap-4 p-5 sm:p-6">
@@ -25,10 +25,35 @@
         </dl>
       </section>
 
-      <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-        <a routerLink="/painel/leitor" class="btn btn-ghost btn-lg">Cancelar</a>
-        <button type="button" (click)="executarConfirmacaoRetirada()" class="btn btn-primary btn-lg">Confirmar retirada</button>
-      </div>
+      <!-- Código de retirada: só quem pediu tem; o responsável digita o que a pessoa mostrar -->
+      <form (submit)="executarConfirmacaoRetirada($event)" class="flex flex-col gap-5">
+        <div class="field">
+          <label for="codigoRetirada" class="label" title="A pessoa vê o código no app, em Meus empréstimos.">Código de retirada</label>
+          <input
+            id="codigoRetirada"
+            type="text"
+            class="input h-12 max-w-56 font-mono text-lg uppercase tracking-[0.2em]"
+            [class.input-invalid]="erro()"
+            [value]="codigoDigitado()"
+            (input)="codigoDigitado.set($any($event.target).value); erro.set(null)"
+            maxlength="8"
+            autocomplete="off"
+            autocapitalize="characters"
+            spellcheck="false"
+            [attr.aria-describedby]="erro() ? 'erro-codigo' : null"
+            [attr.aria-invalid]="!!erro()"
+            required
+          />
+          @if (erro()) {
+            <p id="erro-codigo" class="field-error" role="alert">{{ erro() }}</p>
+          }
+        </div>
+
+        <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+          <a routerLink="/painel/leitor" class="btn btn-ghost btn-lg">Cancelar</a>
+          <button type="submit" class="btn btn-primary btn-lg">Confirmar retirada</button>
+        </div>
+      </form>
     } @else {
       <div class="card empty">
         <mat-icon class="icon-xl" svgIcon="warning_amber" />

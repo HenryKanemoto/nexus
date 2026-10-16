@@ -3,10 +3,15 @@ import {ProtemState} from '../estado';
 import {registrarDevolucao, registrarRetirada, registrarRetiradaPorQr} from './emprestimos';
 import {AGORA, buscar, em, emprestimo, estadoDeTeste, solicitacao, usuario} from './estado-de-teste';
 
+/** Código que a aluna recebeu na aprovação do pedido de a1. */
+const CODIGO = 'K7PM4X';
+
 /** Pedido aprovado hoje para a1, com o item reservado esperando retirada. */
 function comPedidoAprovado(): ProtemState {
   const s = estadoDeTeste({
-    solicitacoes: [solicitacao('p', 'a1', {status: 'aprovada', avaliadoPor: 'resp', avaliadoEm: AGORA.toISOString()})],
+    solicitacoes: [
+      solicitacao('p', 'a1', {status: 'aprovada', avaliadoPor: 'resp', avaliadoEm: AGORA.toISOString(), codigoRetirada: CODIGO}),
+    ],
   });
   s.itens[0] = {...s.itens[0], status: 'reservado'};
   return s;
@@ -26,7 +31,7 @@ function comEmprestimoAtrasado(politica: PoliticaAtraso, statusConta: 'ativa' | 
 describe('regras de retirada e devolução', () => {
   describe('RN05: retirada', () => {
     it('registra a retirada, começa o prazo agora e conclui o pedido', () => {
-      const {estado, resultado} = registrarRetirada(comPedidoAprovado(), 'a1', 'resp');
+      const {estado, resultado} = registrarRetirada(comPedidoAprovado(), 'a1', 'resp', CODIGO);
       expect(resultado.sucesso).toBe(true);
 
       const emp = buscar.emprestimo(estado, resultado.emprestimoId!);
@@ -43,21 +48,56 @@ describe('regras de retirada e devolução', () => {
     });
 
     it.each(['qr-a1', 'QR-A1', ' pat-a1 '])('encontra o item pelo QR ou patrimônio digitado ("%s")', (codigo) => {
-      const {resultado} = registrarRetiradaPorQr(comPedidoAprovado(), codigo, 'resp');
+      const {resultado} = registrarRetiradaPorQr(comPedidoAprovado(), codigo, 'resp', CODIGO);
       expect(resultado).toMatchObject({sucesso: true, itemId: 'a1'});
     });
 
     it('avisa quando o código não existe', () => {
-      const {resultado} = registrarRetiradaPorQr(comPedidoAprovado(), 'XYZ-999', 'resp');
+      const {resultado} = registrarRetiradaPorQr(comPedidoAprovado(), 'XYZ-999', 'resp', CODIGO);
       expect(resultado.sucesso).toBe(false);
       expect(resultado.mensagem).toContain('não encontrado');
     });
 
     it('não registra retirada sem pedido aprovado', () => {
       const s = estadoDeTeste({solicitacoes: [solicitacao('p', 'a1', {status: 'pendente'})]});
-      const {estado, resultado} = registrarRetirada(s, 'a1', 'resp');
+      const {estado, resultado} = registrarRetirada(s, 'a1', 'resp', CODIGO);
       expect(resultado.sucesso).toBe(false);
       expect(estado).toBe(s);
+    });
+
+    describe('código de retirada', () => {
+      it.each(['', 'K7PM4Y', 'ABCDEF'])('não libera com código errado ou vazio ("%s")', (codigo) => {
+        const s = comPedidoAprovado();
+        const {estado, resultado} = registrarRetirada(s, 'a1', 'resp', codigo);
+        expect(resultado.sucesso).toBe(false);
+        expect(resultado.mensagem).toContain('Código de retirada incorreto');
+        // A mensagem nunca mostra o código certo
+        expect(resultado.mensagem).not.toContain(CODIGO);
+        expect(estado).toBe(s);
+      });
+
+      it.each(['k7pm4x', ' K7P-M4X ', 'K7 PM 4X'])('aceita o código com minúsculas, espaços ou hífen ("%s")', (codigo) => {
+        expect(registrarRetirada(comPedidoAprovado(), 'a1', 'resp', codigo).resultado.sucesso).toBe(true);
+      });
+
+      it('não libera pedido aprovado sem código', () => {
+        const s = comPedidoAprovado();
+        s.solicitacoes[0] = {...s.solicitacoes[0], codigoRetirada: undefined};
+        expect(registrarRetirada(s, 'a1', 'resp', '').resultado.sucesso).toBe(false);
+      });
+
+      it('é de uso único: depois da retirada o mesmo código não vale mais', () => {
+        const depois = registrarRetirada(comPedidoAprovado(), 'a1', 'resp', CODIGO).estado;
+        expect(buscar.solicitacao(depois, 'p').status).toBe('concluida');
+        const deNovo = registrarRetirada(depois, 'a1', 'resp', CODIGO);
+        expect(deNovo.resultado.sucesso).toBe(false);
+      });
+
+      it('RN04: pedido expirado no fim do dia não aceita o código', () => {
+        const s = comPedidoAprovado();
+        s.solicitacoes[0] = {...s.solicitacoes[0], status: 'expirada'};
+        expect(registrarRetirada(s, 'a1', 'resp', CODIGO).resultado.sucesso).toBe(false);
+      });
     });
   });
 

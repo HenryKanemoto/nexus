@@ -13,6 +13,12 @@
       <app-status-badge [status]="u.status" />
     </header>
 
+    <a routerLink="/codigos" class="card flex items-center gap-3 px-5 py-3.5 transition-colors hover:border-primary">
+      <mat-icon class="icon-sm text-text-muted" svgIcon="tag" />
+      <span class="flex-1 font-medium">Meus códigos de retirada</span>
+      <mat-icon class="icon-sm text-text-muted" svgIcon="chevron_right" />
+    </a>
+
     <!-- Situação da conta -->
     <section
       class="alert"
