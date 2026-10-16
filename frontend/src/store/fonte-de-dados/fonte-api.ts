@@ -11,8 +11,9 @@ import {DonoDoEstado, FonteDeDados, StatusConexao} from './fonte-de-dados';
  * Modo api: o estado fica no navegador como no modo local, e os itens do acervo também
  * são sincronizados com o back-end (/api/item):
  * - ao iniciar, o banco é a fonte da verdade dos itens. Exceção: se este navegador
- *   começou agora do seed (ou o banco está vazio), o seed é enviado ao banco, para os
- *   itens ficarem coerentes com os empréstimos de demonstração;
+ *   começou agora do seed, se o banco está vazio ou depois de "Reiniciar dados", o seed é
+ *   enviado ao banco, para os itens ficarem coerentes com os empréstimos de demonstração.
+ *   As fotos são do banco: o item do seed sem foto fica com a foto que já estava lá;
  * - depois, toda mudança em um item (cadastro, edição ou troca de situação) vai para a API.
  */
 @Injectable({providedIn: 'root'})
@@ -49,6 +50,14 @@ export class FonteApi implements FonteDeDados {
     this.carregarItensDaApi();
   }
 
+  /** "Reiniciar dados": o seed volta e vai para o banco, preservando as fotos que estão lá. */
+  reiniciar(aplicar: () => void) {
+    // Enquanto o seed não for enviado, nada vai item a item (senão as fotos iriam como null)
+    this.enviarSeed = true;
+    aplicar();
+    this.carregarItensDaApi();
+  }
+
   dispensarErro() {
     this._erro.set(null);
   }
@@ -64,7 +73,9 @@ export class FonteApi implements FonteDeDados {
         this._erro.set(null);
 
         if (itens.length === 0 || this.enviarSeed) {
-          // Banco vazio ou navegador recém-iniciado: envia o acervo que está no navegador
+          // Banco vazio, navegador recém-iniciado ou "Reiniciar dados": o seed do navegador vale,
+          // mas as fotos ficam no banco (o seed do navegador não tem fotos)
+          dono.receberItens(completarFotos(dono.estado().itens, itens));
           this.enviarSeed = false;
           dono.estado().itens.forEach((item) => this.enviar(this.itensApi.salvar(item)));
           return;
@@ -79,7 +90,7 @@ export class FonteApi implements FonteDeDados {
   }
 
   private sincronizarItens(antes: Item[], depois: Item[]) {
-    if (antes === depois || this._conexao() !== 'online') return;
+    if (antes === depois || this._conexao() !== 'online' || this.enviarSeed) return;
 
     // As regras sempre criam um objeto novo para o item que mudou,
     // então comparar referências basta para achar o que enviar
@@ -100,6 +111,15 @@ export class FonteApi implements FonteDeDados {
       },
     });
   }
+}
+
+/**
+ * Itens do navegador com a foto do banco quando não tiverem uma própria.
+ * O seed de demonstração do navegador não tem fotos; as do banco são mantidas.
+ */
+export function completarFotos(locais: Item[], doBanco: Item[]): Item[] {
+  const fotos = new Map(doBanco.filter((i) => i.foto).map((i) => [i.id, i.foto]));
+  return locais.map((item) => (!item.foto && fotos.has(item.id) ? {...item, foto: fotos.get(item.id)} : item));
 }
 
 /** Status 0: backend inacessível. 500-504: o proxy do Angular não alcançou o backend. */

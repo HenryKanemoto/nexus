@@ -144,10 +144,12 @@ export class ProtemStore {
   }
 
   reiniciarDados() {
-    this.atualizar(() => {
-      const fresh = getInitialDemoState();
-      return executarRotinaAutomatica(fresh, parseDate(fresh.agora));
-    });
+    this.fonte.reiniciar(() =>
+      this.atualizar(() => {
+        const fresh = getInitialDemoState();
+        return executarRotinaAutomatica(fresh, parseDate(fresh.agora));
+      }),
+    );
   }
 
   // ==========================================

@@ -40,6 +40,10 @@ export class FonteLocal implements FonteDeDados {
     // Nada a reconectar
   }
 
+  reiniciar(aplicar: () => void) {
+    aplicar();
+  }
+
   dispensarErro() {
     this._erro.set(null);
   }

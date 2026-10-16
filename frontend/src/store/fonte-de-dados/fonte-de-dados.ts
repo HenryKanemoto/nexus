@@ -37,5 +37,7 @@ export interface FonteDeDados {
   /** Grava o novo estado. Recebe o anterior para saber o que mudou. */
   salvar(antes: ProtemState, depois: ProtemState): void;
   reconectar(): void;
+  /** "Reiniciar dados": a fonte roda `aplicar` (que troca o estado pelo seed) e grava do jeito dela. */
+  reiniciar(aplicar: () => void): void;
   dispensarErro(): void;
 }
