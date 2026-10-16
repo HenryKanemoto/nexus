@@ -13,7 +13,8 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'login',
+    title: 'Protem · Plataforma Web de Empréstimos',
+    loadComponent: () => import('../pages/P0Landing').then((m) => m.P0Landing),
   },
   {
     path: 'login',

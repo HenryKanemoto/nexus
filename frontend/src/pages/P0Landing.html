@@ -1,0 +1,52 @@
+<div class="flex min-h-screen flex-col bg-bg">
+  <header class="border-b border-border bg-surface">
+    <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+      <app-brand-logo variante="horizontal" [tamanho]="44" />
+      <a routerLink="/login" class="btn btn-secondary shrink-0">Acessar plataforma</a>
+    </div>
+  </header>
+
+  <main class="flex-1">
+    <!-- Apresentação -->
+    <section class="mx-auto flex max-w-5xl flex-col items-start gap-6 px-4 py-16 sm:px-6 sm:py-24">
+      <app-brand-logo variante="icone" [tamanho]="72" />
+      <h1 class="max-w-2xl font-display text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
+        Empréstimo de itens da escola, do pedido à devolução.
+      </h1>
+      <p class="max-w-xl text-lg text-text-muted">
+        Alunos e professores pedem pelo catálogo; o responsável pelo acervo aprova e registra a retirada e a devolução pelo QR code.
+      </p>
+      <a routerLink="/login" class="btn btn-primary btn-lg">Acessar plataforma</a>
+    </section>
+
+    <!-- Pacotes -->
+    <section class="border-t border-border bg-surface" aria-labelledby="titulo-pacotes">
+      <div class="mx-auto flex max-w-5xl flex-col gap-8 px-4 py-16 sm:px-6">
+        <div>
+          <h2 id="titulo-pacotes" class="font-display text-3xl font-semibold tracking-tight">Pacotes</h2>
+          <p class="mt-2 text-text-muted">Valores e limites de exemplo, revisados com cada escola.</p>
+        </div>
+
+        <ul class="grid gap-4 sm:grid-cols-3">
+          @for (pacote of pacotes; track pacote.nome) {
+            <li class="card flex flex-col gap-4 p-6">
+              <h3 class="font-display text-xl font-semibold">{{ pacote.nome }}</h3>
+              <p>
+                <span class="font-display text-3xl font-semibold text-text-heading">{{ pacote.preco }}</span>
+                <span class="block text-sm text-text-muted">{{ pacote.cobranca }}</span>
+              </p>
+              <p class="flex-1 text-text">{{ pacote.detalhe }}</p>
+              <a routerLink="/login" class="btn btn-secondary btn-block">Acessar plataforma</a>
+            </li>
+          }
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-border bg-surface">
+    <p class="mx-auto max-w-5xl px-4 py-6 text-sm text-text-muted sm:px-6">
+      Protem · Plataforma Web de Empréstimos · {{ ano }}
+    </p>
+  </footer>
+</div>
