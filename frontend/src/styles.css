@@ -25,7 +25,9 @@
   --color-brand-soft: #eaf1fe; /* fundos suaves: selecionado, destaque, estados vazios */
 
   /* Derivados */
-  --color-primary: #2f6bff; /* fundo de botão com texto branco (4,5:1) */
+  /* Fundo de botão com texto branco. Um ponto mais escuro que o brand-blue: #2F6BFF dá 4,499:1
+     com branco (reprova o AA por pouco); #2F6AFE dá 4,55:1 e é visualmente igual. */
+  --color-primary: #2f6afe;
   --color-primary-hover: #2558d9; /* hover; texto e links azuis sobre branco (6,0:1) */
   --color-primary-strong: #1e47b8; /* texto azul sobre brand-soft (7,0:1) */
   --color-text: #1f2937; /* corpo (14,7:1) */
