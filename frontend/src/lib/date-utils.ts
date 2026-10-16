@@ -4,7 +4,12 @@
  */
 
 export function parseDate(isoOrDate: string | Date): Date {
-  return typeof isoOrDate === 'string' ? new Date(isoOrDate) : new Date(isoOrDate.getTime());
+  if (typeof isoOrDate !== 'string') return new Date(isoOrDate.getTime());
+  // "AAAA-MM-DD" (data de devolução) é um dia do calendário local. O new Date() leria
+  // como meia-noite UTC, que no Brasil cai às 21h do dia anterior.
+  const soData = /^(\d{4})-(\d{2})-(\d{2})$/.exec(isoOrDate);
+  if (soData) return new Date(Number(soData[1]), Number(soData[2]) - 1, Number(soData[3]));
+  return new Date(isoOrDate);
 }
 
 export function formatDateTime(isoOrDate: string | Date): string {
