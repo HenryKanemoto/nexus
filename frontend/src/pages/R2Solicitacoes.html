@@ -2,7 +2,7 @@
   <header class="page-header">
     <div>
       <h1 class="page-title">Solicitações</h1>
-      <p class="page-subtitle">Todo pedido precisa da sua aprovação. Depois de aprovado, a retirada é no mesmo dia.</p>
+      <p class="page-subtitle" title="Todo pedido precisa da sua aprovação. Depois de aprovado, a retirada é no mesmo dia.">Aprove ou recuse os pedidos.</p>
     </div>
   </header>
 
@@ -19,9 +19,8 @@
   <!-- Pedidos aguardando análise -->
   <section class="card" aria-labelledby="titulo-pendentes">
     <div class="card-header">
-      <h2 id="titulo-pendentes" class="card-title flex items-center gap-2">
-        Aguardando análise
-        <span class="count">{{ solicitacoesPendentes().length }}</span>
+      <h2 id="titulo-pendentes" class="card-title">
+        Aguardando análise <span class="font-sans text-sm font-normal text-text-muted">{{ solicitacoesPendentes().length }}</span>
       </h2>
     </div>
 
@@ -32,32 +31,20 @@
           @let user = getUsuario(s.solicitanteId);
           <li class="grid gap-3 px-5 py-4 sm:px-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_auto] md:items-center md:gap-6">
             <div class="min-w-0">
-              <p class="flex flex-wrap items-center gap-2 font-medium">
-                {{ user?.nome || 'Solicitante' }}
-                @if (s.lembreteEnviadoEm) {
-                  <span class="inline-flex items-center gap-1 rounded-full bg-brand-soft px-2 py-0.5 text-[0.6875rem] font-semibold text-primary-strong" title="O solicitante enviou um lembrete">
-                    <mat-icon class="icon-xs" svgIcon="notifications_active" />
-                    lembrete
-                  </span>
-                }
-              </p>
-              <p class="text-xs text-text-muted">
-                <span class="capitalize">{{ user?.perfil }}</span> · <span class="font-mono">{{ user?.matricula }}</span>
+              <p class="font-medium">{{ user?.nome || 'Solicitante' }}</p>
+              <p class="text-sm capitalize text-text-muted">
+                {{ user?.perfil }}@if (s.lembreteEnviadoEm) {<span class="normal-case"> · enviou lembrete</span>}
               </p>
             </div>
 
             <div class="min-w-0">
               <p class="truncate">{{ item?.nome }}</p>
-              <p class="text-xs text-text-muted">
-                <span class="font-mono">{{ item?.patrimonio }}</span> · devolver até {{ formatarData(s.devolucaoDesejada) }} · há
-                {{ getTempoDecorrido(s.criadoEm) }}
-              </p>
+              <p class="text-sm text-text-muted">até {{ formatarData(s.devolucaoDesejada) }} · há {{ getTempoDecorrido(s.criadoEm) }}</p>
             </div>
 
             <div class="flex gap-2">
-              <button type="button" (click)="abrirModalRecusa(s)" class="btn btn-secondary btn-sm flex-1 md:flex-none">Recusar</button>
-              <button type="button" (click)="aprovarPedido(s.id)" class="btn btn-ok btn-sm flex-1 md:flex-none" title="O item fica reservado para retirada hoje">
-                <mat-icon class="icon-sm" svgIcon="check" />
+              <button type="button" (click)="abrirModalRecusa(s)" class="btn btn-ghost btn-sm flex-1 md:flex-none">Recusar</button>
+              <button type="button" (click)="aprovarPedido(s.id)" class="btn btn-primary btn-sm flex-1 md:flex-none" title="O item fica reservado para retirada hoje">
                 Aprovar
               </button>
             </div>
@@ -76,13 +63,9 @@
   <!-- Aprovados aguardando retirada (RN04) -->
   <section class="card" aria-labelledby="titulo-aprovados">
     <div class="card-header">
-      <div>
-        <h2 id="titulo-aprovados" class="card-title flex items-center gap-2">
-          Aprovados, aguardando retirada
-          <span class="count">{{ pedidosAprovadosHoje().length }}</span>
-        </h2>
-        <p class="text-xs text-text-muted">Se não forem retirados até o fim do dia, os pedidos expiram.</p>
-      </div>
+      <h2 id="titulo-aprovados" class="card-title" title="Se não forem retirados até o fim do dia, os pedidos expiram.">
+        Aguardando retirada <span class="font-sans text-sm font-normal text-text-muted">{{ pedidosAprovadosHoje().length }}</span>
+      </h2>
     </div>
 
     @if (pedidosAprovadosHoje().length > 0) {
@@ -93,20 +76,13 @@
           <li class="grid gap-3 px-5 py-4 sm:px-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_auto] md:items-center md:gap-6">
             <div class="min-w-0">
               <p class="font-medium">{{ user?.nome }}</p>
-              <p class="text-xs text-text-muted">
-                <span class="capitalize">{{ user?.perfil }}</span> · <span class="font-mono">{{ user?.matricula }}</span>
-              </p>
+              <p class="text-sm capitalize text-text-muted">{{ user?.perfil }}</p>
             </div>
             <div class="min-w-0">
               <p class="truncate">{{ item?.nome }}</p>
-              <p class="text-xs text-text-muted">
-                <span class="font-mono">{{ item?.codigoQr }}</span> · aprovado às {{ formatarHora(solic.avaliadoEm || solic.criadoEm) }}
-              </p>
+              <p class="text-sm text-text-muted">aprovado às {{ formatarHora(solic.avaliadoEm || solic.criadoEm) }}</p>
             </div>
-            <a [routerLink]="['/painel/retirada', solic.itemId]" class="btn btn-primary btn-sm">
-              <mat-icon class="icon-sm" svgIcon="qr_code_scanner" />
-              Registrar retirada
-            </a>
+            <a [routerLink]="['/painel/retirada', solic.itemId]" class="btn btn-ghost btn-sm">Retirada</a>
           </li>
         }
       </ul>
