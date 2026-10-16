@@ -46,14 +46,19 @@
             <app-item-thumb [item]="item" class="size-14 shrink-0 rounded-control bg-brand-soft" />
           }
           <div class="min-w-0 flex-1">
-            <p class="font-semibold">{{ item?.nome }}</p>
+            <p class="flex flex-wrap items-center gap-2 font-semibold">
+              {{ item?.nome }}
+              <span class="rounded-full bg-reservado-bg px-2.5 py-0.5 text-xs font-medium text-reservado">Retire hoje</span>
+            </p>
             <p class="mt-0.5 text-sm text-text-muted" title="Retire no setor de materiais antes do fim do dia, senão o pedido expira.">
-              Aprovado às {{ formatarHora(solic.avaliadoEm || solic.criadoEm) }}
+              Aprovado às {{ formatarHora(solic.avaliadoEm || solic.criadoEm) }} · mostre o código ao responsável
             </p>
           </div>
-          <span class="inline-flex shrink-0 self-start rounded-full bg-reservado-bg px-2.5 py-0.5 text-xs font-medium text-reservado sm:self-auto">
-            Retire hoje
-          </span>
+          <div class="shrink-0 sm:text-right">
+            <p class="text-xs text-text-muted">Código de retirada</p>
+            <p class="font-mono text-2xl font-semibold tracking-[0.2em] text-text-heading">{{ solic.codigoRetirada }}</p>
+            <a routerLink="/codigos" class="text-sm font-medium text-primary-hover hover:underline">Meus códigos</a>
+          </div>
         </li>
       }
 
