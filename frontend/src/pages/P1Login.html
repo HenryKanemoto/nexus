@@ -21,7 +21,7 @@
     <div class="pointer-events-none absolute -right-20 bottom-16 flex rotate-[-8deg] flex-col gap-3" aria-hidden="true">
       @for (etiqueta of etiquetas; track etiqueta.codigo) {
         <div class="flex w-72 items-center gap-4 rounded-card bg-accent px-4 py-3 text-ink" [style.margin-left.px]="etiqueta.recuo">
-          <mat-icon class="icon-lg">qr_code_2</mat-icon>
+          <mat-icon class="icon-lg" svgIcon="qr_code_2" />
           <div class="min-w-0">
             <p class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] opacity-70">Patrimônio</p>
             <p class="font-mono text-lg font-semibold">{{ etiqueta.codigo }}</p>
@@ -44,7 +44,7 @@
 
       @if (mensagemErro()) {
         <div role="alert" class="alert alert-danger mt-6">
-          <mat-icon class="icon-sm">error_outline</mat-icon>
+          <mat-icon class="icon-sm" svgIcon="error_outline" />
           <p>{{ mensagemErro() }}</p>
         </div>
       }
@@ -85,7 +85,7 @@
               class="btn-icon absolute right-1 top-1 size-9"
               [attr.aria-label]="mostrarSenha() ? 'Ocultar senha' : 'Mostrar senha'"
             >
-              <mat-icon class="icon-sm">{{ mostrarSenha() ? 'visibility_off' : 'visibility' }}</mat-icon>
+              <mat-icon class="icon-sm" [svgIcon]="mostrarSenha() ? 'visibility_off' : 'visibility'" />
             </button>
           </div>
         </div>

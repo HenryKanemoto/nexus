@@ -21,7 +21,7 @@
 
       <div class="flex items-center gap-1 sm:gap-2">
         <a routerLink="/notificacoes" class="btn-icon relative hidden md:inline-flex" aria-label="Notificações">
-          <mat-icon>notifications_none</mat-icon>
+          <mat-icon svgIcon="notifications_none" />
           @if (store.totalNaoLidas() > 0) {
             <span class="count absolute -right-0.5 -top-0.5 h-4 min-w-4 px-1 text-[0.625rem]">{{ store.totalNaoLidas() }}</span>
           }
@@ -56,7 +56,7 @@
                 role="menuitem"
                 class="flex items-center gap-2.5 px-4 py-2.5 text-sm hover:bg-sunken"
               >
-                <mat-icon class="icon-sm text-ink-muted">person_outline</mat-icon>
+                <mat-icon class="icon-sm text-ink-muted" svgIcon="person_outline" />
                 Meu perfil
               </a>
               <button
@@ -65,7 +65,7 @@
                 role="menuitem"
                 class="flex w-full items-center gap-2.5 border-t border-line px-4 py-2.5 text-sm text-danger hover:bg-danger-soft"
               >
-                <mat-icon class="icon-sm">logout</mat-icon>
+                <mat-icon class="icon-sm" svgIcon="logout" />
                 Sair
               </button>
             </div>
@@ -93,7 +93,7 @@
         class="relative flex flex-col items-center gap-0.5 py-2 text-[0.6875rem] font-medium text-ink-muted"
       >
         <span class="marca flex h-7 w-12 items-center justify-center rounded-full transition-colors">
-          <mat-icon class="icon-sm">{{ link.icone }}</mat-icon>
+          <mat-icon class="icon-sm" [svgIcon]="link.icone" />
         </span>
         {{ link.rotulo }}
         @if (link.rota === '/notificacoes' && store.totalNaoLidas() > 0) {

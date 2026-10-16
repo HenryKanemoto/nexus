@@ -6,10 +6,10 @@
 
   @if (mensagemSucesso()) {
     <div role="status" class="alert alert-ok items-center">
-      <mat-icon class="icon-sm">check_circle</mat-icon>
+      <mat-icon class="icon-sm" svgIcon="check_circle" />
       <p class="flex-1">{{ mensagemSucesso() }}</p>
       <button type="button" (click)="mensagemSucesso.set(null)" class="btn-icon size-8" aria-label="Fechar aviso">
-        <mat-icon class="icon-sm">close</mat-icon>
+        <mat-icon class="icon-sm" svgIcon="close" />
       </button>
     </div>
   }
@@ -52,7 +52,7 @@
 
     <div class="flex justify-end border-t border-line pt-5">
       <button type="button" (click)="salvar()" class="btn btn-primary" [disabled]="politicaSelecionada() === politicaAtual()">
-        <mat-icon class="icon-sm">save</mat-icon>
+        <mat-icon class="icon-sm" svgIcon="save" />
         Salvar
       </button>
     </div>

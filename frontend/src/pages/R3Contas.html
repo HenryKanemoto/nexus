@@ -8,10 +8,10 @@
 
   @if (feedbackMensagem()) {
     <div role="status" class="alert alert-ok items-center">
-      <mat-icon class="icon-sm">check_circle</mat-icon>
+      <mat-icon class="icon-sm" svgIcon="check_circle" />
       <p class="flex-1">{{ feedbackMensagem() }}</p>
       <button type="button" (click)="feedbackMensagem.set(null)" class="btn-icon size-8" aria-label="Fechar aviso">
-        <mat-icon class="icon-sm">close</mat-icon>
+        <mat-icon class="icon-sm" svgIcon="close" />
       </button>
     </div>
   }
@@ -41,7 +41,7 @@
             <div class="flex gap-2">
               <button type="button" (click)="abrirModalRecusa(u)" class="btn btn-secondary btn-sm flex-1 md:flex-none">Recusar</button>
               <button type="button" (click)="aprovarConta(u)" class="btn btn-ok btn-sm flex-1 md:flex-none">
-                <mat-icon class="icon-sm">check</mat-icon>
+                <mat-icon class="icon-sm" svgIcon="check" />
                 Aprovar
               </button>
             </div>
@@ -50,7 +50,7 @@
       </ul>
     } @else {
       <div class="empty">
-        <mat-icon class="icon-xl">how_to_reg</mat-icon>
+        <mat-icon class="icon-xl" svgIcon="how_to_reg" />
         <p class="empty-title">Nenhuma conta pendente</p>
         <p class="empty-text">Quando alguém se cadastrar, a conta aparece aqui para você aprovar.</p>
       </div>

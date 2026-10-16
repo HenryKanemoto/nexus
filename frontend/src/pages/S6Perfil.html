@@ -24,7 +24,7 @@
       @switch (u.status) {
         @case ('bloqueada') {
           @let atrasado = itemAtrasadoInfo();
-          <mat-icon class="icon-sm">lock</mat-icon>
+          <mat-icon class="icon-sm" svgIcon="lock" />
           <div class="flex-1">
             <p class="font-semibold">Conta bloqueada</p>
             <p class="mt-0.5">
@@ -37,12 +37,12 @@
             </p>
             <a routerLink="/meus-emprestimos" [queryParams]="{aba: 'ativos'}" class="mt-2 inline-flex items-center gap-1 font-semibold underline underline-offset-4">
               Ver item atrasado
-              <mat-icon class="icon-xs">arrow_forward</mat-icon>
+              <mat-icon class="icon-xs" svgIcon="arrow_forward" />
             </a>
           </div>
         }
         @case ('suspensa') {
-          <mat-icon class="icon-sm">hourglass_empty</mat-icon>
+          <mat-icon class="icon-sm" svgIcon="hourglass_empty" />
           <div>
             <p class="font-semibold">Suspensa até {{ formatarData(u.suspensoAte) }}</p>
             <p class="mt-0.5">
@@ -51,11 +51,11 @@
           </div>
         }
         @case ('ativa') {
-          <mat-icon class="icon-sm">verified</mat-icon>
+          <mat-icon class="icon-sm" svgIcon="verified" />
           <p>Conta em dia. Você pode pedir equipamentos dentro dos limites de cada categoria.</p>
         }
         @default {
-          <mat-icon class="icon-sm">hourglass_top</mat-icon>
+          <mat-icon class="icon-sm" svgIcon="hourglass_top" />
           <p>Cadastro esperando a aprovação de um responsável do acervo.</p>
         }
       }
@@ -101,7 +101,7 @@
 
     <div>
       <button type="button" (click)="sair()" class="btn btn-danger-ghost">
-        <mat-icon class="icon-sm">logout</mat-icon>
+        <mat-icon class="icon-sm" svgIcon="logout" />
         Sair da conta
       </button>
     </div>

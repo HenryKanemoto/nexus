@@ -18,13 +18,13 @@ import {NexusStore} from '../../store/nexus.store';
           store.conexao() === 'offline' ? 'alert-warn' : 'alert-danger'
         }}"
       >
-        <mat-icon class="icon-sm">{{ store.conexao() === 'offline' ? 'cloud_off' : 'error' }}</mat-icon>
+        <mat-icon class="icon-sm" [svgIcon]="store.conexao() === 'offline' ? 'cloud_off' : 'error'" />
         <p class="flex-1">{{ erro }}</p>
         @if (store.conexao() === 'offline') {
           <button type="button" class="btn btn-sm btn-secondary" (click)="store.reconectar()">Tentar de novo</button>
         }
         <button type="button" class="btn-icon size-8" (click)="store.dispensarErroApi()" aria-label="Fechar aviso">
-          <mat-icon class="icon-sm">close</mat-icon>
+          <mat-icon class="icon-sm" svgIcon="close" />
         </button>
       </div>
     }

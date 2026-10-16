@@ -2,7 +2,7 @@
   <header class="mx-auto flex max-w-xl items-center justify-between">
     <a routerLink="/login" aria-label="Nexus, voltar para o login"><app-logo [tamanho]="30" /></a>
     <a routerLink="/login" class="back-link">
-      <mat-icon class="icon-sm">arrow_back</mat-icon>
+      <mat-icon class="icon-sm" svgIcon="arrow_back" />
       Voltar ao login
     </a>
   </header>
@@ -16,7 +16,7 @@
 
     @if (erros().geral) {
       <div role="alert" class="alert alert-danger mt-6">
-        <mat-icon class="icon-sm">error_outline</mat-icon>
+        <mat-icon class="icon-sm" svgIcon="error_outline" />
         <p>{{ erros().geral }}</p>
       </div>
     }
@@ -38,7 +38,7 @@
                 [checked]="perfil() === opcao.valor"
                 (change)="perfil.set(opcao.valor)"
               />
-              <mat-icon [class.text-accent]="perfil() === opcao.valor">{{ opcao.icone }}</mat-icon>
+              <mat-icon [class.text-accent]="perfil() === opcao.valor" [svgIcon]="opcao.icone" />
               <span class="text-sm font-medium">{{ opcao.rotulo }}</span>
             </label>
           }
@@ -123,7 +123,7 @@
               class="btn-icon absolute right-0.5 top-0.5"
               [attr.aria-label]="mostrarSenha() ? 'Ocultar senhas' : 'Mostrar senhas'"
             >
-              <mat-icon class="icon-sm">{{ mostrarSenha() ? 'visibility_off' : 'visibility' }}</mat-icon>
+              <mat-icon class="icon-sm" [svgIcon]="mostrarSenha() ? 'visibility_off' : 'visibility'" />
             </button>
           </div>
           @if (erros().senha) {

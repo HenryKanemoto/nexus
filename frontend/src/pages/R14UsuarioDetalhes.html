@@ -1,6 +1,6 @@
 <div class="page">
   <a routerLink="/painel/usuarios" class="back-link">
-    <mat-icon class="icon-sm">arrow_back</mat-icon>
+    <mat-icon class="icon-sm" svgIcon="arrow_back" />
     Usuários
   </a>
 
@@ -22,12 +22,12 @@
         @if (u.perfil !== 'responsavel') {
           @if (u.status === 'ativa') {
             <button type="button" (click)="store.bloquearUsuario(u.id)" class="btn btn-danger-ghost btn-sm">
-              <mat-icon class="icon-sm">lock</mat-icon>
+              <mat-icon class="icon-sm" svgIcon="lock" />
               Bloquear conta
             </button>
           } @else if (u.status === 'bloqueada' || u.status === 'suspensa') {
             <button type="button" (click)="store.desbloquearUsuario(u.id)" class="btn btn-secondary btn-sm">
-              <mat-icon class="icon-sm">lock_open</mat-icon>
+              <mat-icon class="icon-sm" svgIcon="lock_open" />
               Reativar conta
             </button>
           }
@@ -90,7 +90,7 @@
     </section>
   } @else {
     <div class="card empty">
-      <mat-icon class="icon-xl">help_outline</mat-icon>
+      <mat-icon class="icon-xl" svgIcon="help_outline" />
       <p class="empty-title">Usuário não encontrado</p>
       <a routerLink="/painel/usuarios" class="btn btn-secondary btn-sm mt-3">Voltar para usuários</a>
     </div>

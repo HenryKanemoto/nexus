@@ -6,10 +6,10 @@
 
   @if (mensagemAviso()) {
     <div role="alert" class="alert alert-warn">
-      <mat-icon class="icon-sm">info</mat-icon>
+      <mat-icon class="icon-sm" svgIcon="info" />
       <p class="flex-1">{{ mensagemAviso() }}</p>
       <button type="button" (click)="mensagemAviso.set(null)" class="btn-icon size-8" aria-label="Fechar aviso">
-        <mat-icon class="icon-sm">close</mat-icon>
+        <mat-icon class="icon-sm" svgIcon="close" />
       </button>
     </div>
   }
@@ -26,7 +26,7 @@
       </div>
       <div class="flex flex-col items-center">
         @if (!cameraAtiva()) {
-          <mat-icon class="icon-xl text-white/30">qr_code_scanner</mat-icon>
+          <mat-icon class="icon-xl text-white/30" svgIcon="qr_code_scanner" />
           <p class="mt-3 max-w-[85%] text-center text-sm text-white/70">{{ cameraStatusTexto() }}</p>
         }
       </div>
@@ -53,7 +53,7 @@
           required
         />
         <button type="submit" class="btn btn-primary shrink-0">
-          <mat-icon class="icon-sm">search</mat-icon>
+          <mat-icon class="icon-sm" svgIcon="search" />
           Buscar
         </button>
       </div>

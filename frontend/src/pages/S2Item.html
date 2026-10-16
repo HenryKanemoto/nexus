@@ -1,6 +1,6 @@
 <div class="page">
   <a routerLink="/catalogo" class="back-link">
-    <mat-icon class="icon-sm">arrow_back</mat-icon>
+    <mat-icon class="icon-sm" svgIcon="arrow_back" />
     Catálogo
   </a>
 
@@ -49,16 +49,16 @@
           @if (perm.pode) {
             <a [routerLink]="['/solicitar', i.id]" class="btn btn-primary btn-lg sm:self-start">
               Pedir emprestado
-              <mat-icon class="icon-sm">arrow_forward</mat-icon>
+              <mat-icon class="icon-sm" svgIcon="arrow_forward" />
             </a>
             <p class="text-sm text-ink-muted">O responsável analisa o pedido. Depois de aprovado, a retirada é no mesmo dia.</p>
           } @else {
             <button type="button" disabled class="btn btn-primary btn-lg sm:self-start">
-              <mat-icon class="icon-sm">lock</mat-icon>
+              <mat-icon class="icon-sm" svgIcon="lock" />
               Pedir emprestado
             </button>
             <div role="status" class="alert alert-danger">
-              <mat-icon class="icon-sm">info</mat-icon>
+              <mat-icon class="icon-sm" svgIcon="info" />
               <p>{{ perm.motivo }}</p>
             </div>
           }
@@ -67,7 +67,7 @@
     </div>
   } @else {
     <div class="card empty">
-      <mat-icon class="icon-xl">help_outline</mat-icon>
+      <mat-icon class="icon-xl" svgIcon="help_outline" />
       <p class="empty-title">Item não encontrado</p>
       <p class="empty-text">Esse equipamento não existe ou foi removido do acervo.</p>
       <a routerLink="/catalogo" class="btn btn-secondary btn-sm mt-3">Voltar ao catálogo</a>

@@ -65,7 +65,7 @@
         @for (r of registrosFiltrados(); track r.id) {
           <li class="flex items-start gap-4 px-5 py-3.5 sm:px-6">
             <span class="flex size-9 shrink-0 items-center justify-center rounded-full {{ classeIcone(r.tipo) }}">
-              <mat-icon class="icon-sm">{{ icone(r.tipo) }}</mat-icon>
+              <mat-icon class="icon-sm" [svgIcon]="icone(r.tipo)" />
             </span>
             <div class="min-w-0 flex-1">
               <p class="flex flex-wrap items-baseline justify-between gap-x-3">
@@ -80,7 +80,7 @@
       </ul>
     } @else {
       <div class="empty">
-        <mat-icon class="icon-xl">manage_search</mat-icon>
+        <mat-icon class="icon-xl" svgIcon="manage_search" />
         <p class="empty-title">Nenhuma movimentação encontrada</p>
         <p class="empty-text">Tente mudar os filtros.</p>
       </div>

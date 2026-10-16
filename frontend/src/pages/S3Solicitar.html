@@ -3,7 +3,7 @@
     @let cat = categoria();
 
     <a [routerLink]="['/item', i.id]" class="back-link">
-      <mat-icon class="icon-sm">arrow_back</mat-icon>
+      <mat-icon class="icon-sm" svgIcon="arrow_back" />
       {{ i.nome }}
     </a>
 
@@ -17,7 +17,7 @@
 
     @if (mensagemErro()) {
       <div role="alert" class="alert alert-danger">
-        <mat-icon class="icon-sm">error_outline</mat-icon>
+        <mat-icon class="icon-sm" svgIcon="error_outline" />
         <p>{{ mensagemErro() }}</p>
       </div>
     }
@@ -34,11 +34,11 @@
             [class.invisible]="!podeVoltarMes()"
             aria-label="Mês anterior"
           >
-            <mat-icon>chevron_left</mat-icon>
+            <mat-icon svgIcon="chevron_left" />
           </button>
           <p class="font-display text-base font-semibold capitalize">{{ nomeMesAno() }}</p>
           <button type="button" (click)="proximoMes()" class="btn-icon" aria-label="Próximo mês">
-            <mat-icon>chevron_right</mat-icon>
+            <mat-icon svgIcon="chevron_right" />
           </button>
         </div>
 
@@ -108,7 +108,7 @@
         </dl>
 
         <div class="alert alert-warn">
-          <mat-icon class="icon-sm">schedule</mat-icon>
+          <mat-icon class="icon-sm" svgIcon="schedule" />
           <p>
             <strong class="font-semibold">Retirada no mesmo dia da aprovação.</strong>
             Se o item não for retirado até o fim do dia, o pedido expira e o equipamento volta para o acervo.
@@ -119,14 +119,14 @@
           <a [routerLink]="['/item', i.id]" class="btn btn-secondary btn-lg">Cancelar</a>
           <button type="button" (click)="submeterPedido()" class="btn btn-primary btn-lg sm:flex-1">
             Enviar pedido
-            <mat-icon class="icon-sm">send</mat-icon>
+            <mat-icon class="icon-sm" svgIcon="send" />
           </button>
         </div>
       </section>
     </div>
   } @else {
     <div class="card empty">
-      <mat-icon class="icon-xl">help_outline</mat-icon>
+      <mat-icon class="icon-xl" svgIcon="help_outline" />
       <p class="empty-title">Equipamento não encontrado</p>
       <a routerLink="/catalogo" class="btn btn-secondary btn-sm mt-3">Voltar ao catálogo</a>
     </div>

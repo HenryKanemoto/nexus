@@ -8,10 +8,10 @@
 
   @if (feedbackMensagem()) {
     <div role="status" class="alert alert-ok items-center">
-      <mat-icon class="icon-sm">check_circle</mat-icon>
+      <mat-icon class="icon-sm" svgIcon="check_circle" />
       <p class="flex-1">{{ feedbackMensagem() }}</p>
       <button type="button" (click)="feedbackMensagem.set(null)" class="btn-icon size-8" aria-label="Fechar aviso">
-        <mat-icon class="icon-sm">close</mat-icon>
+        <mat-icon class="icon-sm" svgIcon="close" />
       </button>
     </div>
   }
@@ -36,7 +36,7 @@
                 {{ user?.nome || 'Solicitante' }}
                 @if (s.lembreteEnviadoEm) {
                   <span class="inline-flex items-center gap-1 rounded-full bg-accent px-2 py-0.5 text-[0.6875rem] font-semibold" title="O solicitante enviou um lembrete">
-                    <mat-icon class="icon-xs">notifications_active</mat-icon>
+                    <mat-icon class="icon-xs" svgIcon="notifications_active" />
                     lembrete
                   </span>
                 }
@@ -57,7 +57,7 @@
             <div class="flex gap-2">
               <button type="button" (click)="abrirModalRecusa(s)" class="btn btn-secondary btn-sm flex-1 md:flex-none">Recusar</button>
               <button type="button" (click)="aprovarPedido(s.id)" class="btn btn-ok btn-sm flex-1 md:flex-none" title="O item fica reservado para retirada hoje">
-                <mat-icon class="icon-sm">check</mat-icon>
+                <mat-icon class="icon-sm" svgIcon="check" />
                 Aprovar
               </button>
             </div>
@@ -66,7 +66,7 @@
       </ul>
     } @else {
       <div class="empty">
-        <mat-icon class="icon-xl">inbox</mat-icon>
+        <mat-icon class="icon-xl" svgIcon="inbox" />
         <p class="empty-title">Nada para analisar</p>
         <p class="empty-text">Novos pedidos de alunos e professores aparecem aqui.</p>
       </div>
@@ -104,7 +104,7 @@
               </p>
             </div>
             <a [routerLink]="['/painel/retirada', solic.itemId]" class="btn btn-primary btn-sm">
-              <mat-icon class="icon-sm">qr_code_scanner</mat-icon>
+              <mat-icon class="icon-sm" svgIcon="qr_code_scanner" />
               Registrar retirada
             </a>
           </li>

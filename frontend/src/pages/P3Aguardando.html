@@ -8,7 +8,7 @@
       class="flex size-14 items-center justify-center rounded-card"
       [class]="estaAprovada() ? 'bg-ok-soft text-ok' : 'bg-accent-soft text-warn'"
     >
-      <mat-icon class="icon-lg">{{ estaAprovada() ? 'verified' : 'hourglass_top' }}</mat-icon>
+      <mat-icon class="icon-lg" [svgIcon]="estaAprovada() ? 'verified' : 'hourglass_top'" />
     </div>
 
     @if (estaAprovada()) {
@@ -47,7 +47,7 @@
       @if (estaAprovada()) {
         <a routerLink="/catalogo" class="btn btn-primary btn-lg btn-block">
           Ir para o catálogo
-          <mat-icon class="icon-sm">arrow_forward</mat-icon>
+          <mat-icon class="icon-sm" svgIcon="arrow_forward" />
         </a>
       }
       <button type="button" (click)="voltarAoLogin()" class="btn btn-secondary btn-lg btn-block">Voltar ao login</button>
@@ -60,7 +60,7 @@
           Para testar o fluxo sem entrar como responsável, aprove esta conta agora.
         </p>
         <button type="button" (click)="simularAprovacao()" class="btn btn-sm btn-accent mt-3">
-          <mat-icon class="icon-sm">check</mat-icon>
+          <mat-icon class="icon-sm" svgIcon="check" />
           Simular aprovação
         </button>
       </section>

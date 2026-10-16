@@ -5,7 +5,7 @@
       <p class="page-subtitle">Alunos, professores e responsáveis. Abra uma pessoa para ver o histórico dela.</p>
     </div>
     <div class="input-group w-full sm:w-80">
-      <mat-icon class="icon-sm">search</mat-icon>
+      <mat-icon class="icon-sm" svgIcon="search" />
       <input
         type="search"
         class="input"
@@ -41,7 +41,7 @@
       <p class="border-t border-line px-5 py-3 text-xs text-ink-muted">{{ usuariosFiltrados().length }} de {{ store.usuarios().length }} pessoas</p>
     } @else {
       <div class="empty">
-        <mat-icon class="icon-xl">person_search</mat-icon>
+        <mat-icon class="icon-xl" svgIcon="person_search" />
         <p class="empty-title">Ninguém encontrado</p>
         <p class="empty-text">Tente outro nome ou matrícula.</p>
       </div>

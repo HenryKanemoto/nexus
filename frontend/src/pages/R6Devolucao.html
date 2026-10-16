@@ -1,6 +1,6 @@
 <div class="page max-w-3xl">
   <a routerLink="/painel/leitor" class="back-link">
-    <mat-icon class="icon-sm">arrow_back</mat-icon>
+    <mat-icon class="icon-sm" svgIcon="arrow_back" />
     Leitor de QR
   </a>
 
@@ -31,7 +31,7 @@
         <!-- Situação do prazo e consequência pela política (RN06) -->
         @if (diasAtrasoAtual > 0) {
           <div class="flex items-start gap-3 border-t border-warn/25 bg-warn-soft px-5 py-4 text-[#7d4500] sm:px-6">
-            <mat-icon class="icon-sm mt-0.5">warning</mat-icon>
+            <mat-icon class="icon-sm mt-0.5" svgIcon="warning" />
             <div>
               <p class="font-semibold">{{ plural(diasAtrasoAtual, 'dia') }} de atraso</p>
               <p class="text-sm">
@@ -47,7 +47,7 @@
           </div>
         } @else {
           <div class="flex items-center gap-3 border-t border-ok/20 bg-ok-soft px-5 py-4 text-[#11612e] sm:px-6">
-            <mat-icon class="icon-sm">verified</mat-icon>
+            <mat-icon class="icon-sm" svgIcon="verified" />
             <p class="text-sm font-medium">Dentro do prazo. Nenhuma penalidade.</p>
           </div>
         }
@@ -91,13 +91,13 @@
       <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
         <a routerLink="/painel/leitor" class="btn btn-secondary btn-lg">Cancelar</a>
         <button type="button" (click)="executarConfirmacaoDevolucao()" class="btn btn-primary btn-lg">
-          <mat-icon class="icon-sm">done_all</mat-icon>
+          <mat-icon class="icon-sm" svgIcon="done_all" />
           Confirmar devolução
         </button>
       </div>
     } @else {
       <div class="card empty">
-        <mat-icon class="icon-xl">check_circle</mat-icon>
+        <mat-icon class="icon-xl" svgIcon="check_circle" />
         <p class="empty-title">Nenhum empréstimo em aberto</p>
         <p class="empty-text">"{{ i.nome }}" ({{ i.patrimonio }}) já foi devolvido ou está disponível.</p>
         <a routerLink="/painel/leitor" class="btn btn-secondary btn-sm mt-3">Voltar ao leitor</a>
@@ -105,7 +105,7 @@
     }
   } @else {
     <div class="card empty">
-      <mat-icon class="icon-xl">help_outline</mat-icon>
+      <mat-icon class="icon-xl" svgIcon="help_outline" />
       <p class="empty-title">Item não encontrado</p>
       <a routerLink="/painel/leitor" class="btn btn-secondary btn-sm mt-3">Voltar ao leitor</a>
     </div>

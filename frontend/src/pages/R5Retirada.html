@@ -1,6 +1,6 @@
 <div class="page max-w-3xl">
   <a routerLink="/painel/leitor" class="back-link">
-    <mat-icon class="icon-sm">arrow_back</mat-icon>
+    <mat-icon class="icon-sm" svgIcon="arrow_back" />
     Leitor de QR
   </a>
 
@@ -45,13 +45,13 @@
       <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
         <a routerLink="/painel/leitor" class="btn btn-secondary btn-lg">Cancelar</a>
         <button type="button" (click)="executarConfirmacaoRetirada()" class="btn btn-primary btn-lg">
-          <mat-icon class="icon-sm">check</mat-icon>
+          <mat-icon class="icon-sm" svgIcon="check" />
           Confirmar retirada
         </button>
       </div>
     } @else {
       <div class="card empty">
-        <mat-icon class="icon-xl">warning_amber</mat-icon>
+        <mat-icon class="icon-xl" svgIcon="warning_amber" />
         <p class="empty-title">Nenhum pedido aprovado para este item</p>
         <p class="empty-text">"{{ i.nome }}" ({{ i.patrimonio }}) não tem retirada marcada no momento.</p>
         <a routerLink="/painel/leitor" class="btn btn-secondary btn-sm mt-3">Voltar ao leitor</a>
@@ -59,7 +59,7 @@
     }
   } @else {
     <div class="card empty">
-      <mat-icon class="icon-xl">help_outline</mat-icon>
+      <mat-icon class="icon-xl" svgIcon="help_outline" />
       <p class="empty-title">Item não encontrado</p>
       <p class="empty-text">Esse identificador não existe no acervo.</p>
       <a routerLink="/painel/leitor" class="btn btn-secondary btn-sm mt-3">Voltar ao leitor</a>

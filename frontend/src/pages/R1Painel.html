@@ -9,10 +9,10 @@
 
   @if (mensagemSucesso()) {
     <div role="status" class="alert alert-ok items-center">
-      <mat-icon class="icon-sm">check_circle</mat-icon>
+      <mat-icon class="icon-sm" svgIcon="check_circle" />
       <p class="flex-1">{{ mensagemSucesso() }}</p>
       <button type="button" (click)="mensagemSucesso.set(null)" class="btn-icon size-8" aria-label="Fechar aviso">
-        <mat-icon class="icon-sm">close</mat-icon>
+        <mat-icon class="icon-sm" svgIcon="close" />
       </button>
     </div>
   }
@@ -22,7 +22,7 @@
     <a routerLink="/painel/solicitacoes" class="stat group transition-colors hover:border-ink">
       <span class="stat-label flex items-center justify-between">
         Pedidos pendentes
-        <mat-icon class="icon-sm text-ink-muted transition-transform group-hover:translate-x-0.5">arrow_forward</mat-icon>
+        <mat-icon class="icon-sm text-ink-muted transition-transform group-hover:translate-x-0.5" svgIcon="arrow_forward" />
       </span>
       <span class="stat-value">{{ store.solicitacoesPendentesCount() }}</span>
     </a>
@@ -66,7 +66,7 @@
       class="group flex flex-col justify-between gap-3 rounded-card bg-ink p-5 text-white transition-colors hover:bg-ink-hover"
     >
       <span class="flex size-10 items-center justify-center rounded-control bg-accent text-ink">
-        <mat-icon>qr_code_scanner</mat-icon>
+        <mat-icon svgIcon="qr_code_scanner" />
       </span>
       <span>
         <span class="block font-display text-lg font-semibold">Ler QR code</span>
@@ -156,7 +156,7 @@
                 </p>
               </div>
               <a [routerLink]="['/painel/retirada', solic.itemId]" class="btn btn-primary btn-sm shrink-0">
-                <mat-icon class="icon-sm">qr_code</mat-icon>
+                <mat-icon class="icon-sm" svgIcon="qr_code" />
                 Registrar
               </a>
             </li>
@@ -164,7 +164,7 @@
         </ul>
       } @else {
         <div class="empty py-10">
-          <mat-icon class="icon-lg">event_available</mat-icon>
+          <mat-icon class="icon-lg" svgIcon="event_available" />
           <p class="empty-text">Nenhuma retirada pendente para hoje.</p>
         </div>
       }
@@ -203,7 +203,7 @@
         </ul>
       } @else {
         <div class="empty py-10">
-          <mat-icon class="icon-lg">task_alt</mat-icon>
+          <mat-icon class="icon-lg" svgIcon="task_alt" />
           <p class="empty-text">Nenhuma devolução atrasada.</p>
         </div>
       }

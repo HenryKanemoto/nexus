@@ -13,9 +13,7 @@ import {Item} from '../../types/models';
     @if (item().foto; as foto) {
       <img [src]="foto" [alt]="item().nome" class="size-full object-cover" loading="lazy" />
     } @else {
-      <mat-icon [style.font-size.px]="tamanhoIcone()" [style.width.px]="tamanhoIcone()" [style.height.px]="tamanhoIcone()">
-        {{ icone() }}
-      </mat-icon>
+      <mat-icon [style.font-size.px]="tamanhoIcone()" [style.width.px]="tamanhoIcone()" [style.height.px]="tamanhoIcone()" [svgIcon]="icone()" />
     }
   `,
 })

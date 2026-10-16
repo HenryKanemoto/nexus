@@ -19,14 +19,14 @@
       </p>
     </div>
     <a routerLink="/painel/itens/novo" class="btn btn-primary self-start sm:self-auto">
-      <mat-icon class="icon-sm">add</mat-icon>
+      <mat-icon class="icon-sm" svgIcon="add" />
       Novo item
     </a>
   </header>
 
   <div class="grid gap-3 sm:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)]">
     <div class="input-group">
-      <mat-icon class="icon-sm">search</mat-icon>
+      <mat-icon class="icon-sm" svgIcon="search" />
       <input
         type="search"
         class="input"
@@ -85,7 +85,7 @@
       </p>
     } @else {
       <div class="empty">
-        <mat-icon class="icon-xl">inventory_2</mat-icon>
+        <mat-icon class="icon-xl" svgIcon="inventory_2" />
         <p class="empty-title">Nenhum item encontrado</p>
         <p class="empty-text">Ajuste a busca ou os filtros.</p>
       </div>

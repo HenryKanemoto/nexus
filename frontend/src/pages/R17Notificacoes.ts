@@ -18,7 +18,7 @@ import {ListaNotificacoes} from '../components/lista-notificacoes/lista-notifica
         </div>
         @if (temNaoLidas()) {
           <button type="button" (click)="marcarTodasComoLidas()" class="btn btn-secondary btn-sm self-start sm:self-auto">
-            <mat-icon class="icon-sm">done_all</mat-icon>
+            <mat-icon class="icon-sm" svgIcon="done_all" />
             Marcar todas como lidas
           </button>
         }

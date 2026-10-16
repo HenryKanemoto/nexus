@@ -15,7 +15,7 @@
         <app-logo [tamanho]="30" />
       </a>
       <button type="button" class="btn-icon lg:hidden" (click)="fecharDrawer()" aria-label="Fechar menu">
-        <mat-icon>close</mat-icon>
+        <mat-icon svgIcon="close" />
       </button>
     </div>
 
@@ -34,7 +34,7 @@
                 [routerLinkActiveOptions]="{exact: item.rota === '/painel'}"
                 class="group flex h-9 items-center gap-3 rounded-control px-3 text-sm font-medium text-ink-soft transition-colors hover:bg-sunken hover:text-ink"
               >
-                <mat-icon class="icon-sm text-ink-muted group-[.is-active]:text-accent">{{ item.icone }}</mat-icon>
+                <mat-icon class="icon-sm text-ink-muted group-[.is-active]:text-accent" [svgIcon]="item.icone" />
                 <span class="flex-1">{{ item.rotulo }}</span>
                 @if (item.badge && item.badge() > 0) {
                   <span class="count">{{ item.badge() }}</span>
@@ -53,7 +53,7 @@
         <p class="text-xs text-ink-muted">Responsável</p>
       </div>
       <button type="button" class="btn-icon" (click)="sair()" aria-label="Sair" title="Sair">
-        <mat-icon class="icon-sm">logout</mat-icon>
+        <mat-icon class="icon-sm" svgIcon="logout" />
       </button>
     </div>
   </aside>
@@ -64,7 +64,7 @@
     >
       <div class="flex min-w-0 items-center gap-2">
         <button type="button" class="btn-icon -ml-2 lg:hidden" (click)="toggleDrawer()" aria-label="Abrir menu">
-          <mat-icon>menu</mat-icon>
+          <mat-icon svgIcon="menu" />
         </button>
         <a routerLink="/painel/configuracoes" class="tag hidden gap-1.5 hover:border-ink sm:inline-flex" title="Política de atraso em vigor">
           <span class="size-1.5 rounded-full bg-accent-strong"></span>
@@ -74,13 +74,13 @@
 
       <div class="flex items-center gap-1 sm:gap-2">
         <a routerLink="/painel/notificacoes" class="btn-icon relative" aria-label="Notificações">
-          <mat-icon>notifications_none</mat-icon>
+          <mat-icon svgIcon="notifications_none" />
           @if (store.totalNaoLidas() > 0) {
             <span class="count absolute -right-0.5 -top-0.5 h-4 min-w-4 px-1 text-[0.625rem]">{{ store.totalNaoLidas() }}</span>
           }
         </a>
         <a routerLink="/painel/leitor" class="btn btn-accent btn-sm sm:h-9">
-          <mat-icon class="icon-sm">qr_code_scanner</mat-icon>
+          <mat-icon class="icon-sm" svgIcon="qr_code_scanner" />
           <span class="hidden sm:inline">Escanear</span>
         </a>
       </div>

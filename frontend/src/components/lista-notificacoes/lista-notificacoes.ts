@@ -32,7 +32,7 @@ const ICONES: Record<TipoNotificacao, {icone: string; classe: string}> = {
               [class.bg-accent-soft]="!n.lida"
             >
               <span class="flex size-9 shrink-0 items-center justify-center rounded-full {{ tipo.classe }}">
-                <mat-icon class="icon-sm">{{ tipo.icone }}</mat-icon>
+                <mat-icon class="icon-sm" [svgIcon]="tipo.icone" />
               </span>
               <span class="min-w-0 flex-1">
                 <span class="block text-sm leading-snug" [class.font-semibold]="!n.lida">{{ n.mensagem }}</span>
@@ -48,7 +48,7 @@ const ICONES: Record<TipoNotificacao, {icone: string; classe: string}> = {
               </span>
               <span class="hidden shrink-0 items-center gap-1 self-center text-xs font-medium text-ink-muted group-hover:text-ink sm:flex">
                 {{ rotuloDestino()(n) }}
-                <mat-icon class="icon-sm">arrow_forward</mat-icon>
+                <mat-icon class="icon-sm" svgIcon="arrow_forward" />
               </span>
             </button>
           </li>
@@ -56,7 +56,7 @@ const ICONES: Record<TipoNotificacao, {icone: string; classe: string}> = {
       </ul>
     } @else {
       <div class="card empty">
-        <mat-icon class="icon-xl">notifications_off</mat-icon>
+        <mat-icon class="icon-xl" svgIcon="notifications_off" />
         <p class="empty-title">Nenhuma notificação</p>
         <p class="empty-text">{{ textoVazio() }}</p>
       </div>

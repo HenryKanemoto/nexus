@@ -1,6 +1,6 @@
 <div class="page max-w-2xl">
   <a routerLink="/painel/categorias" class="back-link">
-    <mat-icon class="icon-sm">arrow_back</mat-icon>
+    <mat-icon class="icon-sm" svgIcon="arrow_back" />
     Categorias
   </a>
 
@@ -11,10 +11,10 @@
 
   @if (erroValidacao()) {
     <div role="alert" class="alert alert-danger">
-      <mat-icon class="icon-sm">error_outline</mat-icon>
+      <mat-icon class="icon-sm" svgIcon="error_outline" />
       <p class="flex-1">{{ erroValidacao() }}</p>
       <button type="button" (click)="erroValidacao.set(null)" class="btn-icon size-8" aria-label="Fechar aviso">
-        <mat-icon class="icon-sm">close</mat-icon>
+        <mat-icon class="icon-sm" svgIcon="close" />
       </button>
     </div>
   }
@@ -78,7 +78,7 @@
     <div class="flex flex-col-reverse gap-3 border-t border-line pt-5 sm:flex-row sm:justify-end">
       <button type="button" (click)="cancelar()" class="btn btn-secondary">Cancelar</button>
       <button type="submit" class="btn btn-primary">
-        <mat-icon class="icon-sm">save</mat-icon>
+        <mat-icon class="icon-sm" svgIcon="save" />
         Salvar categoria
       </button>
     </div>

@@ -5,7 +5,7 @@
       <p class="page-subtitle">Cada categoria define o prazo máximo do empréstimo e quantos itens uma pessoa pode ter ao mesmo tempo.</p>
     </div>
     <a routerLink="/painel/categorias/nova" class="btn btn-primary self-start sm:self-auto">
-      <mat-icon class="icon-sm">add</mat-icon>
+      <mat-icon class="icon-sm" svgIcon="add" />
       Nova categoria
     </a>
   </header>
@@ -17,7 +17,7 @@
         <li class="card flex flex-col">
           <div class="flex items-start gap-4 p-5">
             <span class="flex size-11 shrink-0 items-center justify-center rounded-control bg-accent-soft text-ink">
-              <mat-icon>{{ getIconeCategoria(cat.id) }}</mat-icon>
+              <mat-icon [svgIcon]="getIconeCategoria(cat.id)" />
             </span>
             <div class="min-w-0 flex-1">
               <h2 class="font-sans text-base font-semibold tracking-normal">{{ cat.nome }}</h2>
@@ -44,7 +44,7 @@
             [routerLink]="['/painel/categorias', cat.id, 'editar']"
             class="flex items-center justify-center gap-1.5 border-t border-line py-2.5 text-sm font-medium text-ink-soft transition-colors hover:bg-paper hover:text-ink"
           >
-            <mat-icon class="icon-sm">edit</mat-icon>
+            <mat-icon class="icon-sm" svgIcon="edit" />
             Editar
           </a>
         </li>
@@ -53,7 +53,7 @@
     <p class="text-xs text-ink-muted">Mudanças de prazo e limite valem para os próximos pedidos.</p>
   } @else {
     <div class="card empty">
-      <mat-icon class="icon-xl">category</mat-icon>
+      <mat-icon class="icon-xl" svgIcon="category" />
       <p class="empty-title">Nenhuma categoria</p>
       <a routerLink="/painel/categorias/nova" class="btn btn-secondary btn-sm mt-3">Criar a primeira</a>
     </div>
