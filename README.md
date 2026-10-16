@@ -84,7 +84,7 @@ Acesse **<http://localhost:3000>**.
 Na primeira subida, o backend roda as migrations sozinho: cria a tabela `itens` e cadastra os 15 equipamentos de demonstração. Para conferir a API direto: <http://localhost:3001/api/item>.
 
 - Toda mudança num item (cadastro, edição ou troca de situação por empréstimo) é enviada para a API.
-- Ao abrir, os itens do banco valem sobre os do navegador. Exceção: um navegador sem dados salvos (ou com o banco vazio) envia os itens de demonstração ao banco, para ficarem coerentes com os empréstimos de demonstração. "Reiniciar dados" faz o mesmo.
+- Ao abrir, os itens do banco valem sobre os do navegador. Exceção: um navegador sem dados salvos (ou com o banco vazio) envia os itens de demonstração ao banco, para ficarem coerentes com os empréstimos de demonstração. "Reiniciar dados" faz o mesmo. Nos dois casos, as fotos que já estão no banco são mantidas.
 - Se o backend estiver desligado, o app continua funcionando no navegador e mostra um aviso no topo com o botão "Tentar de novo".
 - Build de produção no modo api: `npm run build:api` (o servidor precisa responder em `/api`).
 

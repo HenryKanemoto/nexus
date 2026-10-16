@@ -23,7 +23,7 @@ Abre em <http://localhost:4200>, só com Node. Detalhes, modo api (com Docker e 
 **O que mudou**
 
 - **Fonte de dados alternável** (`frontend/src/store/fonte-de-dados/`): interface `FonteDeDados` com `FonteLocal` (padrão, sem nenhuma requisição) e `FonteApi` (o comportamento anterior, com os itens sincronizados com o back-end). A escolha fica em `environment.fonteDeDados`; a configuração `api` (`npm run dev:api`) troca o arquivo e liga o proxy. As telas só falam com o `ProtemStore`.
-- **Regras de negócio**: já estavam em funções puras em `store/regras/` (o back-end só tem o CRUD de itens). Ficaram lá, por decisão da equipe, e ganharam **69 testes** (RN01 a RN10, rotina automática, seed e persistência).
+- **Regras de negócio**: já estavam em funções puras em `store/regras/` (o back-end só tem o CRUD de itens). Ficaram lá, por decisão da equipe, e ganharam **72 testes** (RN01 a RN10, rotina automática, seed, persistência e fotos no modo api).
 - **Persistência**: chave `protem:v1`, lendo uma vez os dados das chaves antigas do Nexus. Dados corrompidos voltam para o seed; cota cheia mostra um aviso.
 - **Seed de demonstração** com uma situação de cada tipo: contas pendente (Diego), bloqueada (Bruno) e suspensa (Elisa); pedidos pendente, aprovado, recusado e expirado; empréstimo ativo e atrasado; item em manutenção com ocorrência; histórico. Os 15 itens são os mesmos do seed do back-end. Um teste garante que o seed já obedece às regras.
 - **Aviso** "Dados salvos neste navegador" no painel de demonstração.
@@ -82,7 +82,7 @@ Aplicada às 8 telas da lista de prioridade:
 | Verificação | Resultado |
 |---|---|
 | Lint (`ng lint`) | passa |
-| Testes do front-end | 69 passam (também nos fusos UTC e Tóquio) |
+| Testes do front-end | 72 passam (os 69 de antes também nos fusos UTC e Tóquio) |
 | Build de produção, modo local e modo api | passam (436 kB iniciais, 112 kB transferidos) |
 | Testes e compilação do back-end | 7 testes passam e compila. Não mexi em `backend/`; os 3 avisos de lint dele já existiam |
 | Fluxo completo pela interface, nas 3 políticas: cadastro e aprovação de conta, pedido, aprovação, retirada por QR e por patrimônio, +1 dia, +3 dias, atraso, devolução com e sem avaria, recarga da página, "Reiniciar dados" | passa no modo local (dev, build de produção e clone limpo com domínios externos bloqueados) e no modo api |
@@ -98,7 +98,7 @@ Capturas em `antes/` e `depois/`, cada uma também em `sem-cdn/`, com domínios 
 
 1. As regras de negócio continuam em `store/regras/` (o `CLAUDE.md` citava `core/rules` como exemplo).
 2. Chave `protem:v1` no `localStorage`, migrando os dados das chaves antigas do Nexus.
-3. No modo api, um navegador sem dados salvos envia o seed ao banco, para os itens ficarem coerentes com os empréstimos de demonstração.
+3. No modo api, um navegador sem dados salvos envia o seed ao banco, para os itens ficarem coerentes com os empréstimos de demonstração. Depois que a `main` passou a ter fotos no seed do banco, esse envio (e o "Reiniciar dados") **mantém a foto do banco** quando o item do navegador não tem uma; antes, as fotos eram trocadas por `null`. Testado com uma API falsa com fotos nos 15 itens.
 4. O banco `nexus_db` e o prefixo `NX-` de patrimônio e QR **foram mantidos**.
 5. Primary `#2F6AFE` em vez de `#2F6BFF`: o valor da tabela dá 4,499:1 com branco e reprova o AA por pouco. `brand-blue` segue `#2F6BFF` na logo.
 6. Contas (aprovar cadastros) e Histórico saíram do menu: abrem a partir de Usuários e de Relatórios, e as rotas não mudaram.
@@ -133,4 +133,5 @@ Capturas em `antes/` e `depois/`, cada uma também em `sem-cdn/`, com domínios 
 - [ ] **Tooltips (`title`) não aparecem no toque.** No celular, as explicações que foram para tooltip ficam invisíveis. Avaliar se alguma deve voltar como texto curto.
 - [ ] **Telas fora da lista de prioridade** (Categorias, Manutenção, Configurações, Perfil, Cadastro e os formulários) receberam os tokens novos, mas não passaram pelo enxugamento completo da Fase 5.
 - [ ] **Cópia de trabalho:** a exclusão de `backend/dist/` que já estava na cópia local não foi incluída em nenhum commit, e o `CLAUDE.md` continua sem versionar. As logos e o favicon antigos do Nexus, que também estavam apagados na cópia local, entraram no commit do favicon novo.
-- [ ] Abrir o pull request de `refactor/protem-rebrand` para `main` (depende de confirmação).
+- [ ] **Fotos do seed do banco** (vindas da `main`) são links para sites de terceiros (Google, Amazon, Mercado Livre...). Elas só aparecem no modo api, podem sair do ar e têm direitos de uso incertos. Vale decidir se a equipe prefere imagens próprias em `public/`, que também funcionariam no modo local.
+- [ ] Abrir o pull request de `refactor/protem-rebrand` para `main`: a branch já está no GitHub.
