@@ -158,6 +158,13 @@ Todas as rotas ficam sob `/api`.
 
 Patrimônio e código QR são únicos (`409` se repetirem). Campos obrigatórios: `nome`, `categoriaId`, `patrimonio`, `codigoQr`.
 
+## Ícones e fontes
+
+Nada vem de CDN: o app abre igual sem internet ou com domínios externos bloqueados.
+
+- **Fontes** (Geist, Geist Mono e Bricolage Grotesque): pacotes `@fontsource-variable/*`, ligados em `styles` no [frontend/angular.json](frontend/angular.json). Os arquivos `.woff2` vão junto no build.
+- **Ícones**: SVGs do Material Icons (variante *round*) embutidos em [frontend/src/app/icones.ts](frontend/src/app/icones.ts) e registrados no `MatIconRegistry`. Nos templates, use `<mat-icon svgIcon="nome" />`. Ao usar um ícone novo, rode `npm run icones` para regerar o arquivo (nomes em <https://fonts.google.com/icons>). O `mat-icon` já sai com `aria-hidden="true"`; botão só com ícone precisa de `aria-label`.
+
 ## Estrutura do frontend
 
 ```
@@ -196,6 +203,7 @@ frontend/src/
 | `npm run build` | Build de produção estático, modo local |
 | `npm run build:api` | Build de produção, modo api |
 | `npm run servir` | Serve o build em <http://localhost:4300>, com fallback de rotas |
+| `npm run icones` | Regera `src/app/icones.ts` depois de usar um ícone novo |
 | `npm test` | Testes (regras de negócio, seed e persistência) |
 | `npm run lint` | Lint |
 
