@@ -1,12 +1,9 @@
-import {HttpErrorResponse} from '@angular/common/http';
 import {Injectable, computed, inject, signal} from '@angular/core';
-import {Observable} from 'rxjs';
 import {addHours, parseDate} from '../lib/date-utils';
-import {ItensApi} from '../services/itens-api.service';
 import {Categoria, Item, PoliticaAtraso, Solicitacao} from '../types/models';
 import {getInitialDemoState} from './demo-data';
 import {NexusState, Transicao} from './estado';
-import {carregarEstado, salvarEstado} from './persistencia';
+import {FONTE_DE_DADOS} from './fonte-de-dados';
 import * as acervo from './regras/acervo';
 import * as contas from './regras/contas';
 import * as emprestimos from './regras/emprestimos';
@@ -14,27 +11,26 @@ import {executarRotinaAutomatica} from './regras/rotina';
 import * as solicitacoes from './regras/solicitacoes';
 
 export type {NexusState} from './estado';
-
-export type StatusConexao = 'conectando' | 'online' | 'offline';
+export type {StatusConexao} from './fonte-de-dados';
 
 /**
- * Fachada única usada pelas telas. Guarda o estado em um signal, persiste no
- * localStorage e delega as regras de negócio para as funções em ./regras.
+ * Fachada única usada pelas telas. Guarda o estado em um signal e delega as regras
+ * de negócio para as funções em ./regras.
  *
- * Os itens do acervo também são sincronizados com o backend (/api/item):
- * ao iniciar, o backend é a fonte da verdade; depois, toda mudança em um item
- * (cadastro, edição ou troca de status por empréstimo) é enviada para a API.
+ * Onde o estado é gravado depende da fonte de dados (./fonte-de-dados): só no navegador
+ * (modo local, o padrão) ou no navegador com os itens também no back-end (modo api).
+ * As telas não sabem qual fonte está em uso.
  */
 @Injectable({
   providedIn: 'root',
 })
 export class NexusStore {
-  private readonly itensApi = inject(ItensApi);
-  private readonly state = signal<NexusState>(carregarEstado());
+  private readonly fonte = inject(FONTE_DE_DADOS);
+  private readonly state = signal<NexusState>(this.fonte.carregar());
 
-  // Conexão com o backend
-  readonly conexao = signal<StatusConexao>('conectando');
-  readonly erroApi = signal<string | null>(null);
+  // Situação da gravação: 'local' no modo local; conectando/online/offline no modo api
+  readonly conexao = this.fonte.conexao;
+  readonly erroApi = this.fonte.erro;
 
   // Seletores públicos
   readonly agora = computed(() => parseDate(this.state().agora));
@@ -81,22 +77,25 @@ export class NexusStore {
 
   constructor() {
     // Garante consistência com o relógio virtual antes de qualquer tela ler o estado
+    // (aplica expirações, atrasos e suspensões pendentes no estado salvo ou no seed)
     this.atualizar((s) => executarRotinaAutomatica(s, parseDate(s.agora)));
-    this.carregarItensDaApi();
+    this.fonte.conectar({
+      estado: () => this.state(),
+      receberItens: (itens) => this.receberItens(itens),
+    });
   }
 
   // ==========================================
-  // ESTADO E SINCRONIZAÇÃO
+  // ESTADO E GRAVAÇÃO
   // ==========================================
 
-  /** Aplica uma mudança de estado, salva no navegador e envia itens alterados para a API. */
+  /** Aplica uma mudança de estado e entrega para a fonte de dados gravar. */
   private atualizar(fn: (s: NexusState) => NexusState) {
     const antes = this.state();
     const depois = fn(antes);
     if (depois === antes) return;
     this.state.set(depois);
-    salvarEstado(depois);
-    this.sincronizarItens(antes.itens, depois.itens);
+    this.fonte.salvar(antes, depois);
   }
 
   /** Igual a atualizar(), para regras que também devolvem um resultado para a tela. */
@@ -110,63 +109,23 @@ export class NexusStore {
     return resultado;
   }
 
-  /** Busca os itens do backend e passa a usá-los como fonte da verdade. */
+  /** Modo api: troca os itens locais pelos do banco e roda a rotina sobre eles. */
+  private receberItens(itens: Item[]) {
+    const estado = {...this.state(), itens};
+    this.state.set(estado);
+    // Mesmos itens dos dois lados: grava no navegador sem reenviar para a API
+    this.fonte.salvar(estado, estado);
+    // A rotina pode marcar atrasos; aí sim o que mudou é sincronizado
+    this.atualizar((s) => executarRotinaAutomatica(s, parseDate(s.agora)));
+  }
+
+  /** Modo api: tenta falar com o back-end de novo. */
   reconectar() {
-    this.carregarItensDaApi();
-  }
-
-  private carregarItensDaApi() {
-    this.conexao.set('conectando');
-    this.itensApi.listar().subscribe({
-      next: (itens) => {
-        this.conexao.set('online');
-        this.erroApi.set(null);
-
-        if (itens.length === 0) {
-          // Banco vazio: envia o acervo que está no navegador
-          this.state().itens.forEach((item) => this.enviar(this.itensApi.salvar(item)));
-          return;
-        }
-
-        // Troca os itens locais pelos do banco sem reenviá-los, depois roda a rotina
-        // (que pode marcar atrasos e, aí sim, sincroniza o que mudou)
-        const estado = {...this.state(), itens};
-        this.state.set(estado);
-        salvarEstado(estado);
-        this.atualizar((s) => executarRotinaAutomatica(s, parseDate(s.agora)));
-      },
-      error: (erro: HttpErrorResponse) => {
-        this.conexao.set('offline');
-        this.erroApi.set(mensagemDeErro(erro));
-      },
-    });
-  }
-
-  private sincronizarItens(antes: Item[], depois: Item[]) {
-    if (antes === depois || this.conexao() !== 'online') return;
-
-    // As regras sempre criam um objeto novo para o item que mudou,
-    // então comparar referências basta para achar o que enviar
-    const anteriores = new Map(antes.map((i) => [i.id, i]));
-    depois
-      .filter((item) => anteriores.get(item.id) !== item)
-      .forEach((item) => this.enviar(this.itensApi.salvar(item)));
-
-    const atuais = new Set(depois.map((i) => i.id));
-    antes.filter((item) => !atuais.has(item.id)).forEach((item) => this.enviar(this.itensApi.remover(item.id)));
-  }
-
-  private enviar(requisicao: Observable<unknown>) {
-    requisicao.subscribe({
-      error: (erro: HttpErrorResponse) => {
-        if (semConexao(erro)) this.conexao.set('offline');
-        this.erroApi.set(mensagemDeErro(erro));
-      },
-    });
+    this.fonte.reconectar();
   }
 
   dispensarErroApi() {
-    this.erroApi.set(null);
+    this.fonte.dispensarErro();
   }
 
   // ==========================================
@@ -308,17 +267,4 @@ export class NexusStore {
   marcarTodasNotificacoesComoLidas(usuarioId: string) {
     this.atualizar((s) => acervo.marcarTodasNotificacoesComoLidas(s, usuarioId));
   }
-}
-
-/** Status 0: backend inacessível. 502-504: o proxy do Angular não alcançou o backend. */
-function semConexao(erro: HttpErrorResponse): boolean {
-  return erro.status === 0 || (erro.status >= 502 && erro.status <= 504);
-}
-
-function mensagemDeErro(erro: HttpErrorResponse): string {
-  if (semConexao(erro)) {
-    return 'Sem conexão com o backend. Os itens estão sendo salvos só neste navegador.';
-  }
-  const mensagem = erro.error?.message;
-  return Array.isArray(mensagem) ? mensagem.join(' ') : mensagem || `Erro ${erro.status} ao falar com o backend.`;
 }

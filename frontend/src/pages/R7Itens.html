@@ -5,6 +5,7 @@
       <p class="page-subtitle flex flex-wrap items-center gap-2">
         Patrimônio da escola e a situação de cada equipamento.
         @switch (store.conexao()) {
+          @case ('local') {}
           @case ('online') {
             <span class="inline-flex items-center gap-1.5 text-xs font-medium text-ok"><span class="size-1.5 rounded-full bg-ok"></span>sincronizado com o banco</span>
           }

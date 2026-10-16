@@ -2,7 +2,10 @@ import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
 import {NexusStore} from '../../store/nexus.store';
 
-/** Faixa que avisa quando o backend está fora do ar ou recusou uma alteração de item. */
+/**
+ * Faixa que avisa quando algo não foi salvo: no modo api, backend fora do ar ou alteração
+ * de item recusada; no modo local, espaço do navegador esgotado.
+ */
 @Component({
   selector: 'app-aviso-api',
   changeDetection: ChangeDetectionStrategy.OnPush,
