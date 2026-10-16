@@ -22,6 +22,8 @@ export class R1Painel {
   readonly mensagemSucesso = signal<string | null>(null);
 
   readonly plural = plural;
+  /** Quantas linhas cada lista mostra antes do "Ver todos". */
+  readonly limite = 5;
 
   readonly primeiroNome = computed(() => this.store.usuarioLogado()?.nome.split(' ')[0] ?? '');
 

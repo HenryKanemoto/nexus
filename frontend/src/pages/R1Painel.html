@@ -1,10 +1,13 @@
 <div class="page">
   <header class="page-header">
     <div>
-      <p class="page-eyebrow">{{ dataHoje() }}</p>
-      <h1 class="page-title mt-1">Olá, {{ primeiroNome() }}</h1>
-      <p class="page-subtitle">Pendências do acervo, retiradas do dia e devoluções atrasadas.</p>
+      <h1 class="page-title">Olá, {{ primeiroNome() }}</h1>
+      <p class="page-subtitle first-letter:uppercase">{{ dataHoje() }}</p>
     </div>
+    <a routerLink="/painel/leitor" class="btn btn-primary self-start sm:self-auto">
+      <mat-icon class="icon-sm" svgIcon="qr_code_scanner" />
+      Ler QR code
+    </a>
   </header>
 
   @if (mensagemSucesso()) {
@@ -17,13 +20,10 @@
     </div>
   }
 
-  <!-- Indicadores + atalho para o leitor de QR -->
-  <div class="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
-    <a routerLink="/painel/solicitacoes" class="stat group transition-colors hover:border-primary">
-      <span class="stat-label flex items-center justify-between">
-        Pedidos pendentes
-        <mat-icon class="icon-sm text-text-muted transition-transform group-hover:translate-x-0.5" svgIcon="arrow_forward" />
-      </span>
+  <!-- Três contadores -->
+  <div class="grid grid-cols-3 gap-3 lg:gap-4">
+    <a routerLink="/painel/solicitacoes" class="stat transition-colors hover:border-primary">
+      <span class="stat-label">Pedidos</span>
       <span class="stat-value">{{ store.solicitacoesPendentesCount() }}</span>
     </a>
 
@@ -32,14 +32,9 @@
       (click)="alternarFiltro('ativos')"
       class="stat text-left transition-colors hover:border-primary"
       [class.!border-primary]="filtroAtivo() === 'ativos'"
-      [class.ring-1]="filtroAtivo() === 'ativos'"
-      [class.ring-primary]="filtroAtivo() === 'ativos'"
       [attr.aria-pressed]="filtroAtivo() === 'ativos'"
     >
-      <span class="stat-label flex items-center justify-between">
-        Empréstimos ativos
-        <span class="hidden text-xs text-text-muted sm:inline">{{ filtroAtivo() === 'ativos' ? 'ocultar' : 'ver lista' }}</span>
-      </span>
+      <span class="stat-label">Emprestados</span>
       <span class="stat-value">{{ totalEmprestimosAtivos() }}</span>
     </button>
 
@@ -48,38 +43,20 @@
       (click)="alternarFiltro('atrasados')"
       class="stat text-left transition-colors hover:border-danger"
       [class.!border-danger]="filtroAtivo() === 'atrasados'"
-      [class.ring-1]="filtroAtivo() === 'atrasados'"
-      [class.ring-danger]="filtroAtivo() === 'atrasados'"
       [attr.aria-pressed]="filtroAtivo() === 'atrasados'"
     >
-      <span class="stat-label flex items-center justify-between">
-        Atrasados
-        @if (totalAtrasados() > 0) {
-          <span class="size-2 rounded-full bg-danger"></span>
-        }
-      </span>
+      <span class="stat-label">Atrasados</span>
       <span class="stat-value" [class.text-danger]="totalAtrasados() > 0">{{ totalAtrasados() }}</span>
     </button>
-
-    <a
-      routerLink="/painel/leitor"
-      class="group flex flex-col justify-between gap-3 rounded-card bg-brand-navy p-5 text-white transition-colors hover:bg-sidebar-hover"
-    >
-      <span class="flex size-10 items-center justify-center rounded-control bg-brand-gold text-brand-navy">
-        <mat-icon svgIcon="qr_code_scanner" />
-      </span>
-      <span>
-        <span class="block font-display text-lg font-semibold">Ler QR code</span>
-        <span class="block text-xs text-white/60">Retiradas e devoluções</span>
-      </span>
-    </a>
   </div>
 
-  <!-- Lista completa de empréstimos ativos (quando o indicador é clicado) -->
+  <!-- Lista completa de empréstimos ativos (quando o contador é clicado) -->
   @if (filtroAtivo() === 'ativos') {
-    <section class="card">
+    <section class="card" aria-labelledby="titulo-ativos">
       <div class="card-header">
-        <h2 class="card-title">Empréstimos ativos <span class="font-mono text-sm text-text-muted">{{ totalEmprestimosAtivos() }}</span></h2>
+        <h2 id="titulo-ativos" class="card-title">
+          Emprestados <span class="font-sans text-sm font-normal text-text-muted">{{ totalEmprestimosAtivos() }}</span>
+        </h2>
         <button type="button" (click)="filtroAtivo.set('todos')" class="btn btn-ghost btn-sm">Fechar</button>
       </div>
       @if (listaEmprestimosAtivos().length > 0) {
@@ -89,7 +66,6 @@
               <tr>
                 <th>Pessoa</th>
                 <th>Item</th>
-                <th>Retirado</th>
                 <th>Devolver até</th>
                 <th>Situação</th>
                 <th class="text-right"><span class="sr-only">Ação</span></th>
@@ -100,25 +76,12 @@
                 @let it = getItem(emp.itemId);
                 @let user = getUsuario(emp.usuarioId);
                 <tr>
-                  <td>
-                    <p class="font-medium">{{ user?.nome }}</p>
-                    <p class="text-xs capitalize text-text-muted">{{ user?.perfil }}</p>
-                  </td>
-                  <td>
-                    <p>{{ it?.nome }}</p>
-                    <p class="font-mono text-xs text-text-muted">{{ it?.patrimonio }}</p>
-                  </td>
-                  <td class="tabular-nums">{{ formatarData(emp.retiradoEm) }}</td>
+                  <td>{{ user?.nome }}</td>
+                  <td>{{ it?.nome }}</td>
                   <td class="tabular-nums">{{ formatarData(emp.devolucaoPrevista) }}</td>
-                  <td>
-                    @if (emp.diasAtraso > 0) {
-                      <app-status-badge status="atrasado" />
-                    } @else {
-                      <span class="text-sm text-text-muted">No prazo</span>
-                    }
-                  </td>
+                  <td><app-status-badge [status]="emp.diasAtraso > 0 ? 'atrasado' : 'emprestado'" /></td>
                   <td class="text-right">
-                    <a [routerLink]="['/painel/devolucao', emp.itemId]" class="btn btn-secondary btn-sm">Devolução</a>
+                    <a [routerLink]="['/painel/devolucao', emp.itemId]" class="btn btn-ghost btn-sm">Devolução</a>
                   </td>
                 </tr>
               }
@@ -126,7 +89,7 @@
           </table>
         </div>
       } @else {
-        <p class="px-6 py-10 text-center text-sm text-text-muted">Nenhum empréstimo ativo.</p>
+        <p class="px-6 py-10 text-center text-sm text-text-muted">Nenhum item emprestado agora.</p>
       }
     </section>
   }
@@ -135,37 +98,33 @@
     <!-- Retiradas aprovadas para hoje (RN04) -->
     <section class="card" aria-labelledby="titulo-retiradas">
       <div class="card-header">
-        <div>
-          <h2 id="titulo-retiradas" class="card-title flex items-center gap-2">
-            Retiradas de hoje
-            <span class="count">{{ listaAprovadosHoje().length }}</span>
-          </h2>
-          <p class="text-xs text-text-muted">Expiram no fim do dia se não forem retiradas.</p>
-        </div>
+        <h2 id="titulo-retiradas" class="card-title" title="Pedidos aprovados expiram no fim do dia se não forem retirados.">
+          Retiradas de hoje <span class="font-sans text-sm font-normal text-text-muted">{{ listaAprovadosHoje().length }}</span>
+        </h2>
+        @if (listaAprovadosHoje().length > limite) {
+          <a routerLink="/painel/solicitacoes" class="btn btn-ghost btn-sm">Ver todos</a>
+        }
       </div>
       @if (listaAprovadosHoje().length > 0) {
         <ul class="divide-y divide-border">
-          @for (solic of listaAprovadosHoje(); track solic.id) {
+          @for (solic of listaAprovadosHoje().slice(0, limite); track solic.id) {
             @let it = getItem(solic.itemId);
             @let user = getUsuario(solic.solicitanteId);
-            <li class="flex items-center gap-4 px-5 py-3.5 sm:px-6">
+            <li class="flex items-center gap-4 px-5 py-3 sm:px-6">
               <div class="min-w-0 flex-1">
                 <p class="truncate font-medium">{{ it?.nome }}</p>
-                <p class="truncate text-xs text-text-muted">
+                <p class="truncate text-sm text-text-muted">
                   {{ user?.nome }} · aprovado às {{ formatarHora(solic.avaliadoEm || solic.criadoEm) }}
                 </p>
               </div>
-              <a [routerLink]="['/painel/retirada', solic.itemId]" class="btn btn-primary btn-sm shrink-0">
-                <mat-icon class="icon-sm" svgIcon="qr_code" />
-                Registrar
-              </a>
+              <a [routerLink]="['/painel/retirada', solic.itemId]" class="btn btn-ghost btn-sm shrink-0">Retirada</a>
             </li>
           }
         </ul>
       } @else {
         <div class="empty py-10">
           <mat-icon class="icon-lg" svgIcon="event_available" />
-          <p class="empty-text">Nenhuma retirada pendente para hoje.</p>
+          <p class="empty-text">Nenhuma retirada marcada para hoje.</p>
         </div>
       }
     </section>
@@ -173,31 +132,24 @@
     <!-- Atrasados (RN06) -->
     <section class="card" [class.!border-danger]="filtroAtivo() === 'atrasados'" aria-labelledby="titulo-atrasados">
       <div class="card-header">
-        <div>
-          <h2 id="titulo-atrasados" class="card-title flex items-center gap-2">
-            Atrasados
-            <span class="count" [class.!bg-danger]="listaAtrasados().length > 0" [class.!text-white]="listaAtrasados().length > 0">
-              {{ listaAtrasados().length }}
-            </span>
-          </h2>
-          <p class="text-xs text-text-muted">Devoluções que passaram do prazo.</p>
-        </div>
-        @if (filtroAtivo() === 'atrasados') {
-          <button type="button" (click)="filtroAtivo.set('todos')" class="btn btn-ghost btn-sm">Limpar destaque</button>
+        <h2 id="titulo-atrasados" class="card-title" title="Devoluções que passaram do prazo.">
+          Atrasados <span class="font-sans text-sm font-normal text-text-muted">{{ listaAtrasados().length }}</span>
+        </h2>
+        @if (listaAtrasados().length > limite) {
+          <button type="button" (click)="filtroAtivo.set('ativos')" class="btn btn-ghost btn-sm">Ver todos</button>
         }
       </div>
       @if (listaAtrasados().length > 0) {
         <ul class="divide-y divide-border">
-          @for (emp of listaAtrasados(); track emp.id) {
+          @for (emp of listaAtrasados().slice(0, limite); track emp.id) {
             @let it = getItem(emp.itemId);
             @let user = getUsuario(emp.usuarioId);
-            <li class="flex items-center gap-4 px-5 py-3.5 sm:px-6">
+            <li class="flex items-center gap-4 px-5 py-3 sm:px-6">
               <div class="min-w-0 flex-1">
                 <p class="truncate font-medium">{{ it?.nome }}</p>
-                <p class="truncate text-xs text-text-muted">{{ user?.nome }} · {{ user?.matricula }}</p>
+                <p class="truncate text-sm text-text-muted">{{ user?.nome }} · {{ plural(emp.diasAtraso, 'dia') }} de atraso</p>
               </div>
-              <span class="shrink-0 font-mono text-sm font-semibold text-danger">{{ plural(emp.diasAtraso, 'dia') }}</span>
-              <a [routerLink]="['/painel/devolucao', emp.itemId]" class="btn btn-secondary btn-sm shrink-0">Devolver</a>
+              <a [routerLink]="['/painel/devolucao', emp.itemId]" class="btn btn-ghost btn-sm shrink-0">Devolução</a>
             </li>
           }
         </ul>
