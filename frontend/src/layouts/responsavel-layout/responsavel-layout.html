@@ -30,16 +30,16 @@
               <a
                 [routerLink]="item.rota"
                 (click)="fecharDrawer()"
-                routerLinkActive="is-active bg-sidebar-hover !text-white"
-                [routerLinkActiveOptions]="{exact: item.rota === '/painel'}"
-                class="group relative flex h-9 items-center gap-3 rounded-control px-3 text-sm font-medium text-white/80 transition-colors hover:bg-sidebar-hover hover:text-white"
+                [class.is-active]="ativo(item)"
+                [attr.aria-current]="ativo(item) ? 'page' : null"
+                class="group relative flex h-9 items-center gap-3 rounded-control px-3 text-sm font-medium text-white/80 transition-colors hover:bg-sidebar-hover hover:text-white [&.is-active]:bg-sidebar-hover [&.is-active]:text-white"
               >
                 <!-- Marcador dourado do item ativo -->
                 <span class="absolute inset-y-1.5 left-0 hidden w-[3px] rounded-full bg-brand-gold group-[.is-active]:block"></span>
                 <mat-icon class="icon-sm text-white/60 group-[.is-active]:text-brand-gold" [svgIcon]="item.icone" />
                 <span class="flex-1">{{ item.rotulo }}</span>
                 @if (item.badge && item.badge() > 0) {
-                  <span class="count">{{ item.badge() }}</span>
+                  <span class="count !bg-white/15">{{ item.badge() }}</span>
                 }
               </a>
             </li>
@@ -81,7 +81,7 @@
             <span class="count absolute -right-0.5 -top-0.5 h-4 min-w-4 px-1 text-[0.625rem]">{{ store.totalNaoLidas() }}</span>
           }
         </a>
-        <a routerLink="/painel/leitor" class="btn btn-primary btn-sm sm:h-9">
+        <a routerLink="/painel/leitor" aria-label="Escanear QR code" class="btn btn-sm border border-white/30 text-white hover:bg-sidebar-hover sm:h-9">
           <mat-icon class="icon-sm" svgIcon="qr_code_scanner" />
           <span class="hidden sm:inline">Escanear</span>
         </a>

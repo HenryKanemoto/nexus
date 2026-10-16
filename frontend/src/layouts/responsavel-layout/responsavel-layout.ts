@@ -1,5 +1,7 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
-import {Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
+import {NavigationEnd, Router, RouterLink, RouterOutlet} from '@angular/router';
+import {toSignal} from '@angular/core/rxjs-interop';
+import {filter, map} from 'rxjs';
 import {MatIconModule} from '@angular/material/icon';
 import {ProtemStore} from '../../store/protem.store';
 import {RelogioFlutuante} from '../../components/relogio-flutuante/relogio-flutuante';
@@ -12,6 +14,8 @@ interface NavItem {
   rota: string;
   icone: string;
   badge?: () => number;
+  /** Outras rotas que acendem este item (telas que não têm entrada própria no menu). */
+  tambemEm?: string[];
 }
 
 interface NavGrupo {
@@ -22,7 +26,7 @@ interface NavGrupo {
 @Component({
   selector: 'app-responsavel-layout',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, MatIconModule, RelogioFlutuante, BrandLogo, AvisoApi],
+  imports: [RouterOutlet, RouterLink, MatIconModule, RelogioFlutuante, BrandLogo, AvisoApi],
   templateUrl: './responsavel-layout.html',
 })
 export class ResponsavelLayout {
@@ -31,6 +35,15 @@ export class ResponsavelLayout {
 
   readonly drawerAberto = signal(false);
   readonly iniciais = computed(() => iniciais(this.store.usuarioLogado()?.nome));
+
+  /** Rota atual, para acender o item do menu (inclusive telas sem entrada própria). */
+  private readonly url = toSignal(
+    this.router.events.pipe(
+      filter((e) => e instanceof NavigationEnd),
+      map(() => this.router.url),
+    ),
+    {initialValue: this.router.url},
+  );
 
   readonly menu: NavGrupo[] = [
     {
@@ -42,14 +55,9 @@ export class ResponsavelLayout {
           rota: '/painel/solicitacoes',
           icone: 'inbox',
           badge: () => this.store.solicitacoesPendentesCount(),
+          tambemEm: ['/painel/retirada'],
         },
-        {
-          rotulo: 'Contas',
-          rota: '/painel/contas',
-          icone: 'how_to_reg',
-          badge: () => this.store.contasPendentesCount(),
-        },
-        {rotulo: 'Leitor de QR code', rota: '/painel/leitor', icone: 'qr_code_scanner'},
+        {rotulo: 'Leitor de QR code', rota: '/painel/leitor', icone: 'qr_code_scanner', tambemEm: ['/painel/devolucao']},
       ],
     },
     {
@@ -66,18 +74,29 @@ export class ResponsavelLayout {
       ],
     },
     {
-      titulo: 'Pessoas e dados',
+      titulo: 'Gestão',
       itens: [
-        {rotulo: 'Usuários', rota: '/painel/usuarios', icone: 'group'},
-        {rotulo: 'Relatórios', rota: '/painel/relatorios', icone: 'insights'},
-        {rotulo: 'Histórico', rota: '/painel/historico', icone: 'history'},
+        // Aprovação de cadastros (Contas) fica dentro de Usuários
+        {
+          rotulo: 'Usuários',
+          rota: '/painel/usuarios',
+          icone: 'group',
+          badge: () => this.store.contasPendentesCount(),
+          tambemEm: ['/painel/contas'],
+        },
+        // O histórico de movimentações abre a partir de Relatórios
+        {rotulo: 'Relatórios', rota: '/painel/relatorios', icone: 'insights', tambemEm: ['/painel/historico']},
+        {rotulo: 'Configurações', rota: '/painel/configuracoes', icone: 'tune'},
       ],
     },
-    {
-      titulo: 'Sistema',
-      itens: [{rotulo: 'Configurações', rota: '/painel/configuracoes', icone: 'tune'}],
-    },
   ];
+
+  ativo(item: NavItem): boolean {
+    const caminho = this.url().split(/[?#]/)[0];
+    const confere = (rota: string) =>
+      rota === '/painel' ? caminho === rota : caminho === rota || caminho.startsWith(rota + '/');
+    return confere(item.rota) || (item.tambemEm ?? []).some(confere);
+  }
 
   toggleDrawer() {
     this.drawerAberto.update((v) => !v);

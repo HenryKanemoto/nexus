@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ProtemStore } from '../store/protem.store';
 import { MatIconModule } from '@angular/material/icon';
 import { Usuario } from '../types/models';
@@ -8,7 +9,7 @@ import {Modal} from '../components/modal/modal';
 @Component({
   selector: 'app-r3-contas',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatIconModule, Modal],
+  imports: [MatIconModule, Modal, RouterLink],
   templateUrl: './R3Contas.html',
 })
 export class R3Contas {
