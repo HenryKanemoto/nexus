@@ -34,18 +34,23 @@ export function getInitialDemoState(): ProtemState {
 
   const usuarios: Usuario[] = [
     usuario('user-enzo', 'Enzo Capiel', 'enzo@escola.edu.br', 'RESP-001', 'responsavel', em(-30)),
-    usuario('user-gusta', 'Gustavo Machado', 'gustavo@escola.edu.br', 'PROF-001', 'professor', em(-30)),
-    usuario('user-camila', 'Camila Cristina', 'camila@escola.edu.br', 'ALU-0001', 'aluno', em(-30)),
+    usuario('user-gusta', 'Gustavo Machado', 'gustavo@escola.edu.br', 'PROF-001', 'professor',  em(-30)),
+    usuario('user-camila',
+            'Camila Cristina',
+            'camila@escola.edu.br',
+            'ALU-0001',
+            'aluno',
+            em(-30)),
     // Bloqueado pela política rígida: está com o Notebook Dell #2 atrasado
-    {...usuario('user-bruno', 'Bruno Lima', 'bruno.lima@escola.edu.br', 'ALU-0002', 'aluno', em(-20)), status: 'bloqueada'},
+    {...usuario('user-bruno', 'Bruno Lima', 'bruno.lima@escola.edu.br', 'ALU-0002', 'aluno',  em(-20)), status: 'bloqueada'},
     // Devolveu a parafusadeira ontem com 3 dias de atraso: suspensa por 3 dias a partir da devolução
     {
-      ...usuario('user-elisa', 'Elisa Rocha', 'elisa.rocha@escola.edu.br', 'ALU-0003', 'aluno', em(-20)),
+      ...usuario('user-elisa', 'Elisa Rocha', 'elisa.rocha@escola.edu.br', 'ALU-0003', 'aluno',  em(-20)),
       status: 'suspensa',
       suspensoAte: em(2, 16),
     },
     // Acabou de se cadastrar e espera aprovação (RN08)
-    {...usuario('user-diego', 'Diego Alves', 'diego.alves@escola.edu.br', 'ALU-0004', 'aluno', ha20Minutos), status: 'pendente'},
+    {...usuario('user-diego', 'Diego Alves', 'diego.alves@escola.edu.br', 'ALU-0004', 'aluno',  ha20Minutos), status: 'pendente'},
   ];
 
   const categorias: Categoria[] = [

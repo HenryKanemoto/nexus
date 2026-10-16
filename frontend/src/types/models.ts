@@ -57,6 +57,7 @@ export interface Solicitacao {
   criadoEm: string;          // ISO date string
   avaliadoEm?: string;       // ISO date string
   lembreteEnviadoEm?: string; // ISO date string
+  codigoRetirada?:string;
 }
 
 export interface Emprestimo {

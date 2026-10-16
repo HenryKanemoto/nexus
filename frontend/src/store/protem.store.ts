@@ -98,6 +98,20 @@ export class ProtemStore {
     this.fonte.salvar(antes, depois);
   }
 
+  readonly meusCodigos = computed(() => {
+  const user = this.usuarioLogado();
+  if (!user) return [];
+  const itens = this.state().itens;
+  return this.state()
+    .solicitacoes.filter((s) => s.solicitanteId === user.id && s.codigoRetirada)
+    .map((s) => ({
+      solicitacaoId: s.id,
+      codigo: s.codigoRetirada!,
+      item: itens.find((i) => i.id === s.itemId),
+      status: s.status,
+    }));
+});
+
   /** Igual a atualizar(), para regras que também devolvem um resultado para a tela. */
   private executar<R>(fn: (s: ProtemState) => Transicao<R>): R {
     let resultado!: R;

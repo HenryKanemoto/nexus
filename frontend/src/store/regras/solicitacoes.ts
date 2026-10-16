@@ -1,4 +1,5 @@
 import {addDays, differenceInHours, formatDateShort, parseDate} from '../../lib/date-utils';
+import { GeradorCodigo } from '../../services/gerador-codigo.service';
 import {Item, Solicitacao, StatusItem, Usuario} from '../../types/models';
 import {ProtemState, ResultadoAcao, Transicao, novaNotificacao, responsaveis} from '../estado';
 
@@ -166,10 +167,11 @@ export function aprovarPedido(s: ProtemState, solicitacaoId: string, responsavel
   if (solic.status !== 'pendente') return {estado: s, resultado: {sucesso: false, mensagem: 'Solicitação já foi avaliada.'}};
 
   const item = s.itens.find((i) => i.id === solic.itemId);
+  const codigoRetirada = GeradorCodigo.gerar();
   const notif = novaNotificacao(
     solic.solicitanteId,
     'aprovacao',
-    `Seu pedido para "${item?.nome || 'o item'}" foi APROVADO! Realize a retirada hoje no setor responsável.`,
+    `Seu pedido para "${item?.nome || 'o item'}" foi APROVADO! Realize a retirada hoje no setor responsável com o código ${codigoRetirada}.`,
     s.agora,
     '/meus-emprestimos',
   );
@@ -179,7 +181,7 @@ export function aprovarPedido(s: ProtemState, solicitacaoId: string, responsavel
       ...s,
       solicitacoes: s.solicitacoes.map((sol) =>
         sol.id === solicitacaoId
-          ? {...sol, status: 'aprovada' as const, avaliadoPor: responsavelId, avaliadoEm: s.agora}
+          ? {...sol, status: 'aprovada' as const, avaliadoPor: responsavelId, avaliadoEm: s.agora, codigoRetirada}
           : sol,
       ),
       itens: mudarStatusItem(s, solic.itemId, 'reservado'),
