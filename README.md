@@ -106,6 +106,8 @@ npm run servir
 
 ## Usando a aplicação
 
+O endereço `/` abre a landing page, com os pacotes e o botão "Acessar plataforma"; o login fica em `/login`.
+
 Na tela de login, o bloco **"Acesso rápido de demonstração"** entra com um clique. Todas as contas usam a senha `123456`.
 
 | Perfil | Conta | O que faz |
@@ -117,9 +119,9 @@ Na tela de login, o bloco **"Acesso rápido de demonstração"** entra com um cl
 ### Ciclo de um empréstimo
 
 1. **Aluno** → *Catálogo* → escolhe um item → *Pedir emprestado* → escolhe a data de devolução (limitada pelo prazo da categoria).
-2. **Responsável** → *Solicitações* → *Aprovar*. O item fica **reservado** e precisa ser retirado no mesmo dia.
-3. **Responsável** → *Leitor de QR code* (ou *Registrar retirada* no painel). Escanear o QR do item leva à confirmação da retirada.
-4. Na devolução, o mesmo leitor leva à tela *Registrar devolução*. Ali dá para marcar **"voltou com defeito"**, e o item vai para *Manutenção*.
+2. **Responsável** → *Solicitações* → *Aprovar*. O item fica **reservado** e precisa ser retirado no mesmo dia. Quem pediu recebe um **código de retirada** (em *Meus empréstimos* e *Meus códigos*); o responsável não vê esse código.
+3. **Responsável** → *Leitor de QR code*. Escanear o QR do item leva à confirmação da retirada, que só é registrada com o código que a pessoa mostrar no app. O código vale uma vez, até o fim do dia. No pedido aprovado do seed (Gustavo), o código é `K7PM4X`.
+4. Na devolução, o mesmo leitor leva à tela *Registrar devolução*. Ali dá para marcar **"Voltou com avaria"**, e o item vai para *Manutenção*.
 
 ### Painel de demonstração (relógio)
 
