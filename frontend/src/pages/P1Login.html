@@ -18,7 +18,6 @@
     <div class="pointer-events-none absolute -right-20 bottom-16 flex rotate-[-8deg] flex-col gap-3" aria-hidden="true">
       @for (etiqueta of etiquetas; track etiqueta.codigo) {
         <div class="flex w-72 items-center gap-4 rounded-card bg-brand-gold px-4 py-3 text-brand-navy" [style.margin-left.px]="etiqueta.recuo">
-          <mat-icon class="icon-lg" svgIcon="qr_code_2" />
           <div class="min-w-0">
             <p class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] opacity-70">Patrimônio</p>
             <p class="font-mono text-lg font-semibold">{{ etiqueta.codigo }}</p>

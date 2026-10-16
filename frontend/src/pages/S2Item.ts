@@ -3,13 +3,12 @@ import {ActivatedRoute, RouterLink} from '@angular/router';
 import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 import {ItemThumb} from '../components/item-thumb/item-thumb';
-import {QrCode} from '../components/qr-code/qr-code';
 import {plural} from '../lib/categoria-utils';
 
 @Component({
   selector: 'app-s2-item',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, MatIconModule, ItemThumb, QrCode],
+  imports: [RouterLink, MatIconModule, ItemThumb],
   templateUrl: './S2Item.html',
 })
 export class S2Item {

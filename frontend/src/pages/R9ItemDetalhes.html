@@ -15,7 +15,11 @@
           <app-status-badge [status]="i.status" />
         </h1>
       </div>
-      <div class="flex gap-2 self-start sm:self-auto">
+      <div class="flex flex-wrap gap-2 self-start sm:self-auto">
+        <button type="button" (click)="abrirModalEtiqueta()" class="btn btn-primary">
+          <mat-icon class="icon-sm" svgIcon="print" />
+          Imprimir etiqueta
+        </button>
         @if (podeRemover()) {
           <button type="button" (click)="confirmandoRemocao.set(true)" class="btn btn-danger-ghost">
             <mat-icon class="icon-sm" svgIcon="delete_outline" />
@@ -29,8 +33,7 @@
       </div>
     </header>
 
-    <div class="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
-      <!-- Dados do item -->
+    <!-- Dados do item -->
       <section class="card flex flex-col gap-6 p-5 sm:flex-row sm:p-6">
         <app-item-thumb [item]="i" [tamanhoIcone]="56" class="aspect-square w-full shrink-0 self-start rounded-control sm:w-48" />
         <dl class="flex flex-1 flex-col gap-4">
@@ -41,8 +44,8 @@
             </dd>
           </div>
           <div>
-            <dt class="text-xs text-text-muted">Patrimônio</dt>
-            <dd class="mt-1"><span class="tag text-sm">{{ i.patrimonio }}</span></dd>
+            <dt class="text-xs text-text-muted">Patrimônio e código QR</dt>
+            <dd class="mt-0.5 font-mono text-sm">{{ i.patrimonio }} · {{ i.codigoQr }}</dd>
           </div>
           <div>
             <dt class="text-xs text-text-muted">Descrição</dt>
@@ -50,20 +53,6 @@
           </div>
         </dl>
       </section>
-
-      <!-- Etiqueta com QR -->
-      <section class="card card-pad flex flex-col items-center gap-4 text-center" aria-label="Etiqueta do item">
-        <app-qr-code [valor]="i.codigoQr || i.patrimonio" [tamanho]="176" class="rounded-control border border-border p-2" />
-        <div>
-          <p class="font-mono text-base font-semibold">{{ i.patrimonio }}</p>
-          <p class="font-mono text-xs text-text-muted">{{ i.codigoQr }}</p>
-        </div>
-        <button type="button" (click)="abrirModalEtiqueta()" class="btn btn-secondary btn-block">
-          <mat-icon class="icon-sm" svgIcon="print" />
-          Imprimir etiqueta
-        </button>
-      </section>
-    </div>
 
     <div class="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
       <!-- Histórico de empréstimos -->

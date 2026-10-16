@@ -33,15 +33,9 @@
               {{ perm.itensAtuais }} de {{ perm.limiteMax }}
             </dd>
           </div>
-          <div class="col-span-2 flex items-center gap-4 bg-surface p-4">
-            <app-qr-code [valor]="i.codigoQr" [tamanho]="64" class="rounded-md border border-border p-1" />
-            <div class="min-w-0">
-              <dt class="text-xs text-text-muted">Patrimônio</dt>
-              <dd class="mt-1 flex flex-wrap items-center gap-2">
-                <span class="tag">{{ i.patrimonio }}</span>
-                <span class="font-mono text-xs text-text-muted">QR {{ i.codigoQr }}</span>
-              </dd>
-            </div>
+          <div class="col-span-2 bg-surface p-4">
+            <dt class="text-xs text-text-muted">Patrimônio</dt>
+            <dd class="mt-1 font-mono text-sm">{{ i.patrimonio }}</dd>
           </div>
         </dl>
 
