@@ -2,8 +2,8 @@
   <header class="page-header">
     <div>
       <h1 class="page-title">Meus códigos</h1>
-      <p class="page-subtitle">
-        Códigos de autenticação para retirada dos itens.
+      <p class="page-subtitle" title="Mostre o código ao responsável na hora de retirar. Ele vale só para você, uma vez, até o fim do dia da aprovação.">
+        Códigos para retirar os itens.
       </p>
     </div>
     <a routerLink="/catalogo" class="btn btn-primary self-start sm:self-auto">
@@ -14,47 +14,31 @@
 
   <ul class="flex flex-col gap-3">
     @for (sol of listarSolicitacoes(); track sol.id) {
-    @let item = getItem(sol.itemId);
-    <li class="card flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:p-5">
-      @if (item) {
-      <app-item-thumb [item]="item" class="size-14 shrink-0 rounded-control" />
-      }
-      <div class="min-w-0 flex-1">
-        <p class="font-semibold">{{ item?.nome }}</p>
-        <p class="mt-0.5 text-sm text-text-muted">
-          Criado em {{ formatarData(sol.criadoEm) }}
-        </p>
-      </div>
-      <div class="shrink-0 sm:text-right">
-        <p class="text-xs text-text-muted">Código de Retirada:</p>
-        @if(sol.status !== 'pendente' && sol.status !== 'recusada' && sol.status !== 'expirada' && sol.status !== 'concluida' ){
-          <p class="font-display text-lg font-semibold text-[#f59e0b]">{{sol.codigoRetirada}}</p>
+      @let item = getItem(sol.itemId);
+      <li class="card flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:p-5" [class.border-primary]="sol.status === 'aprovada'">
+        @if (item) {
+          <app-item-thumb [item]="item" class="size-14 shrink-0 rounded-control" />
         }
-
-        @if(sol.status === 'pendente'){
-           <p class="font-display text-lg font-semibold text-[#0059ff]">Aguardando aprovação</p>
-        }
-
-        @if(sol.status === 'recusada'){
-           <p class="font-display text-lg font-semibold text-[#bd0429]">Solicitacao recusada</p>
-        }
-
-        @if(sol.status === 'expirada'){
-           <p class="font-display text-lg font-semibold text-[#bd0429]">Expirado</p>
-        }
-
-        @if(sol.status === 'concluida'){
-           <p class="font-display text-lg font-semibold text-[#18d611]">Concluida</p>
-        }
-
-      </div>
-    </li>
+        <div class="min-w-0 flex-1">
+          <p class="font-semibold">{{ item?.nome }}</p>
+          <p class="mt-0.5 text-sm text-text-muted">Pedido em {{ formatarData(sol.criadoEm) }}</p>
+        </div>
+        <div class="shrink-0 sm:text-right">
+          @if (sol.status === 'aprovada') {
+            <p class="text-xs text-text-muted">Código de retirada</p>
+            <p class="font-mono text-2xl font-semibold tracking-[0.2em] text-text-heading">{{ sol.codigoRetirada }}</p>
+            <span class="mt-1 inline-flex rounded-full bg-reservado-bg px-2.5 py-0.5 text-xs font-medium text-reservado">Retire hoje</span>
+          } @else {
+            <p class="text-sm text-text-muted">{{ situacao(sol.status) }}</p>
+          }
+        </div>
+      </li>
     } @empty {
-    <li class="card solty">
-      <mat-icon class="icon-xl" svgIcon="check_circle_outline" />
-      <p class="solty-title">Nenhum código gerado</p>
-      <p class="solty-text">Você não precisa retirar nenhum material</p>
-    </li>
+      <li class="card empty">
+        <mat-icon class="icon-xl" svgIcon="check_circle_outline" />
+        <p class="empty-title">Nenhum código por aqui</p>
+        <p class="empty-text">Quando um pedido seu for aprovado, o código de retirada aparece nesta tela.</p>
+      </li>
     }
   </ul>
 </div>
