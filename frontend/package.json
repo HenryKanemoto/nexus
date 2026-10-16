@@ -5,7 +5,10 @@
     "ng": "ng",
     "start": "ng serve",
     "dev": "ng serve --port=3000",
+    "dev:api": "ng serve --port=3000 --configuration api",
     "build": "ng build",
+    "build:api": "ng build --configuration production,api",
+    "servir": "node scripts/servir-build.mjs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint"
