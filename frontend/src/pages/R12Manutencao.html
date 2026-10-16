@@ -22,12 +22,12 @@
             <app-item-thumb [item]="linha.item" [tamanhoIcone]="22" class="size-12 shrink-0 rounded-control bg-maint-soft text-maint" />
             <span class="min-w-0">
               <span class="block truncate font-medium group-hover:underline">{{ linha.item.nome }}</span>
-              <span class="block font-mono text-xs text-ink-muted">{{ linha.item.patrimonio }}</span>
+              <span class="block font-mono text-xs text-text-muted">{{ linha.item.patrimonio }}</span>
             </span>
           </a>
           <div class="min-w-0 flex-1">
             <p class="text-sm">{{ linha.ocorrencia?.descricao || 'Defeito informado na devolução.' }}</p>
-            <p class="mt-1 text-xs text-ink-muted">Devolvido por {{ linha.devolvidoPorNome }} · {{ formatarData(linha.dataRegistro) }}</p>
+            <p class="mt-1 text-xs text-text-muted">Devolvido por {{ linha.devolvidoPorNome }} · {{ formatarData(linha.dataRegistro) }}</p>
           </div>
           <button type="button" (click)="marcarConsertado(linha)" class="btn btn-secondary btn-sm shrink-0">
             <mat-icon class="icon-sm" svgIcon="handyman" />
@@ -36,12 +36,12 @@
         </li>
       }
     </ul>
-    <p class="text-xs text-ink-muted">Ao marcar como consertado, o item volta ao catálogo como disponível.</p>
+    <p class="text-xs text-text-muted">Ao marcar como consertado, o item volta ao catálogo como disponível.</p>
   } @else {
     <div class="card empty">
       <mat-icon class="icon-xl" svgIcon="task_alt" />
       <p class="empty-title">Nada em manutenção</p>
-      <p class="empty-text">Todos os equipamentos estão funcionando.</p>
+      <p class="empty-text">Quando um item voltar com avaria, ele aparece aqui com a ocorrência.</p>
     </div>
   }
 </div>

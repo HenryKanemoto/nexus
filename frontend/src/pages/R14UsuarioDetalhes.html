@@ -9,7 +9,7 @@
       <span class="avatar size-16 text-xl">{{ getIniciais(u.nome) }}</span>
       <div class="min-w-0 flex-1">
         <h1 class="page-title">{{ u.nome }}</h1>
-        <p class="mt-1 flex flex-wrap items-center gap-2 text-sm text-ink-soft">
+        <p class="mt-1 flex flex-wrap items-center gap-2 text-sm text-text-muted">
           {{ rotuloPerfil(u.perfil) }} · {{ u.email }}
           <span class="tag">{{ u.matricula }}</span>
         </p>
@@ -72,7 +72,7 @@
                 <tr>
                   <td>
                     <p class="font-medium">{{ item?.nome || 'Equipamento' }}</p>
-                    <p class="font-mono text-xs text-ink-muted">{{ item?.patrimonio }}</p>
+                    <p class="font-mono text-xs text-text-muted">{{ item?.patrimonio }}</p>
                   </td>
                   <td class="whitespace-nowrap tabular-nums">{{ formatarData(emp.retiradoEm) }}</td>
                   <td class="whitespace-nowrap tabular-nums">{{ emp.devolvidoEm ? formatarData(emp.devolvidoEm) : '—' }}</td>
@@ -85,7 +85,7 @@
           </table>
         </div>
       } @else {
-        <p class="px-6 py-10 text-center text-sm text-ink-muted">Nenhum empréstimo registrado.</p>
+        <p class="px-6 py-10 text-center text-sm text-text-muted">Nenhum empréstimo registrado.</p>
       }
     </section>
   } @else {

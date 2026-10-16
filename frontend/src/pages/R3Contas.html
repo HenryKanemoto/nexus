@@ -25,18 +25,18 @@
     </div>
 
     @if (contasPendentes().length > 0) {
-      <ul class="divide-y divide-line">
+      <ul class="divide-y divide-border">
         @for (u of contasPendentes(); track u.id) {
           <li class="flex flex-col gap-3 px-5 py-4 sm:px-6 md:flex-row md:items-center md:gap-6">
             <span class="avatar hidden size-10 text-sm md:inline-flex">{{ iniciais(u.nome) }}</span>
             <div class="min-w-0 flex-1">
               <p class="font-medium">{{ u.nome }}</p>
-              <p class="truncate text-sm text-ink-muted">{{ u.email }}</p>
+              <p class="truncate text-sm text-text-muted">{{ u.email }}</p>
             </div>
             <div class="flex flex-wrap items-center gap-2 text-sm md:w-64">
               <span class="tag">{{ u.matricula }}</span>
-              <span class="capitalize text-ink-soft">{{ u.perfil }}</span>
-              <span class="text-xs text-ink-muted">· {{ formatarData(u.criadoEm) }}</span>
+              <span class="capitalize text-text-muted">{{ u.perfil }}</span>
+              <span class="text-xs text-text-muted">· {{ formatarData(u.criadoEm) }}</span>
             </div>
             <div class="flex gap-2">
               <button type="button" (click)="abrirModalRecusa(u)" class="btn btn-secondary btn-sm flex-1 md:flex-none">Recusar</button>
@@ -61,17 +61,17 @@
     <app-modal rotulo="titulo-recusa-conta" (fechar)="usuarioParaRecusar.set(null)">
         <div>
           <h3 id="titulo-recusa-conta" class="modal-title">Recusar cadastro?</h3>
-          <p class="mt-1 text-sm text-ink-soft">A conta fica marcada como recusada e a pessoa é avisada.</p>
+          <p class="mt-1 text-sm text-text-muted">A conta fica marcada como recusada e a pessoa é avisada.</p>
         </div>
 
-        <dl class="rounded-control bg-paper p-4 text-sm">
-          <div class="flex justify-between gap-4"><dt class="text-ink-muted">Nome</dt><dd>{{ usr.nome }}</dd></div>
-          <div class="mt-1 flex justify-between gap-4"><dt class="text-ink-muted">E-mail</dt><dd class="truncate">{{ usr.email }}</dd></div>
-          <div class="mt-1 flex justify-between gap-4"><dt class="text-ink-muted">Matrícula</dt><dd class="font-mono">{{ usr.matricula }}</dd></div>
+        <dl class="rounded-control bg-bg p-4 text-sm">
+          <div class="flex justify-between gap-4"><dt class="text-text-muted">Nome</dt><dd>{{ usr.nome }}</dd></div>
+          <div class="mt-1 flex justify-between gap-4"><dt class="text-text-muted">E-mail</dt><dd class="truncate">{{ usr.email }}</dd></div>
+          <div class="mt-1 flex justify-between gap-4"><dt class="text-text-muted">Matrícula</dt><dd class="font-mono">{{ usr.matricula }}</dd></div>
         </dl>
 
         <div class="field">
-          <label for="motivoContaRecusa" class="label">Motivo <span class="font-normal text-ink-muted">(opcional)</span></label>
+          <label for="motivoContaRecusa" class="label">Motivo <span class="font-normal text-text-muted">(opcional)</span></label>
           <input
             id="motivoContaRecusa"
             type="text"

@@ -26,7 +26,7 @@
     </div>
 
     @if (solicitacoesPendentes().length > 0) {
-      <ul class="divide-y divide-line">
+      <ul class="divide-y divide-border">
         @for (s of solicitacoesPendentes(); track s.id) {
           @let item = getItem(s.itemId);
           @let user = getUsuario(s.solicitanteId);
@@ -35,20 +35,20 @@
               <p class="flex flex-wrap items-center gap-2 font-medium">
                 {{ user?.nome || 'Solicitante' }}
                 @if (s.lembreteEnviadoEm) {
-                  <span class="inline-flex items-center gap-1 rounded-full bg-accent px-2 py-0.5 text-[0.6875rem] font-semibold" title="O solicitante enviou um lembrete">
+                  <span class="inline-flex items-center gap-1 rounded-full bg-brand-soft px-2 py-0.5 text-[0.6875rem] font-semibold text-primary-strong" title="O solicitante enviou um lembrete">
                     <mat-icon class="icon-xs" svgIcon="notifications_active" />
                     lembrete
                   </span>
                 }
               </p>
-              <p class="text-xs text-ink-muted">
+              <p class="text-xs text-text-muted">
                 <span class="capitalize">{{ user?.perfil }}</span> · <span class="font-mono">{{ user?.matricula }}</span>
               </p>
             </div>
 
             <div class="min-w-0">
               <p class="truncate">{{ item?.nome }}</p>
-              <p class="text-xs text-ink-muted">
+              <p class="text-xs text-text-muted">
                 <span class="font-mono">{{ item?.patrimonio }}</span> · devolver até {{ formatarData(s.devolucaoDesejada) }} · há
                 {{ getTempoDecorrido(s.criadoEm) }}
               </p>
@@ -81,25 +81,25 @@
           Aprovados, aguardando retirada
           <span class="count">{{ pedidosAprovadosHoje().length }}</span>
         </h2>
-        <p class="text-xs text-ink-muted">Se não forem retirados até o fim do dia, os pedidos expiram.</p>
+        <p class="text-xs text-text-muted">Se não forem retirados até o fim do dia, os pedidos expiram.</p>
       </div>
     </div>
 
     @if (pedidosAprovadosHoje().length > 0) {
-      <ul class="divide-y divide-line">
+      <ul class="divide-y divide-border">
         @for (solic of pedidosAprovadosHoje(); track solic.id) {
           @let item = getItem(solic.itemId);
           @let user = getUsuario(solic.solicitanteId);
           <li class="grid gap-3 px-5 py-4 sm:px-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_auto] md:items-center md:gap-6">
             <div class="min-w-0">
               <p class="font-medium">{{ user?.nome }}</p>
-              <p class="text-xs text-ink-muted">
+              <p class="text-xs text-text-muted">
                 <span class="capitalize">{{ user?.perfil }}</span> · <span class="font-mono">{{ user?.matricula }}</span>
               </p>
             </div>
             <div class="min-w-0">
               <p class="truncate">{{ item?.nome }}</p>
-              <p class="text-xs text-ink-muted">
+              <p class="text-xs text-text-muted">
                 <span class="font-mono">{{ item?.codigoQr }}</span> · aprovado às {{ formatarHora(solic.avaliadoEm || solic.criadoEm) }}
               </p>
             </div>
@@ -111,7 +111,7 @@
         }
       </ul>
     } @else {
-      <p class="px-6 py-10 text-center text-sm text-ink-muted">Nenhum pedido aprovado aguardando retirada.</p>
+      <p class="px-6 py-10 text-center text-sm text-text-muted">Nenhum pedido aprovado aguardando retirada.</p>
     }
   </section>
 
@@ -122,17 +122,17 @@
     <app-modal rotulo="titulo-recusa" (fechar)="solicitacaoParaRecusar.set(null)">
         <div>
           <h3 id="titulo-recusa" class="modal-title">Recusar pedido?</h3>
-          <p class="mt-1 text-sm text-ink-soft">O item volta para o catálogo como disponível e a pessoa é avisada.</p>
+          <p class="mt-1 text-sm text-text-muted">O item volta para o catálogo como disponível e a pessoa é avisada.</p>
         </div>
 
-        <dl class="rounded-control bg-paper p-4 text-sm">
-          <div class="flex justify-between gap-4"><dt class="text-ink-muted">Solicitante</dt><dd>{{ usr?.nome }}</dd></div>
-          <div class="mt-1 flex justify-between gap-4"><dt class="text-ink-muted">Item</dt><dd class="text-right">{{ it?.nome }}</dd></div>
-          <div class="mt-1 flex justify-between gap-4"><dt class="text-ink-muted">Devolução</dt><dd>{{ formatarData(solic.devolucaoDesejada) }}</dd></div>
+        <dl class="rounded-control bg-bg p-4 text-sm">
+          <div class="flex justify-between gap-4"><dt class="text-text-muted">Solicitante</dt><dd>{{ usr?.nome }}</dd></div>
+          <div class="mt-1 flex justify-between gap-4"><dt class="text-text-muted">Item</dt><dd class="text-right">{{ it?.nome }}</dd></div>
+          <div class="mt-1 flex justify-between gap-4"><dt class="text-text-muted">Devolução</dt><dd>{{ formatarData(solic.devolucaoDesejada) }}</dd></div>
         </dl>
 
         <div class="field">
-          <label for="motivoRecusa" class="label">Motivo <span class="font-normal text-ink-muted">(opcional)</span></label>
+          <label for="motivoRecusa" class="label">Motivo <span class="font-normal text-text-muted">(opcional)</span></label>
           <input
             id="motivoRecusa"
             type="text"

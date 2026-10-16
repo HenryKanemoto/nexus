@@ -21,7 +21,7 @@
           <app-item-thumb [item]="i" [tamanhoIcone]="40" class="size-24 shrink-0 rounded-control" />
           <div class="min-w-0 flex-1">
             <h2 class="font-display text-2xl font-semibold leading-tight">{{ i.nome }}</h2>
-            <p class="mt-1 text-sm text-ink-soft">
+            <p class="mt-1 text-sm text-text-muted">
               {{ user?.nome }} · retirado em {{ formatarData(emp.retiradoEm) }} · devolver até {{ formatarData(emp.devolucaoPrevista) }}
             </p>
             <span class="tag mt-2">{{ i.patrimonio }}</span>
@@ -30,7 +30,7 @@
 
         <!-- Situação do prazo e consequência pela política (RN06) -->
         @if (diasAtrasoAtual > 0) {
-          <div class="flex items-start gap-3 border-t border-warn/25 bg-warn-soft px-5 py-4 text-[#7d4500] sm:px-6">
+          <div class="flex items-start gap-3 border-t border-warn/25 bg-warn-soft px-5 py-4 text-warn sm:px-6">
             <mat-icon class="icon-sm mt-0.5" svgIcon="warning" />
             <div>
               <p class="font-semibold">{{ plural(diasAtrasoAtual, 'dia') }} de atraso</p>
@@ -46,7 +46,7 @@
             </div>
           </div>
         } @else {
-          <div class="flex items-center gap-3 border-t border-ok/20 bg-ok-soft px-5 py-4 text-[#11612e] sm:px-6">
+          <div class="flex items-center gap-3 border-t border-ok/20 bg-ok-soft px-5 py-4 text-ok sm:px-6">
             <mat-icon class="icon-sm" svgIcon="verified" />
             <p class="text-sm font-medium">Dentro do prazo. Nenhuma penalidade.</p>
           </div>
@@ -60,11 +60,11 @@
             type="checkbox"
             [checked]="comDefeito()"
             (change)="comDefeito.set($any($event.target).checked)"
-            class="mt-0.5 size-5 shrink-0 cursor-pointer accent-ink"
+            class="mt-0.5 size-5 shrink-0 cursor-pointer accent-primary"
           />
           <span>
             <span class="block font-medium">O item voltou com defeito</span>
-            <span class="block text-sm text-ink-muted">Ele vai para a manutenção, sai do catálogo e uma ocorrência é registrada.</span>
+            <span class="block text-sm text-text-muted">Ele vai para a manutenção, sai do catálogo e uma ocorrência é registrada.</span>
           </span>
         </label>
 

@@ -4,12 +4,12 @@ import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 import {RelogioFlutuante} from '../components/relogio-flutuante/relogio-flutuante';
 import {StatusBadge} from '../components/status-badge/status-badge';
-import {Logo} from '../components/logo/logo';
+import {BrandLogo} from '../components/brand-logo/brand-logo';
 
 @Component({
   selector: 'app-p3-aguardando',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, MatIconModule, RelogioFlutuante, StatusBadge, Logo],
+  imports: [RouterLink, MatIconModule, RelogioFlutuante, StatusBadge, BrandLogo],
   templateUrl: './P3Aguardando.html',
 })
 export class P3Aguardando {

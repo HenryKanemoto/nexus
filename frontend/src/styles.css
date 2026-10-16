@@ -2,8 +2,10 @@
 
 /* ==========================================================================
    Protem: sistema visual
-   Inspirado na etiqueta de patrimônio: papel, tinta e um amarelo-sinal.
-   Cores e fontes viram utilitários do Tailwind (bg-paper, text-ink, font-mono...).
+   Todas as cores do app saem daqui (tokens da marca, em CLAUDE.md > Fase 4) e viram
+   utilitários do Tailwind: bg-brand-navy, text-text-muted, border-border-input...
+   A paleta padrão do Tailwind é desligada, então cor fora dos tokens não gera CSS.
+   Contrastes (WCAG AA) já conferidos para os pares de uso indicados nos comentários.
    ========================================================================== */
 
 @theme {
@@ -12,37 +14,61 @@
   --font-display: "Bricolage Grotesque Variable", "Geist Variable", ui-sans-serif, sans-serif;
   --font-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, monospace;
 
-  --color-paper: #f4f3ee;
-  --color-surface: #ffffff;
-  --color-sunken: #eceae3;
-  --color-line: #e2e0d8;
-  --color-line-strong: #cbc8bc;
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
 
-  --color-ink: #16181d;
-  --color-ink-hover: #2c2f37;
-  --color-ink-soft: #4a4e57;
-  --color-ink-muted: #767a84;
+  /* Marca */
+  --color-brand-navy: #0e1a3a; /* menu lateral, cabeçalho, títulos */
+  --color-brand-blue: #2f6bff; /* cor primária */
+  --color-brand-gold: #f2b705; /* só acento: nunca texto, ícone informativo ou foco em fundo claro (1,8:1) */
+  --color-brand-soft: #eaf1fe; /* fundos suaves: selecionado, destaque, estados vazios */
 
-  --color-accent: #ffc83d;
-  --color-accent-strong: #e5a800;
-  --color-accent-soft: #fff4d1;
+  /* Derivados */
+  --color-primary: #2f6bff; /* fundo de botão com texto branco (4,5:1) */
+  --color-primary-hover: #2558d9; /* hover; texto e links azuis sobre branco (6,0:1) */
+  --color-primary-strong: #1e47b8; /* texto azul sobre brand-soft (7,0:1) */
+  --color-text: #1f2937; /* corpo (14,7:1) */
+  --color-text-heading: #0e1a3a; /* títulos */
+  --color-text-muted: #5b6475; /* secundário (6,0:1 no branco) */
+  --color-bg: #f6f8fc; /* fundo da página */
+  --color-surface: #ffffff; /* cartões e tabelas */
+  --color-border: #d5dce8; /* divisórias e bordas de cartão */
+  --color-border-input: #7c879b; /* borda de campos (3,6:1) */
+  --color-sidebar-hover: #1b2b55; /* hover e item ativo no menu lateral */
+  --color-focus-ring: #2f6bff;
+  --color-danger: #b91c1c; /* erro e ações destrutivas, com texto branco (6,5:1) */
+  --color-danger-hover: #991b1b;
 
-  /* Cores de status (texto escuro sobre fundo claro, sempre com contraste AA) */
-  --color-ok: #17803d;
-  --color-ok-soft: #e3f4e8;
-  --color-warn: #a35a00;
-  --color-warn-soft: #fdf0d9;
-  --color-danger: #c2312b;
-  --color-danger-soft: #fce6e4;
-  --color-info: #2453b8;
-  --color-info-soft: #e5edfb;
-  --color-maint: #7342b5;
-  --color-maint-soft: #f0e8fb;
+  /* Estados (texto sobre fundo, pelo menos 5:1) */
+  --color-disponivel: #166534;
+  --color-disponivel-bg: #dcfce7;
+  --color-solicitado: #9a3412;
+  --color-solicitado-bg: #ffedd5;
+  --color-reservado: #854d0e;
+  --color-reservado-bg: #fef3c7;
+  --color-emprestado: #1e47b8;
+  --color-emprestado-bg: #dbe7ff;
+  --color-atrasado: #b91c1c;
+  --color-atrasado-bg: #fee2e2;
+  --color-manutencao: #6b21a8;
+  --color-manutencao-bg: #f3e8ff;
 
-  --radius-control: 0.625rem;
-  --radius-card: 0.875rem;
+  /* Tons para avisos e ícones de histórico, reaproveitando os estados */
+  --color-ok: var(--color-disponivel);
+  --color-ok-soft: var(--color-disponivel-bg);
+  --color-warn: var(--color-reservado);
+  --color-warn-soft: var(--color-reservado-bg);
+  --color-info: var(--color-emprestado);
+  --color-info-soft: var(--color-emprestado-bg);
+  --color-maint: var(--color-manutencao);
+  --color-maint-soft: var(--color-manutencao-bg);
+  --color-danger-soft: var(--color-atrasado-bg);
 
-  --shadow-pop: 0 12px 32px -8px rgb(22 24 29 / 0.18), 0 2px 6px rgb(22 24 29 / 0.06);
+  --radius-control: 0.625rem; /* 10 px: botões e campos */
+  --radius-card: 0.75rem; /* 12 px: cartões */
+
+  --shadow-pop: 0 8px 24px -12px rgb(14 26 58 / 0.22), 0 1px 3px rgb(14 26 58 / 0.06);
 }
 
 @layer base {
@@ -51,7 +77,7 @@
   }
 
   body {
-    @apply bg-paper font-sans text-ink antialiased;
+    @apply bg-bg font-sans text-text antialiased;
     font-size: 0.9375rem;
     line-height: 1.5;
   }
@@ -59,17 +85,17 @@
   h1,
   h2,
   h3 {
-    @apply font-display tracking-tight text-ink;
+    @apply font-display tracking-tight text-text-heading;
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-ink);
+    outline: 2px solid var(--color-focus-ring);
     outline-offset: 2px;
   }
 
   ::selection {
-    background: var(--color-accent);
-    color: var(--color-ink);
+    background: var(--color-brand-soft);
+    color: var(--color-text-heading);
   }
 
   /* Ícones do Material: tamanho padrão alinhado ao texto */
@@ -118,46 +144,45 @@
   .btn-block {
     @apply w-full;
   }
-  .btn-primary {
-    @apply bg-ink text-white hover:bg-ink-hover;
-  }
-  .btn-accent {
-    @apply bg-accent text-ink hover:bg-accent-strong;
+  .btn-primary,
+  .btn-ok {
+    @apply bg-primary text-white hover:bg-primary-hover active:bg-primary-hover;
   }
   .btn-secondary {
-    @apply bg-surface text-ink border border-line-strong hover:bg-sunken;
+    @apply bg-surface text-brand-navy border border-border-input hover:bg-brand-soft;
   }
   .btn-ghost {
-    @apply bg-transparent text-ink-soft hover:bg-sunken hover:text-ink;
+    @apply bg-transparent text-primary-hover hover:bg-brand-soft hover:text-primary-strong;
   }
   .btn-danger {
-    @apply bg-danger text-white hover:bg-[#a52722];
+    @apply bg-danger text-white hover:bg-danger-hover;
   }
   .btn-danger-ghost {
     @apply bg-transparent text-danger hover:bg-danger-soft;
   }
-  .btn-ok {
-    @apply bg-ok text-white hover:bg-[#126a32];
-  }
   .btn-icon {
-    @apply inline-flex items-center justify-center size-9 rounded-control text-ink-soft hover:bg-sunken hover:text-ink cursor-pointer transition-colors;
+    @apply inline-flex items-center justify-center size-9 rounded-control text-text-muted hover:bg-brand-soft hover:text-brand-navy cursor-pointer transition-colors;
+  }
+  /* Botão de ícone sobre o navy (menu lateral e cabeçalho) */
+  .btn-icon-escuro {
+    @apply text-white/80 hover:bg-sidebar-hover hover:text-white;
   }
 
   /* ---------- Superfícies ---------- */
   .card {
-    @apply bg-surface border border-line rounded-card;
+    @apply bg-surface border border-border rounded-card;
   }
   .card-pad {
     @apply p-5 sm:p-6;
   }
   .card-header {
-    @apply flex items-center justify-between gap-3 px-5 sm:px-6 py-4 border-b border-line;
+    @apply flex items-center justify-between gap-3 px-5 sm:px-6 py-4 border-b border-border;
   }
   .card-title {
-    @apply font-display text-base font-semibold text-ink;
+    @apply font-display text-base font-semibold text-text-heading;
   }
   .divider {
-    @apply border-t border-line;
+    @apply border-t border-border;
   }
 
   /* ---------- Cabeçalho de página ---------- */
@@ -168,16 +193,16 @@
     @apply flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between;
   }
   .page-eyebrow {
-    @apply font-mono text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-ink-muted;
+    @apply font-mono text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-text-muted;
   }
   .page-title {
-    @apply font-display text-[1.75rem] sm:text-[2rem] leading-tight font-semibold tracking-tight text-ink;
+    @apply font-display text-[1.75rem] sm:text-[2rem] leading-tight font-semibold tracking-tight text-text-heading;
   }
   .page-subtitle {
-    @apply mt-1 text-sm text-ink-soft max-w-2xl;
+    @apply mt-1 text-sm text-text-muted max-w-2xl;
   }
   .back-link {
-    @apply inline-flex items-center gap-1 text-sm font-medium text-ink-soft hover:text-ink transition-colors;
+    @apply inline-flex items-center gap-1 text-sm font-medium text-primary-hover hover:text-primary-strong transition-colors;
   }
 
   /* ---------- Formulários ---------- */
@@ -185,10 +210,10 @@
     @apply flex flex-col gap-1.5;
   }
   .label {
-    @apply text-[0.8125rem] font-medium text-ink;
+    @apply text-[0.8125rem] font-medium text-text;
   }
   .hint {
-    @apply text-xs text-ink-muted;
+    @apply text-xs text-text-muted;
   }
   .field-error {
     @apply text-xs font-medium text-danger flex items-center gap-1;
@@ -196,7 +221,7 @@
   .input,
   .select,
   .textarea {
-    @apply w-full rounded-control border border-line-strong bg-surface px-3.5 text-sm text-ink placeholder:text-ink-muted transition-colors hover:border-ink-muted focus:border-ink focus:outline-none focus:ring-2 focus:ring-accent/70 disabled:bg-sunken disabled:text-ink-muted;
+    @apply w-full rounded-control border border-border-input bg-surface px-3.5 text-sm text-text placeholder:text-text-muted transition-colors hover:border-brand-navy focus:border-primary disabled:bg-bg disabled:text-text-muted;
   }
   .input,
   .select {
@@ -206,13 +231,13 @@
     @apply py-2.5 min-h-24 resize-y;
   }
   .input-invalid {
-    @apply border-danger focus:border-danger focus:ring-danger/25;
+    @apply border-danger focus:border-danger;
   }
   .input-group {
     @apply relative flex items-center;
   }
   .input-group > .mat-icon:first-child {
-    @apply absolute left-3 text-ink-muted pointer-events-none;
+    @apply absolute left-3 text-text-muted pointer-events-none;
   }
   .input-group > .input {
     @apply pl-10;
@@ -226,40 +251,40 @@
     @apply w-full text-sm text-left border-collapse;
   }
   .table th {
-    @apply px-5 py-3 font-mono text-[0.6875rem] font-medium uppercase tracking-[0.1em] text-ink-muted bg-paper/60 border-b border-line whitespace-nowrap;
+    @apply px-5 py-3 font-mono text-[0.6875rem] font-medium uppercase tracking-[0.1em] text-text-muted bg-bg border-b border-border whitespace-nowrap;
   }
   .table td {
-    @apply px-5 py-3.5 border-b border-line align-middle;
+    @apply px-5 py-3.5 border-b border-border align-middle;
   }
   .table tbody tr:last-child td {
     @apply border-b-0;
   }
   .table tbody tr {
-    @apply transition-colors hover:bg-paper/50;
+    @apply transition-colors hover:bg-brand-soft/60;
   }
 
   /* ---------- Etiquetas e contadores ---------- */
   .tag {
-    @apply inline-flex items-center rounded-md border border-line-strong bg-paper px-1.5 py-0.5 font-mono text-[0.75rem] text-ink-soft whitespace-nowrap;
+    @apply inline-flex items-center rounded-md border border-border bg-bg px-1.5 py-0.5 font-mono text-[0.75rem] text-text-muted whitespace-nowrap;
   }
   .count {
-    @apply inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-accent text-ink font-mono text-[0.6875rem] font-semibold tabular-nums;
+    @apply inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-primary text-white font-mono text-[0.6875rem] font-semibold tabular-nums;
   }
   .avatar {
-    @apply inline-flex items-center justify-center shrink-0 rounded-full bg-ink text-white font-display font-semibold;
+    @apply inline-flex items-center justify-center shrink-0 rounded-full bg-brand-navy text-white font-display font-semibold;
   }
 
   /* ---------- Abas ---------- */
   /* A linha de base é uma sombra interna: uma borda + margem negativa geraria rolagem vertical no overflow-x */
   .tabs {
     @apply sem-rolagem flex gap-1 overflow-x-auto overflow-y-hidden;
-    box-shadow: inset 0 -1px 0 var(--color-line);
+    box-shadow: inset 0 -1px 0 var(--color-border);
   }
   .tab {
-    @apply relative inline-flex items-center gap-2 px-3.5 py-2.5 text-sm font-medium text-ink-muted whitespace-nowrap border-b-2 border-transparent hover:text-ink cursor-pointer transition-colors;
+    @apply relative inline-flex items-center gap-2 px-3.5 py-2.5 text-sm font-medium text-text-muted whitespace-nowrap border-b-2 border-transparent hover:text-text-heading cursor-pointer transition-colors;
   }
   .tab-active {
-    @apply text-ink border-ink;
+    @apply text-primary-hover border-primary;
   }
 
   /* ---------- Avisos ---------- */
@@ -270,16 +295,16 @@
     @apply mt-px;
   }
   .alert-info {
-    @apply bg-info-soft border-info/20 text-[#1b3f8c];
+    @apply bg-info-soft border-info/20 text-info;
   }
   .alert-ok {
-    @apply bg-ok-soft border-ok/20 text-[#11612e];
+    @apply bg-ok-soft border-ok/20 text-ok;
   }
   .alert-warn {
-    @apply bg-warn-soft border-warn/25 text-[#7d4500];
+    @apply bg-warn-soft border-warn/25 text-warn;
   }
   .alert-danger {
-    @apply bg-danger-soft border-danger/20 text-[#94241f];
+    @apply bg-danger-soft border-danger/20 text-danger;
   }
 
   /* ---------- Estado vazio ---------- */
@@ -287,29 +312,29 @@
     @apply flex flex-col items-center justify-center gap-2 px-6 py-12 text-center;
   }
   .empty > .mat-icon {
-    @apply text-ink-muted/60 mb-1;
+    @apply box-content p-3 rounded-full bg-brand-soft text-primary-strong mb-1;
   }
   .empty-title {
-    @apply font-display text-base font-semibold text-ink;
+    @apply font-display text-base font-semibold text-text-heading;
   }
   .empty-text {
-    @apply text-sm text-ink-muted max-w-sm;
+    @apply text-sm text-text-muted max-w-sm;
   }
 
   /* ---------- Indicadores ---------- */
   .stat {
-    @apply bg-surface border border-line rounded-card p-5 flex flex-col gap-1;
+    @apply bg-surface border border-border rounded-card p-5 flex flex-col gap-1;
   }
   .stat-label {
-    @apply text-[0.8125rem] font-medium text-ink-soft;
+    @apply text-[0.8125rem] font-medium text-text-muted;
   }
   .stat-value {
-    @apply font-display text-4xl font-semibold tabular-nums tracking-tight text-ink;
+    @apply font-display text-4xl font-semibold tabular-nums tracking-tight text-text-heading;
   }
 
   /* ---------- Diálogos ---------- */
   .modal-backdrop {
-    @apply fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-ink/45 p-0 sm:p-4;
+    @apply fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-brand-navy/45 p-0 sm:p-4;
   }
   .modal {
     @apply w-full sm:max-w-md bg-surface rounded-t-card sm:rounded-card shadow-pop p-6 flex flex-col gap-4 max-h-[90vh] overflow-y-auto;

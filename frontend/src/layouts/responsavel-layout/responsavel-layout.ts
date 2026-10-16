@@ -3,7 +3,7 @@ import {Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/route
 import {MatIconModule} from '@angular/material/icon';
 import {ProtemStore} from '../../store/protem.store';
 import {RelogioFlutuante} from '../../components/relogio-flutuante/relogio-flutuante';
-import {Logo} from '../../components/logo/logo';
+import {BrandLogo} from '../../components/brand-logo/brand-logo';
 import {AvisoApi} from '../../components/aviso-api/aviso-api';
 import {iniciais} from '../../lib/texto-utils';
 
@@ -22,7 +22,7 @@ interface NavGrupo {
 @Component({
   selector: 'app-responsavel-layout',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, MatIconModule, RelogioFlutuante, Logo, AvisoApi],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, MatIconModule, RelogioFlutuante, BrandLogo, AvisoApi],
   templateUrl: './responsavel-layout.html',
 })
 export class ResponsavelLayout {

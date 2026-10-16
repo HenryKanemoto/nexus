@@ -58,10 +58,10 @@
   <section class="card overflow-hidden" aria-labelledby="titulo-movimentacoes">
     <div class="card-header">
       <h2 id="titulo-movimentacoes" class="card-title">Movimentações</h2>
-      <span class="text-xs text-ink-muted">{{ registrosFiltrados().length }} registros · mais recentes primeiro</span>
+      <span class="text-xs text-text-muted">{{ registrosFiltrados().length }} registros · mais recentes primeiro</span>
     </div>
     @if (registrosFiltrados().length > 0) {
-      <ul class="divide-y divide-line">
+      <ul class="divide-y divide-border">
         @for (r of registrosFiltrados(); track r.id) {
           <li class="flex items-start gap-4 px-5 py-3.5 sm:px-6">
             <span class="flex size-9 shrink-0 items-center justify-center rounded-full {{ classeIcone(r.tipo) }}">
@@ -70,10 +70,10 @@
             <div class="min-w-0 flex-1">
               <p class="flex flex-wrap items-baseline justify-between gap-x-3">
                 <span class="font-medium">{{ r.titulo }}</span>
-                <span class="font-mono text-xs text-ink-muted">{{ formatarData(r.data) }}</span>
+                <span class="font-mono text-xs text-text-muted">{{ formatarData(r.data) }}</span>
               </p>
-              <p class="mt-0.5 text-sm text-ink-soft">{{ r.pessoa }} · {{ r.item }}</p>
-              <p class="mt-0.5 text-xs text-ink-muted">{{ r.detalhe }} · <span class="font-medium">{{ r.status }}</span></p>
+              <p class="mt-0.5 text-sm text-text-muted">{{ r.pessoa }} · {{ r.item }}</p>
+              <p class="mt-0.5 text-xs text-text-muted">{{ r.detalhe }} · <span class="font-medium">{{ r.status }}</span></p>
             </div>
           </li>
         }
@@ -87,7 +87,7 @@
     }
   </section>
 
-  <p class="text-xs text-ink-muted">
+  <p class="text-xs text-text-muted">
     O histórico é montado a partir dos registros que o sistema guarda. Alterações antigas de cadastro que não foram registradas
     não podem ser reconstruídas.
   </p>

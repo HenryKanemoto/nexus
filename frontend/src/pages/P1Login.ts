@@ -4,12 +4,12 @@ import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 import {RelogioFlutuante} from '../components/relogio-flutuante/relogio-flutuante';
 import {Usuario} from '../types/models';
-import {Logo} from '../components/logo/logo';
+import {BrandLogo} from '../components/brand-logo/brand-logo';
 
 @Component({
   selector: 'app-p1-login',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, MatIconModule, RelogioFlutuante, Logo],
+  imports: [RouterLink, MatIconModule, RelogioFlutuante, BrandLogo],
   templateUrl: './P1Login.html',
 })
 export class P1Login {

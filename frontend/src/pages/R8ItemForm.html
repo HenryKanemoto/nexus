@@ -37,7 +37,7 @@
       </div>
 
       <div class="field">
-        <label for="descricao" class="label">Descrição <span class="font-normal text-ink-muted">(opcional)</span></label>
+        <label for="descricao" class="label">Descrição <span class="font-normal text-text-muted">(opcional)</span></label>
         <textarea
           id="descricao"
           rows="4"
@@ -73,7 +73,7 @@
         </div>
       </div>
 
-      <div class="flex flex-col-reverse gap-3 border-t border-line pt-5 sm:flex-row sm:justify-end">
+      <div class="flex flex-col-reverse gap-3 border-t border-border pt-5 sm:flex-row sm:justify-end">
         <button type="button" (click)="cancelar()" class="btn btn-secondary">Cancelar</button>
         <button type="submit" class="btn btn-primary">
           <mat-icon class="icon-sm" svgIcon="save" />
@@ -85,19 +85,19 @@
     <!-- Foto -->
     <section class="card card-pad flex flex-col gap-3" aria-labelledby="titulo-foto">
       <p id="titulo-foto" class="label">Foto</p>
-      <div class="relative aspect-square overflow-hidden rounded-control border-2 border-dashed border-line-strong bg-paper">
+      <div class="relative aspect-square overflow-hidden rounded-control border-2 border-dashed border-border-input bg-bg">
         @if (fotoDataUrl()) {
           <img [src]="fotoDataUrl()" alt="Foto do item" class="size-full object-cover" />
           <button
             type="button"
             (click)="fotoDataUrl.set(null)"
-            class="btn-icon absolute right-2 top-2 bg-ink/70 text-white hover:bg-danger hover:text-white"
+            class="btn-icon absolute right-2 top-2 bg-brand-navy/70 text-white hover:bg-danger hover:text-white"
             aria-label="Remover foto"
           >
             <mat-icon class="icon-sm" svgIcon="close" />
           </button>
         } @else {
-          <div class="flex size-full flex-col items-center justify-center gap-2 text-ink-muted">
+          <div class="flex size-full flex-col items-center justify-center gap-2 text-text-muted">
             <mat-icon class="icon-xl opacity-50" svgIcon="add_photo_alternate" />
             <p class="text-xs">Nenhuma foto</p>
           </div>

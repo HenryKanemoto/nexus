@@ -35,28 +35,28 @@
         <app-item-thumb [item]="i" [tamanhoIcone]="56" class="aspect-square w-full shrink-0 self-start rounded-control sm:w-48" />
         <dl class="flex flex-1 flex-col gap-4">
           <div>
-            <dt class="text-xs text-ink-muted">Regras da categoria</dt>
+            <dt class="text-xs text-text-muted">Regras da categoria</dt>
             <dd class="mt-0.5">
               até {{ plural(cat?.prazoMaxDias, 'dia') }} por empréstimo · {{ plural(cat?.limitePorPessoa, 'item', 'itens') }} por pessoa
             </dd>
           </div>
           <div>
-            <dt class="text-xs text-ink-muted">Patrimônio</dt>
+            <dt class="text-xs text-text-muted">Patrimônio</dt>
             <dd class="mt-1"><span class="tag text-sm">{{ i.patrimonio }}</span></dd>
           </div>
           <div>
-            <dt class="text-xs text-ink-muted">Descrição</dt>
-            <dd class="mt-0.5 text-ink-soft">{{ i.descricao || 'Nenhuma descrição informada.' }}</dd>
+            <dt class="text-xs text-text-muted">Descrição</dt>
+            <dd class="mt-0.5 text-text-muted">{{ i.descricao || 'Nenhuma descrição informada.' }}</dd>
           </div>
         </dl>
       </section>
 
       <!-- Etiqueta com QR -->
       <section class="card card-pad flex flex-col items-center gap-4 text-center" aria-label="Etiqueta do item">
-        <app-qr-code [valor]="i.codigoQr || i.patrimonio" [tamanho]="176" class="rounded-control border border-line p-2" />
+        <app-qr-code [valor]="i.codigoQr || i.patrimonio" [tamanho]="176" class="rounded-control border border-border p-2" />
         <div>
           <p class="font-mono text-base font-semibold">{{ i.patrimonio }}</p>
-          <p class="font-mono text-xs text-ink-muted">{{ i.codigoQr }}</p>
+          <p class="font-mono text-xs text-text-muted">{{ i.codigoQr }}</p>
         </div>
         <button type="button" (click)="abrirModalEtiqueta()" class="btn btn-secondary btn-block">
           <mat-icon class="icon-sm" svgIcon="print" />
@@ -70,7 +70,7 @@
       <section class="card" aria-labelledby="titulo-historico">
         <div class="card-header">
           <h2 id="titulo-historico" class="card-title">Histórico de empréstimos</h2>
-          <span class="font-mono text-xs text-ink-muted">{{ historicoEmprestimos().length }}</span>
+          <span class="font-mono text-xs text-text-muted">{{ historicoEmprestimos().length }}</span>
         </div>
         @if (historicoEmprestimos().length > 0) {
           <div class="table-wrap">
@@ -90,7 +90,7 @@
                   <tr>
                     <td>
                       <p class="font-medium">{{ user?.nome || 'Usuário' }}</p>
-                      <p class="text-xs capitalize text-ink-muted">{{ user?.perfil }}</p>
+                      <p class="text-xs capitalize text-text-muted">{{ user?.perfil }}</p>
                     </td>
                     <td class="tabular-nums">{{ formatarData(emp.retiradoEm) }}</td>
                     <td class="tabular-nums">{{ emp.devolvidoEm ? formatarData(emp.devolvidoEm) : '—' }}</td>
@@ -103,7 +103,7 @@
             </table>
           </div>
         } @else {
-          <p class="px-6 py-10 text-center text-sm text-ink-muted">Este item ainda não foi emprestado.</p>
+          <p class="px-6 py-10 text-center text-sm text-text-muted">Este item ainda não foi emprestado.</p>
         }
       </section>
 
@@ -111,14 +111,14 @@
       <section class="card" aria-labelledby="titulo-ocorrencias">
         <div class="card-header">
           <h2 id="titulo-ocorrencias" class="card-title">Ocorrências</h2>
-          <span class="font-mono text-xs text-ink-muted">{{ ocorrenciasItem().length }}</span>
+          <span class="font-mono text-xs text-text-muted">{{ ocorrenciasItem().length }}</span>
         </div>
         @if (ocorrenciasItem().length > 0) {
-          <ul class="divide-y divide-line">
+          <ul class="divide-y divide-border">
             @for (oc of ocorrenciasItem(); track oc.id) {
               <li class="px-5 py-4">
                 <div class="flex items-center justify-between gap-2">
-                  <span class="font-mono text-xs text-ink-muted">{{ formatarData(oc.criadoEm) }}</span>
+                  <span class="font-mono text-xs text-text-muted">{{ formatarData(oc.criadoEm) }}</span>
                   <span
                     class="rounded-full px-2 py-0.5 text-xs font-medium"
                     [class]="oc.status === 'aberta' ? 'bg-maint-soft text-maint' : 'bg-ok-soft text-ok'"
@@ -131,7 +131,7 @@
             }
           </ul>
         } @else {
-          <p class="px-6 py-10 text-center text-sm text-ink-muted">Nenhuma ocorrência.</p>
+          <p class="px-6 py-10 text-center text-sm text-text-muted">Nenhuma ocorrência.</p>
         }
       </section>
     </div>
@@ -139,8 +139,8 @@
     <!-- Etiqueta para impressão: só ela aparece no papel (ver .area-impressao em styles.css) -->
     @if (modalEtiquetaAberta()) {
       <app-modal ariaLabel="Etiqueta para impressão" classe="items-center text-center" (fechar)="modalEtiquetaAberta.set(false)">
-          <div class="area-impressao w-64 rounded-control border-2 border-ink bg-white p-5 text-ink">
-            <p class="border-b-2 border-ink pb-2 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.16em]">Protem · acervo escolar</p>
+          <div class="area-impressao w-64 rounded-control border-2 border-brand-navy bg-white p-5 text-brand-navy">
+            <p class="border-b-2 border-brand-navy pb-2 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.16em]">Protem · acervo escolar</p>
             <app-qr-code [valor]="i.codigoQr || i.patrimonio" [tamanho]="160" class="mx-auto mt-4" />
             <p class="mt-3 font-display text-base font-semibold leading-tight">{{ i.nome }}</p>
             <p class="mt-1 font-mono text-lg font-semibold">{{ i.patrimonio }}</p>
@@ -159,7 +159,7 @@
       <app-modal rotulo="titulo-remover" (fechar)="confirmandoRemocao.set(false)">
           <div>
             <h3 id="titulo-remover" class="modal-title">Remover "{{ i.nome }}"?</h3>
-            <p class="mt-1 text-sm text-ink-soft">O item sai do acervo e do banco de dados. Isso não pode ser desfeito.</p>
+            <p class="mt-1 text-sm text-text-muted">O item sai do acervo e do banco de dados. Isso não pode ser desfeito.</p>
           </div>
           <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
             <button type="button" (click)="confirmandoRemocao.set(false)" class="btn btn-secondary">Cancelar</button>
@@ -170,7 +170,7 @@
   } @else {
     <div class="card empty">
       <mat-icon class="icon-xl" svgIcon="help_outline" />
-      <p class="empty-title">Equipamento não encontrado</p>
+      <p class="empty-title">Item não encontrado</p>
       <p class="empty-text">Esse item não existe no acervo.</p>
       <a routerLink="/painel/itens" class="btn btn-secondary btn-sm mt-3">Voltar para itens</a>
     </div>

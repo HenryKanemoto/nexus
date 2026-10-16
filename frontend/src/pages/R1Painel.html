@@ -19,10 +19,10 @@
 
   <!-- Indicadores + atalho para o leitor de QR -->
   <div class="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
-    <a routerLink="/painel/solicitacoes" class="stat group transition-colors hover:border-ink">
+    <a routerLink="/painel/solicitacoes" class="stat group transition-colors hover:border-primary">
       <span class="stat-label flex items-center justify-between">
         Pedidos pendentes
-        <mat-icon class="icon-sm text-ink-muted transition-transform group-hover:translate-x-0.5" svgIcon="arrow_forward" />
+        <mat-icon class="icon-sm text-text-muted transition-transform group-hover:translate-x-0.5" svgIcon="arrow_forward" />
       </span>
       <span class="stat-value">{{ store.solicitacoesPendentesCount() }}</span>
     </a>
@@ -30,15 +30,15 @@
     <button
       type="button"
       (click)="alternarFiltro('ativos')"
-      class="stat text-left transition-colors hover:border-ink"
-      [class.!border-ink]="filtroAtivo() === 'ativos'"
+      class="stat text-left transition-colors hover:border-primary"
+      [class.!border-primary]="filtroAtivo() === 'ativos'"
       [class.ring-1]="filtroAtivo() === 'ativos'"
-      [class.ring-ink]="filtroAtivo() === 'ativos'"
+      [class.ring-primary]="filtroAtivo() === 'ativos'"
       [attr.aria-pressed]="filtroAtivo() === 'ativos'"
     >
       <span class="stat-label flex items-center justify-between">
         Empréstimos ativos
-        <span class="hidden text-xs text-ink-muted sm:inline">{{ filtroAtivo() === 'ativos' ? 'ocultar' : 'ver lista' }}</span>
+        <span class="hidden text-xs text-text-muted sm:inline">{{ filtroAtivo() === 'ativos' ? 'ocultar' : 'ver lista' }}</span>
       </span>
       <span class="stat-value">{{ totalEmprestimosAtivos() }}</span>
     </button>
@@ -63,9 +63,9 @@
 
     <a
       routerLink="/painel/leitor"
-      class="group flex flex-col justify-between gap-3 rounded-card bg-ink p-5 text-white transition-colors hover:bg-ink-hover"
+      class="group flex flex-col justify-between gap-3 rounded-card bg-brand-navy p-5 text-white transition-colors hover:bg-sidebar-hover"
     >
-      <span class="flex size-10 items-center justify-center rounded-control bg-accent text-ink">
+      <span class="flex size-10 items-center justify-center rounded-control bg-brand-gold text-brand-navy">
         <mat-icon svgIcon="qr_code_scanner" />
       </span>
       <span>
@@ -79,7 +79,7 @@
   @if (filtroAtivo() === 'ativos') {
     <section class="card">
       <div class="card-header">
-        <h2 class="card-title">Empréstimos ativos <span class="font-mono text-sm text-ink-muted">{{ totalEmprestimosAtivos() }}</span></h2>
+        <h2 class="card-title">Empréstimos ativos <span class="font-mono text-sm text-text-muted">{{ totalEmprestimosAtivos() }}</span></h2>
         <button type="button" (click)="filtroAtivo.set('todos')" class="btn btn-ghost btn-sm">Fechar</button>
       </div>
       @if (listaEmprestimosAtivos().length > 0) {
@@ -102,11 +102,11 @@
                 <tr>
                   <td>
                     <p class="font-medium">{{ user?.nome }}</p>
-                    <p class="text-xs capitalize text-ink-muted">{{ user?.perfil }}</p>
+                    <p class="text-xs capitalize text-text-muted">{{ user?.perfil }}</p>
                   </td>
                   <td>
                     <p>{{ it?.nome }}</p>
-                    <p class="font-mono text-xs text-ink-muted">{{ it?.patrimonio }}</p>
+                    <p class="font-mono text-xs text-text-muted">{{ it?.patrimonio }}</p>
                   </td>
                   <td class="tabular-nums">{{ formatarData(emp.retiradoEm) }}</td>
                   <td class="tabular-nums">{{ formatarData(emp.devolucaoPrevista) }}</td>
@@ -114,7 +114,7 @@
                     @if (emp.diasAtraso > 0) {
                       <app-status-badge status="atrasado" />
                     } @else {
-                      <span class="text-sm text-ink-soft">No prazo</span>
+                      <span class="text-sm text-text-muted">No prazo</span>
                     }
                   </td>
                   <td class="text-right">
@@ -126,7 +126,7 @@
           </table>
         </div>
       } @else {
-        <p class="px-6 py-10 text-center text-sm text-ink-muted">Nenhum empréstimo ativo.</p>
+        <p class="px-6 py-10 text-center text-sm text-text-muted">Nenhum empréstimo ativo.</p>
       }
     </section>
   }
@@ -140,18 +140,18 @@
             Retiradas de hoje
             <span class="count">{{ listaAprovadosHoje().length }}</span>
           </h2>
-          <p class="text-xs text-ink-muted">Expiram no fim do dia se não forem retiradas.</p>
+          <p class="text-xs text-text-muted">Expiram no fim do dia se não forem retiradas.</p>
         </div>
       </div>
       @if (listaAprovadosHoje().length > 0) {
-        <ul class="divide-y divide-line">
+        <ul class="divide-y divide-border">
           @for (solic of listaAprovadosHoje(); track solic.id) {
             @let it = getItem(solic.itemId);
             @let user = getUsuario(solic.solicitanteId);
             <li class="flex items-center gap-4 px-5 py-3.5 sm:px-6">
               <div class="min-w-0 flex-1">
                 <p class="truncate font-medium">{{ it?.nome }}</p>
-                <p class="truncate text-xs text-ink-muted">
+                <p class="truncate text-xs text-text-muted">
                   {{ user?.nome }} · aprovado às {{ formatarHora(solic.avaliadoEm || solic.criadoEm) }}
                 </p>
               </div>
@@ -180,21 +180,21 @@
               {{ listaAtrasados().length }}
             </span>
           </h2>
-          <p class="text-xs text-ink-muted">Devoluções que passaram do prazo.</p>
+          <p class="text-xs text-text-muted">Devoluções que passaram do prazo.</p>
         </div>
         @if (filtroAtivo() === 'atrasados') {
           <button type="button" (click)="filtroAtivo.set('todos')" class="btn btn-ghost btn-sm">Limpar destaque</button>
         }
       </div>
       @if (listaAtrasados().length > 0) {
-        <ul class="divide-y divide-line">
+        <ul class="divide-y divide-border">
           @for (emp of listaAtrasados(); track emp.id) {
             @let it = getItem(emp.itemId);
             @let user = getUsuario(emp.usuarioId);
             <li class="flex items-center gap-4 px-5 py-3.5 sm:px-6">
               <div class="min-w-0 flex-1">
                 <p class="truncate font-medium">{{ it?.nome }}</p>
-                <p class="truncate text-xs text-ink-muted">{{ user?.nome }} · {{ user?.matricula }}</p>
+                <p class="truncate text-xs text-text-muted">{{ user?.nome }} · {{ user?.matricula }}</p>
               </div>
               <span class="shrink-0 font-mono text-sm font-semibold text-danger">{{ plural(emp.diasAtraso, 'dia') }}</span>
               <a [routerLink]="['/painel/devolucao', emp.itemId]" class="btn btn-secondary btn-sm shrink-0">Devolver</a>

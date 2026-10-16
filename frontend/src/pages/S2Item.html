@@ -18,28 +18,28 @@
           <p class="page-eyebrow">{{ cat?.nome || 'Geral' }}</p>
           <h1 class="page-title mt-2">{{ i.nome }}</h1>
           @if (i.descricao) {
-            <p class="mt-3 text-base text-ink-soft">{{ i.descricao }}</p>
+            <p class="mt-3 text-base text-text-muted">{{ i.descricao }}</p>
           }
         </div>
 
-        <dl class="grid grid-cols-2 gap-px overflow-hidden rounded-card border border-line bg-line">
+        <dl class="grid grid-cols-2 gap-px overflow-hidden rounded-card border border-border bg-border">
           <div class="bg-surface p-4">
-            <dt class="text-xs text-ink-muted">Prazo máximo</dt>
+            <dt class="text-xs text-text-muted">Prazo máximo</dt>
             <dd class="mt-1 font-display text-xl font-semibold">{{ plural(cat?.prazoMaxDias, 'dia') }}</dd>
           </div>
           <div class="bg-surface p-4">
-            <dt class="text-xs text-ink-muted">Seu limite na categoria</dt>
+            <dt class="text-xs text-text-muted">Seu limite na categoria</dt>
             <dd class="mt-1 font-display text-xl font-semibold" [class.text-danger]="perm.itensAtuais >= perm.limiteMax">
               {{ perm.itensAtuais }} de {{ perm.limiteMax }}
             </dd>
           </div>
           <div class="col-span-2 flex items-center gap-4 bg-surface p-4">
-            <app-qr-code [valor]="i.codigoQr" [tamanho]="64" class="rounded-md border border-line p-1" />
+            <app-qr-code [valor]="i.codigoQr" [tamanho]="64" class="rounded-md border border-border p-1" />
             <div class="min-w-0">
-              <dt class="text-xs text-ink-muted">Patrimônio</dt>
+              <dt class="text-xs text-text-muted">Patrimônio</dt>
               <dd class="mt-1 flex flex-wrap items-center gap-2">
                 <span class="tag">{{ i.patrimonio }}</span>
-                <span class="font-mono text-xs text-ink-muted">QR {{ i.codigoQr }}</span>
+                <span class="font-mono text-xs text-text-muted">QR {{ i.codigoQr }}</span>
               </dd>
             </div>
           </div>
@@ -51,7 +51,7 @@
               Pedir emprestado
               <mat-icon class="icon-sm" svgIcon="arrow_forward" />
             </a>
-            <p class="text-sm text-ink-muted">O responsável analisa o pedido. Depois de aprovado, a retirada é no mesmo dia.</p>
+            <p class="text-sm text-text-muted">O responsável analisa o pedido. Depois de aprovado, a retirada é no mesmo dia.</p>
           } @else {
             <button type="button" disabled class="btn btn-primary btn-lg sm:self-start">
               <mat-icon class="icon-sm" svgIcon="lock" />
@@ -69,7 +69,7 @@
     <div class="card empty">
       <mat-icon class="icon-xl" svgIcon="help_outline" />
       <p class="empty-title">Item não encontrado</p>
-      <p class="empty-text">Esse equipamento não existe ou foi removido do acervo.</p>
+      <p class="empty-text">Esse item não existe ou foi removido do acervo.</p>
       <a routerLink="/catalogo" class="btn btn-secondary btn-sm mt-3">Voltar ao catálogo</a>
     </div>
   }

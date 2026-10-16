@@ -48,8 +48,8 @@
         class="inline-flex h-9 shrink-0 items-center gap-2 rounded-full border px-4 text-sm font-medium transition-colors"
         [class]="
           categoriaSelecionada() === opcao.id
-            ? 'border-ink bg-ink text-white'
-            : 'border-line-strong bg-surface text-ink-soft hover:border-ink hover:text-ink'
+            ? 'border-primary bg-brand-soft text-primary-strong'
+            : 'border-border bg-surface text-text-muted hover:border-primary hover:text-text'
         "
         [attr.aria-pressed]="categoriaSelecionada() === opcao.id"
       >
@@ -66,16 +66,16 @@
         <li>
           <a
             [routerLink]="['/item', item.id]"
-            class="card group flex h-full flex-col overflow-hidden transition-colors hover:border-ink"
+            class="card group flex h-full flex-col overflow-hidden transition-colors hover:border-primary"
           >
             <div class="relative">
-              <app-item-thumb [item]="item" [tamanhoIcone]="44" class="aspect-[16/10] transition-colors group-hover:bg-accent-soft" />
+              <app-item-thumb [item]="item" [tamanhoIcone]="44" class="aspect-[16/10] transition-colors group-hover:bg-brand-soft" />
               <span class="tag absolute left-3 top-3 bg-surface">{{ item.patrimonio }}</span>
             </div>
             <div class="flex flex-1 flex-col gap-1 p-4">
               <h2 class="font-sans text-[0.9375rem] font-semibold leading-snug tracking-normal">{{ item.nome }}</h2>
-              <p class="text-sm text-ink-muted">{{ cat?.nome || 'Geral' }}</p>
-              <p class="mt-auto flex items-center gap-1.5 pt-3 text-xs text-ink-soft">
+              <p class="text-sm text-text-muted">{{ cat?.nome || 'Geral' }}</p>
+              <p class="mt-auto flex items-center gap-1.5 pt-3 text-xs text-text-muted">
                 <mat-icon class="icon-xs" svgIcon="schedule" />
                 até {{ plural(cat?.prazoMaxDias, 'dia') }} de empréstimo
               </p>

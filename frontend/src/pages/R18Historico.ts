@@ -97,7 +97,7 @@ export class R18Historico {
   contarEmprestimosDevolucoes() { return this.registros().filter(r => r.tipo === 'emprestimo' || r.tipo === 'devolucao').length; }
   formatarData(iso: string) { return iso ? formatDateShort(iso) : 'Data não registrada'; }
   icone(tipo: Exclude<TipoHistorico, 'todos'>) { return ({solicitacao:'assignment', emprestimo:'outbox', devolucao:'move_to_inbox', manutencao:'build', cadastro:'inventory_2'})[tipo]; }
-  classeIcone(tipo: Exclude<TipoHistorico, 'todos'>) { return ({solicitacao:'bg-info-soft text-info', emprestimo:'bg-accent-soft text-warn', devolucao:'bg-ok-soft text-ok', manutencao:'bg-maint-soft text-maint', cadastro:'bg-sunken text-ink-soft'})[tipo]; }
+  classeIcone(tipo: Exclude<TipoHistorico, 'todos'>) { return ({solicitacao:'bg-info-soft text-info', emprestimo:'bg-brand-soft text-warn', devolucao:'bg-ok-soft text-ok', manutencao:'bg-maint-soft text-maint', cadastro:'bg-brand-soft text-text-muted'})[tipo]; }
   rotuloStatusSolicitacao(status: string) { return ({pendente:'Pendente', aprovada:'Aprovada', recusada:'Recusada', expirada:'Expirada', concluida:'Concluída'} as Record<string,string>)[status] || status; }
   limparFiltros() { this.tipo.set('todos'); this.busca.set(''); this.dataInicio.set(''); this.dataFim.set(''); }
 }

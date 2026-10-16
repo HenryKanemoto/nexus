@@ -26,17 +26,17 @@
           </div>
         </div>
 
-        <dl class="grid border-t border-line sm:grid-cols-2">
-          <div class="flex items-center gap-3 border-b border-line p-5 sm:border-b-0 sm:border-r sm:p-6">
+        <dl class="grid border-t border-border sm:grid-cols-2">
+          <div class="flex items-center gap-3 border-b border-border p-5 sm:border-b-0 sm:border-r sm:p-6">
             <span class="avatar size-10 text-sm">{{ iniciais(user?.nome) }}</span>
             <div class="min-w-0">
-              <dt class="text-xs text-ink-muted">Solicitante</dt>
+              <dt class="text-xs text-text-muted">Solicitante</dt>
               <dd class="truncate font-medium">{{ user?.nome }}</dd>
-              <dd class="text-xs capitalize text-ink-muted">{{ user?.perfil }} · <span class="font-mono">{{ user?.matricula }}</span></dd>
+              <dd class="text-xs capitalize text-text-muted">{{ user?.perfil }} · <span class="font-mono">{{ user?.matricula }}</span></dd>
             </div>
           </div>
           <div class="p-5 sm:p-6">
-            <dt class="text-xs text-ink-muted">Devolver até</dt>
+            <dt class="text-xs text-text-muted">Devolver até</dt>
             <dd class="mt-1 font-display text-2xl font-semibold">{{ formatarData(solic.devolucaoDesejada) }}</dd>
           </div>
         </dl>

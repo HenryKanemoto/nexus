@@ -1,27 +1,27 @@
-<div class="min-h-screen bg-paper">
+<div class="min-h-screen bg-bg">
   <!-- Fundo escuro atrás do menu no celular -->
   @if (drawerAberto()) {
-    <div class="fixed inset-0 z-40 bg-ink/40 lg:hidden" (click)="fecharDrawer()" aria-hidden="true"></div>
+    <div class="fixed inset-0 z-40 bg-brand-navy/40 lg:hidden" (click)="fecharDrawer()" aria-hidden="true"></div>
   }
 
   <!-- Menu lateral: gaveta no celular, fixo a partir de lg -->
   <aside
-    class="fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-line bg-surface transition-transform duration-200 lg:translate-x-0"
+    class="fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-brand-navy text-white transition-transform duration-200 lg:translate-x-0"
     [class.-translate-x-full]="!drawerAberto()"
     aria-label="Menu principal"
   >
     <div class="flex h-16 shrink-0 items-center justify-between px-5">
       <a routerLink="/painel" (click)="fecharDrawer()" aria-label="Protem, ir para o painel">
-        <app-logo [tamanho]="30" />
+        <app-brand-logo [tamanho]="30" [escuro]="true" />
       </a>
-      <button type="button" class="btn-icon lg:hidden" (click)="fecharDrawer()" aria-label="Fechar menu">
+      <button type="button" class="btn-icon btn-icon-escuro lg:hidden" (click)="fecharDrawer()" aria-label="Fechar menu">
         <mat-icon svgIcon="close" />
       </button>
     </div>
 
     <nav class="flex-1 overflow-y-auto px-3 pb-4">
       @for (grupo of menu; track grupo.titulo) {
-        <p class="px-3 pb-1.5 pt-5 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-ink-muted">
+        <p class="px-3 pb-1.5 pt-5 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-white/60">
           {{ grupo.titulo }}
         </p>
         <ul class="flex flex-col gap-0.5">
@@ -30,11 +30,13 @@
               <a
                 [routerLink]="item.rota"
                 (click)="fecharDrawer()"
-                routerLinkActive="is-active bg-ink !text-white"
+                routerLinkActive="is-active bg-sidebar-hover !text-white"
                 [routerLinkActiveOptions]="{exact: item.rota === '/painel'}"
-                class="group flex h-9 items-center gap-3 rounded-control px-3 text-sm font-medium text-ink-soft transition-colors hover:bg-sunken hover:text-ink"
+                class="group relative flex h-9 items-center gap-3 rounded-control px-3 text-sm font-medium text-white/80 transition-colors hover:bg-sidebar-hover hover:text-white"
               >
-                <mat-icon class="icon-sm text-ink-muted group-[.is-active]:text-accent" [svgIcon]="item.icone" />
+                <!-- Marcador dourado do item ativo -->
+                <span class="absolute inset-y-1.5 left-0 hidden w-[3px] rounded-full bg-brand-gold group-[.is-active]:block"></span>
+                <mat-icon class="icon-sm text-white/60 group-[.is-active]:text-brand-gold" [svgIcon]="item.icone" />
                 <span class="flex-1">{{ item.rotulo }}</span>
                 @if (item.badge && item.badge() > 0) {
                   <span class="count">{{ item.badge() }}</span>
@@ -46,13 +48,13 @@
       }
     </nav>
 
-    <div class="flex shrink-0 items-center gap-3 border-t border-line p-4">
-      <span class="avatar size-9 text-sm">{{ iniciais() }}</span>
+    <div class="flex shrink-0 items-center gap-3 border-t border-white/10 p-4">
+      <span class="avatar size-9 !bg-brand-soft text-sm !text-brand-navy">{{ iniciais() }}</span>
       <div class="min-w-0 flex-1">
         <p class="truncate text-sm font-medium">{{ store.usuarioLogado()?.nome }}</p>
-        <p class="text-xs text-ink-muted">Responsável</p>
+        <p class="text-xs text-white/60">Responsável</p>
       </div>
-      <button type="button" class="btn-icon" (click)="sair()" aria-label="Sair" title="Sair">
+      <button type="button" class="btn-icon btn-icon-escuro" (click)="sair()" aria-label="Sair" title="Sair">
         <mat-icon class="icon-sm" svgIcon="logout" />
       </button>
     </div>
@@ -60,26 +62,26 @@
 
   <div class="flex min-h-screen min-w-0 flex-col lg:pl-64">
     <header
-      class="sticky top-0 z-30 flex h-16 items-center justify-between gap-3 border-b border-line bg-paper/90 px-4 backdrop-blur sm:px-6 lg:px-10"
+      class="sticky top-0 z-30 flex h-16 items-center justify-between gap-3 bg-brand-navy px-4 text-white sm:px-6 lg:px-10"
     >
       <div class="flex min-w-0 items-center gap-2">
-        <button type="button" class="btn-icon -ml-2 lg:hidden" (click)="toggleDrawer()" aria-label="Abrir menu">
+        <button type="button" class="btn-icon btn-icon-escuro -ml-2 lg:hidden" (click)="toggleDrawer()" aria-label="Abrir menu">
           <mat-icon svgIcon="menu" />
         </button>
-        <a routerLink="/painel/configuracoes" class="tag hidden gap-1.5 hover:border-ink sm:inline-flex" title="Política de atraso em vigor">
-          <span class="size-1.5 rounded-full bg-accent-strong"></span>
+        <a routerLink="/painel/configuracoes" class="hidden items-center gap-1.5 rounded-md border border-white/25 px-1.5 py-0.5 font-mono text-xs text-white/80 transition-colors hover:border-white/60 hover:text-white sm:inline-flex" title="Política de atraso em vigor">
+          <span class="size-1.5 rounded-full bg-brand-gold"></span>
           política {{ store.configuracao().politicaAtraso }}
         </a>
       </div>
 
       <div class="flex items-center gap-1 sm:gap-2">
-        <a routerLink="/painel/notificacoes" class="btn-icon relative" aria-label="Notificações">
+        <a routerLink="/painel/notificacoes" class="btn-icon btn-icon-escuro relative" aria-label="Notificações">
           <mat-icon svgIcon="notifications_none" />
           @if (store.totalNaoLidas() > 0) {
             <span class="count absolute -right-0.5 -top-0.5 h-4 min-w-4 px-1 text-[0.625rem]">{{ store.totalNaoLidas() }}</span>
           }
         </a>
-        <a routerLink="/painel/leitor" class="btn btn-accent btn-sm sm:h-9">
+        <a routerLink="/painel/leitor" class="btn btn-primary btn-sm sm:h-9">
           <mat-icon class="icon-sm" svgIcon="qr_code_scanner" />
           <span class="hidden sm:inline">Escanear</span>
         </a>
