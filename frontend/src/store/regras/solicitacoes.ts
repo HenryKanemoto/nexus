@@ -1,6 +1,6 @@
 import {addDays, differenceInHours, formatDateShort, parseDate} from '../../lib/date-utils';
 import {Item, Solicitacao, StatusItem, Usuario} from '../../types/models';
-import {NexusState, ResultadoAcao, Transicao, novaNotificacao, responsaveis} from '../estado';
+import {ProtemState, ResultadoAcao, Transicao, novaNotificacao, responsaveis} from '../estado';
 
 export interface PermissaoSolicitacao {
   pode: boolean;
@@ -9,7 +9,7 @@ export interface PermissaoSolicitacao {
   limiteMax: number;
 }
 
-function mudarStatusItem(s: NexusState, itemId: string, status: StatusItem): Item[] {
+function mudarStatusItem(s: ProtemState, itemId: string, status: StatusItem): Item[] {
   return s.itens.map((i) => (i.id === itemId ? {...i, status} : i));
 }
 
@@ -28,7 +28,7 @@ function bloqueioDaConta(usuario: Usuario): string | null {
  * RN03: Conta quantos itens daquela categoria o usuário possui atualmente em
  * solicitado, reservado, emprestado ou atrasado.
  */
-export function contarItensAtivosDoUsuarioNaCategoria(s: NexusState, categoriaId: string, usuarioId: string | null): number {
+export function contarItensAtivosDoUsuarioNaCategoria(s: ProtemState, categoriaId: string, usuarioId: string | null): number {
   if (!usuarioId) return 0;
   const daCategoria = (itemId: string) => s.itens.find((i) => i.id === itemId)?.categoriaId === categoriaId;
 
@@ -49,7 +49,7 @@ export function contarItensAtivosDoUsuarioNaCategoria(s: NexusState, categoriaId
  * Valida se o usuário pode solicitar um item de uma determinada categoria
  * considerando limite (RN03) e status da conta (bloqueada/suspensa/pendente).
  */
-export function verificarPermissaoSolicitacao(s: NexusState, categoriaId: string, usuarioId: string | null): PermissaoSolicitacao {
+export function verificarPermissaoSolicitacao(s: ProtemState, categoriaId: string, usuarioId: string | null): PermissaoSolicitacao {
   const usuario = s.usuarios.find((u) => u.id === usuarioId);
   const categoria = s.categorias.find((c) => c.id === categoriaId);
 
@@ -82,7 +82,7 @@ export function verificarPermissaoSolicitacao(s: NexusState, categoriaId: string
  * Conta bloqueada ou suspensa ou pendente NÃO pode solicitar.
  */
 export function solicitarEmprestimo(
-  s: NexusState,
+  s: ProtemState,
   itemId: string,
   solicitanteId: string,
   devolucaoDesejada: string,
@@ -160,7 +160,7 @@ export function solicitarEmprestimo(
  * RN01 & RN04: Aprovado o pedido, a retirada deve acontecer no mesmo dia;
  * se o dia terminar sem retirada, expira. Item passa para 'reservado'.
  */
-export function aprovarPedido(s: NexusState, solicitacaoId: string, responsavelId: string): Transicao<ResultadoAcao> {
+export function aprovarPedido(s: ProtemState, solicitacaoId: string, responsavelId: string): Transicao<ResultadoAcao> {
   const solic = s.solicitacoes.find((sol) => sol.id === solicitacaoId);
   if (!solic) return {estado: s, resultado: {sucesso: false, mensagem: 'Solicitação não encontrada.'}};
   if (solic.status !== 'pendente') return {estado: s, resultado: {sucesso: false, mensagem: 'Solicitação já foi avaliada.'}};
@@ -191,7 +191,7 @@ export function aprovarPedido(s: NexusState, solicitacaoId: string, responsavelI
 
 /** RN09: Se o pedido for recusado, item volta a "disponivel". */
 export function recusarPedido(
-  s: NexusState,
+  s: ProtemState,
   solicitacaoId: string,
   responsavelId: string,
   motivo?: string,
@@ -228,12 +228,12 @@ export function recusarPedido(
  * RN10: Pedido pendente não expira. Depois de 2 horas sem análise,
  * o solicitante pode enviar um lembrete ao responsável, uma única vez por pedido.
  */
-export function podeEnviarLembrete(s: NexusState, solicitacao: Solicitacao): boolean {
+export function podeEnviarLembrete(s: ProtemState, solicitacao: Solicitacao): boolean {
   if (solicitacao.status !== 'pendente' || solicitacao.lembreteEnviadoEm) return false;
   return differenceInHours(parseDate(s.agora), parseDate(solicitacao.criadoEm)) >= 2;
 }
 
-export function enviarLembrete(s: NexusState, solicitacaoId: string): Transicao<ResultadoAcao> {
+export function enviarLembrete(s: ProtemState, solicitacaoId: string): Transicao<ResultadoAcao> {
   const solic = s.solicitacoes.find((sol) => sol.id === solicitacaoId);
   if (!solic) return {estado: s, resultado: {sucesso: false, mensagem: 'Solicitação não encontrada.'}};
 

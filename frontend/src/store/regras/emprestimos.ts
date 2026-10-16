@@ -1,6 +1,6 @@
 import {addDays, calculateDiasAtraso, formatDateShort, parseDate} from '../../lib/date-utils';
 import {Emprestimo, Ocorrencia, StatusItem, StatusUsuario, Usuario} from '../../types/models';
-import {NexusState, ResultadoAcao, Transicao, novaNotificacao} from '../estado';
+import {ProtemState, ResultadoAcao, Transicao, novaNotificacao} from '../estado';
 
 export type ResultadoRetirada = ResultadoAcao & {emprestimoId?: string; itemId?: string};
 
@@ -9,7 +9,7 @@ export type ResultadoRetirada = ResultadoAcao & {emprestimoId?: string; itemId?:
  * o prazo começa a contar nesse momento.
  */
 export function registrarRetiradaPorQr(
-  s: NexusState,
+  s: ProtemState,
   codigoQrOuPatrimonio: string,
   responsavelId: string,
 ): Transicao<ResultadoRetirada> {
@@ -24,7 +24,7 @@ export function registrarRetiradaPorQr(
   return registrarRetirada(s, item.id, responsavelId);
 }
 
-export function registrarRetirada(s: NexusState, itemId: string, responsavelId: string): Transicao<ResultadoRetirada> {
+export function registrarRetirada(s: ProtemState, itemId: string, responsavelId: string): Transicao<ResultadoRetirada> {
   const item = s.itens.find((i) => i.id === itemId);
   if (!item) return {estado: s, resultado: {sucesso: false, mensagem: 'Item não encontrado.'}};
 
@@ -80,7 +80,7 @@ export function registrarRetirada(s: NexusState, itemId: string, responsavelId: 
  * RN07: Item devolvido com defeito vai para manutenção, sai do catálogo e gera ocorrência.
  */
 export function registrarDevolucao(
-  s: NexusState,
+  s: ProtemState,
   emprestimoId: string,
   comDefeito: boolean,
   descricaoDefeito?: string,
@@ -131,7 +131,7 @@ export function registrarDevolucao(
 
 /** RN06: decide o que acontece com a conta de quem devolveu, conforme a política configurada. */
 function aplicarPoliticaAtraso(
-  s: NexusState,
+  s: ProtemState,
   usuario: Usuario | undefined,
   emprestimos: Emprestimo[],
   diasAtraso: number,

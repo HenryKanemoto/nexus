@@ -8,7 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { NexusStore } from '../store/nexus.store';
+import { ProtemStore } from '../store/protem.store';
 import { MatIconModule } from '@angular/material/icon';
 import { Html5Qrcode } from 'html5-qrcode';
 import { StatusBadge } from '../components/status-badge/status-badge';
@@ -21,7 +21,7 @@ import { StatusItem } from '../types/models';
   templateUrl: './R4Leitor.html',
 })
 export class R4Leitor {
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
 

@@ -1,5 +1,5 @@
 import {Injectable, signal} from '@angular/core';
-import {NexusState} from '../estado';
+import {ProtemState} from '../estado';
 import {carregarEstado, salvarEstado} from '../persistencia';
 import {FonteDeDados, StatusConexao} from './fonte-de-dados';
 
@@ -17,7 +17,7 @@ export class FonteLocal implements FonteDeDados {
   /** Evita repetir o aviso de cota a cada clique depois que a pessoa fechou. */
   private avisouCota = false;
 
-  carregar(): NexusState {
+  carregar(): ProtemState {
     return carregarEstado().estado;
   }
 
@@ -25,7 +25,7 @@ export class FonteLocal implements FonteDeDados {
     // Nada a sincronizar
   }
 
-  salvar(_antes: NexusState, depois: NexusState) {
+  salvar(_antes: ProtemState, depois: ProtemState) {
     const resultado = salvarEstado(depois);
     if (resultado === 'ok') {
       this.avisouCota = false;

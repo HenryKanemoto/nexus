@@ -3,7 +3,7 @@ import {Injectable, inject, signal} from '@angular/core';
 import {Observable} from 'rxjs';
 import {ItensApi} from '../../services/itens-api.service';
 import {Item} from '../../types/models';
-import {NexusState} from '../estado';
+import {ProtemState} from '../estado';
 import {carregarEstado, salvarEstado} from '../persistencia';
 import {DonoDoEstado, FonteDeDados, StatusConexao} from './fonte-de-dados';
 
@@ -28,7 +28,7 @@ export class FonteApi implements FonteDeDados {
   private dono: DonoDoEstado | null = null;
   private enviarSeed = false;
 
-  carregar(): NexusState {
+  carregar(): ProtemState {
     const {estado, doSeed} = carregarEstado();
     this.enviarSeed = doSeed;
     return estado;
@@ -39,7 +39,7 @@ export class FonteApi implements FonteDeDados {
     this.carregarItensDaApi();
   }
 
-  salvar(antes: NexusState, depois: NexusState) {
+  salvar(antes: ProtemState, depois: ProtemState) {
     salvarEstado(depois);
     this.sincronizarItens(antes.itens, depois.itens);
   }

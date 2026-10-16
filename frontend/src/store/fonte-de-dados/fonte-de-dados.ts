@@ -1,6 +1,6 @@
 import {Signal} from '@angular/core';
 import {Item} from '../../types/models';
-import {NexusState} from '../estado';
+import {ProtemState} from '../estado';
 
 /**
  * De onde vêm e para onde vão os dados do app.
@@ -9,7 +9,7 @@ import {NexusState} from '../estado';
  * - api: igual ao local, mas os itens do acervo também são gravados no back-end (/api/item).
  *
  * As regras de negócio rodam no navegador nos dois modos (store/regras); a fonte só
- * carrega, grava e sincroniza. As telas falam apenas com o NexusStore e não sabem qual
+ * carrega, grava e sincroniza. As telas falam apenas com o ProtemStore e não sabem qual
  * fonte está em uso.
  */
 export type ModoDados = 'local' | 'api';
@@ -19,7 +19,7 @@ export type StatusConexao = 'local' | 'conectando' | 'online' | 'offline';
 
 /** O que a fonte precisa do store para sincronizar. */
 export interface DonoDoEstado {
-  estado(): NexusState;
+  estado(): ProtemState;
   /** Troca os itens pelos que vieram do servidor, sem reenviá-los. */
   receberItens(itens: Item[]): void;
 }
@@ -31,11 +31,11 @@ export interface FonteDeDados {
   readonly erro: Signal<string | null>;
 
   /** Estado inicial: o que estava salvo, ou o seed de demonstração. */
-  carregar(): NexusState;
+  carregar(): ProtemState;
   /** Chamado uma vez pelo store, depois que o estado inicial já passou pela rotina automática. */
   conectar(dono: DonoDoEstado): void;
   /** Grava o novo estado. Recebe o anterior para saber o que mudou. */
-  salvar(antes: NexusState, depois: NexusState): void;
+  salvar(antes: ProtemState, depois: ProtemState): void;
   reconectar(): void;
   dispensarErro(): void;
 }

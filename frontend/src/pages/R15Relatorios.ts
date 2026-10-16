@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
-import {NexusStore} from '../store/nexus.store';
+import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 import {parseDate} from '../lib/date-utils';
 import {plural} from '../lib/categoria-utils';
@@ -22,7 +22,7 @@ interface ItemRanking {
   templateUrl: './R15Relatorios.html',
 })
 export class R15Relatorios {
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
   private readonly router = inject(Router);
 
   readonly periodoSelecionado = signal<PeriodoOpcao>('30d');

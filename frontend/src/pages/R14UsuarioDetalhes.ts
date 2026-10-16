@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, computed, inject} from '@angular/core';
 import {ActivatedRoute, RouterLink} from '@angular/router';
-import {NexusStore} from '../store/nexus.store';
+import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 import {StatusBadge} from '../components/status-badge/status-badge';
 import {formatDateShort} from '../lib/date-utils';
@@ -16,7 +16,7 @@ import {plural} from '../lib/categoria-utils';
 })
 export class R14UsuarioDetalhes {
   private readonly route = inject(ActivatedRoute);
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
 
   readonly rotuloPerfil = rotuloPerfil;
 

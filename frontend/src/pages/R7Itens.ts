@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
 import {iconeCategoria} from '../lib/categoria-utils';
 import {Router, RouterLink} from '@angular/router';
-import {NexusStore} from '../store/nexus.store';
+import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 import {StatusBadge} from '../components/status-badge/status-badge';
 import {ItemThumb} from '../components/item-thumb/item-thumb';
@@ -13,7 +13,7 @@ import {ItemThumb} from '../components/item-thumb/item-thumb';
   templateUrl: './R7Itens.html',
 })
 export class R7Itens {
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
   private readonly router = inject(Router);
 
   readonly termoBusca = signal('');

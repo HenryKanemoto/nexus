@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
 import {Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {MatIconModule} from '@angular/material/icon';
-import {NexusStore} from '../../store/nexus.store';
+import {ProtemStore} from '../../store/protem.store';
 import {RelogioFlutuante} from '../../components/relogio-flutuante/relogio-flutuante';
 import {Logo} from '../../components/logo/logo';
 import {AvisoApi} from '../../components/aviso-api/aviso-api';
@@ -14,7 +14,7 @@ import {iniciais, rotuloPerfil} from '../../lib/texto-utils';
   templateUrl: './solicitante-layout.html',
 })
 export class SolicitanteLayout {
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
   private readonly router = inject(Router);
 
   readonly menuAberto = signal(false);

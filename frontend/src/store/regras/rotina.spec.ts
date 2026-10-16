@@ -1,13 +1,13 @@
 import {PoliticaAtraso} from '../../types/models';
-import {NexusState} from '../estado';
+import {ProtemState} from '../estado';
 import {buscar, em, emprestimo, estadoDeTeste, solicitacao, usuario} from './estado-de-teste';
 import {executarRotinaAutomatica} from './rotina';
 
-function rodarEm(s: NexusState, iso: string): NexusState {
+function rodarEm(s: ProtemState, iso: string): ProtemState {
   return executarRotinaAutomatica({...s, agora: iso}, new Date(iso));
 }
 
-function comEmprestimo(politica: PoliticaAtraso, devolucaoPrevista = '2026-10-15'): NexusState {
+function comEmprestimo(politica: PoliticaAtraso, devolucaoPrevista = '2026-10-15'): ProtemState {
   const s = estadoDeTeste({
     configuracao: {politicaAtraso: politica},
     emprestimos: [emprestimo('e', 'a1', {devolucaoPrevista})],
@@ -18,7 +18,7 @@ function comEmprestimo(politica: PoliticaAtraso, devolucaoPrevista = '2026-10-15
 
 describe('rotina automática', () => {
   describe('RN04: pedido aprovado e não retirado', () => {
-    function comAprovado(): NexusState {
+    function comAprovado(): ProtemState {
       const s = estadoDeTeste({
         solicitacoes: [solicitacao('p', 'a1', {status: 'aprovada', avaliadoEm: em(2026, 10, 15, 9, 0)})],
       });

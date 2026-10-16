@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
-import {NexusStore} from '../store/nexus.store';
+import {ProtemStore} from '../store/protem.store';
 import {formatDateShort} from '../lib/date-utils';
 
 type TipoHistorico = 'todos' | 'solicitacao' | 'emprestimo' | 'devolucao' | 'manutencao' | 'cadastro';
@@ -22,7 +22,7 @@ interface RegistroHistorico {
   templateUrl: './R18Historico.html',
 })
 export class R18Historico {
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
   readonly tipo = signal<TipoHistorico>('todos');
   readonly busca = signal('');
   readonly dataInicio = signal('');

@@ -1,5 +1,5 @@
 import {StatusUsuario, Usuario} from '../../types/models';
-import {NexusState, Transicao, novaNotificacao, responsaveis} from '../estado';
+import {ProtemState, Transicao, novaNotificacao, responsaveis} from '../estado';
 
 export interface ResultadoLogin {
   sucesso: boolean;
@@ -23,7 +23,7 @@ export interface ResultadoCadastro {
   usuario?: Usuario;
 }
 
-export function login(s: NexusState, identificador: string, senha?: string): Transicao<ResultadoLogin> {
+export function login(s: ProtemState, identificador: string, senha?: string): Transicao<ResultadoLogin> {
   const cleanId = identificador.trim().toLowerCase();
   const user = s.usuarios.find(
     (u) => u.email.toLowerCase() === cleanId || u.matricula.toLowerCase() === cleanId,
@@ -53,7 +53,7 @@ export function login(s: NexusState, identificador: string, senha?: string): Tra
 }
 
 /** RN08: Conta nova nasce pendente e os responsáveis são notificados. */
-export function cadastrarUsuario(s: NexusState, dados: DadosCadastro): Transicao<ResultadoCadastro> {
+export function cadastrarUsuario(s: ProtemState, dados: DadosCadastro): Transicao<ResultadoCadastro> {
   const emailClean = dados.email.trim().toLowerCase();
   const matriculaClean = dados.matricula.trim().toUpperCase();
 
@@ -106,11 +106,11 @@ export function cadastrarUsuario(s: NexusState, dados: DadosCadastro): Transicao
   };
 }
 
-function alterarStatus(s: NexusState, usuarioId: string, mudanca: Partial<Usuario>): NexusState['usuarios'] {
+function alterarStatus(s: ProtemState, usuarioId: string, mudanca: Partial<Usuario>): ProtemState['usuarios'] {
   return s.usuarios.map((u) => (u.id === usuarioId ? {...u, ...mudanca} : u));
 }
 
-export function aprovarUsuario(s: NexusState, usuarioId: string): NexusState {
+export function aprovarUsuario(s: ProtemState, usuarioId: string): ProtemState {
   if (!s.usuarios.some((u) => u.id === usuarioId)) return s;
 
   const notif = novaNotificacao(
@@ -127,7 +127,7 @@ export function aprovarUsuario(s: NexusState, usuarioId: string): NexusState {
   };
 }
 
-export function recusarUsuario(s: NexusState, usuarioId: string, motivo?: string): NexusState {
+export function recusarUsuario(s: ProtemState, usuarioId: string, motivo?: string): ProtemState {
   if (!s.usuarios.some((u) => u.id === usuarioId)) return s;
 
   const notif = novaNotificacao(
@@ -144,10 +144,10 @@ export function recusarUsuario(s: NexusState, usuarioId: string, motivo?: string
   };
 }
 
-export function bloquearUsuario(s: NexusState, usuarioId: string): NexusState {
+export function bloquearUsuario(s: ProtemState, usuarioId: string): ProtemState {
   return {...s, usuarios: alterarStatus(s, usuarioId, {status: 'bloqueada'})};
 }
 
-export function desbloquearUsuario(s: NexusState, usuarioId: string): NexusState {
+export function desbloquearUsuario(s: ProtemState, usuarioId: string): ProtemState {
   return {...s, usuarios: alterarStatus(s, usuarioId, {status: 'ativa', suspensoAte: undefined})};
 }

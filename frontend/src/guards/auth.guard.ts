@@ -1,6 +1,6 @@
 import {inject} from '@angular/core';
 import {CanActivateFn, Router} from '@angular/router';
-import {NexusStore} from '../store/nexus.store';
+import {ProtemStore} from '../store/protem.store';
 
 /**
  * Guard para rotas de Solicitante (/catalogo, /item/:id, /solicitar/:id, /meus-emprestimos, /notificacoes, /perfil).
@@ -10,7 +10,7 @@ import {NexusStore} from '../store/nexus.store';
  * Se não logado, redireciona para /login.
  */
 export const solicitanteGuard: CanActivateFn = () => {
-  const store = inject(NexusStore);
+  const store = inject(ProtemStore);
   const router = inject(Router);
   const usuario = store.usuarioLogado();
 
@@ -35,7 +35,7 @@ export const solicitanteGuard: CanActivateFn = () => {
  * Usuário com status 'bloqueada' ou 'suspensa' NÃO pode solicitar; deve ir para /perfil.
  */
 export const podeSolicitarGuard: CanActivateFn = () => {
-  const store = inject(NexusStore);
+  const store = inject(ProtemStore);
   const router = inject(Router);
   const usuario = store.usuarioLogado();
 
@@ -62,7 +62,7 @@ export const podeSolicitarGuard: CanActivateFn = () => {
  * Se não logado, redireciona para /login.
  */
 export const responsavelGuard: CanActivateFn = () => {
-  const store = inject(NexusStore);
+  const store = inject(ProtemStore);
   const router = inject(Router);
   const usuario = store.usuarioLogado();
 
@@ -89,7 +89,7 @@ export const responsavelGuard: CanActivateFn = () => {
  * Se o usuário atual for 'pendente', redireciona para /aguardando.
  */
 export const cadastroPublicGuard: CanActivateFn = () => {
-  const store = inject(NexusStore);
+  const store = inject(ProtemStore);
   const router = inject(Router);
   const usuario = store.usuarioLogado();
 

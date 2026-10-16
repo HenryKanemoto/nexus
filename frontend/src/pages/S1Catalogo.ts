@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
 import {RouterLink} from '@angular/router';
-import {NexusStore} from '../store/nexus.store';
+import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 import {ItemThumb} from '../components/item-thumb/item-thumb';
 import {iconeCategoria, plural} from '../lib/categoria-utils';
@@ -12,7 +12,7 @@ import {iconeCategoria, plural} from '../lib/categoria-utils';
   templateUrl: './S1Catalogo.html',
 })
 export class S1Catalogo {
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
 
   readonly termoBusca = signal('');
   readonly categoriaSelecionada = signal<string>('todas');

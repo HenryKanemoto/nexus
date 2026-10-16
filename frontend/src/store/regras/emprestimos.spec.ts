@@ -1,10 +1,10 @@
 import {PoliticaAtraso} from '../../types/models';
-import {NexusState} from '../estado';
+import {ProtemState} from '../estado';
 import {registrarDevolucao, registrarRetirada, registrarRetiradaPorQr} from './emprestimos';
 import {AGORA, buscar, em, emprestimo, estadoDeTeste, solicitacao, usuario} from './estado-de-teste';
 
 /** Pedido aprovado hoje para a1, com o item reservado esperando retirada. */
-function comPedidoAprovado(): NexusState {
+function comPedidoAprovado(): ProtemState {
   const s = estadoDeTeste({
     solicitacoes: [solicitacao('p', 'a1', {status: 'aprovada', avaliadoPor: 'resp', avaliadoEm: AGORA.toISOString()})],
   });
@@ -13,7 +13,7 @@ function comPedidoAprovado(): NexusState {
 }
 
 /** Empréstimo de a1 com prazo em 13/10; o relógio está em 15/10 às 10:00 (2 dias de atraso). */
-function comEmprestimoAtrasado(politica: PoliticaAtraso, statusConta: 'ativa' | 'bloqueada' = 'bloqueada'): NexusState {
+function comEmprestimoAtrasado(politica: PoliticaAtraso, statusConta: 'ativa' | 'bloqueada' = 'bloqueada'): ProtemState {
   const s = estadoDeTeste({
     configuracao: {politicaAtraso: politica},
     usuarios: [usuario('resp', {perfil: 'responsavel'}), usuario('aluna', {status: statusConta})],

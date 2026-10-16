@@ -1,5 +1,5 @@
 import {Categoria, Emprestimo, Item, Solicitacao, Usuario} from '../../types/models';
-import {NexusState} from '../estado';
+import {ProtemState} from '../estado';
 
 /**
  * Estado mínimo e previsível para os testes das regras: relógio em 15/10/2026 às 10:00
@@ -34,7 +34,7 @@ export function item(id: string, categoriaId: string, mudanca: Partial<Item> = {
   };
 }
 
-export function estadoDeTeste(mudanca: Partial<NexusState> = {}): NexusState {
+export function estadoDeTeste(mudanca: Partial<ProtemState> = {}): ProtemState {
   const categorias: Categoria[] = [
     {id: 'cat-a', nome: 'Notebooks', prazoMaxDias: 2, limitePorPessoa: 1},
     {id: 'cat-b', nome: 'Kits', prazoMaxDias: 7, limitePorPessoa: 2},
@@ -86,8 +86,8 @@ export function em(ano: number, mes: number, dia: number, hora = 0, minuto = 0):
 }
 
 export const buscar = {
-  item: (s: NexusState, id: string) => s.itens.find((i) => i.id === id)!,
-  usuario: (s: NexusState, id: string) => s.usuarios.find((u) => u.id === id)!,
-  solicitacao: (s: NexusState, id: string) => s.solicitacoes.find((x) => x.id === id)!,
-  emprestimo: (s: NexusState, id: string) => s.emprestimos.find((e) => e.id === id)!,
+  item: (s: ProtemState, id: string) => s.itens.find((i) => i.id === id)!,
+  usuario: (s: ProtemState, id: string) => s.usuarios.find((u) => u.id === id)!,
+  solicitacao: (s: ProtemState, id: string) => s.solicitacoes.find((x) => x.id === id)!,
+  emprestimo: (s: ProtemState, id: string) => s.emprestimos.find((e) => e.id === id)!,
 };

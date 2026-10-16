@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, computed, inject} from '@angular/core';
 import {Router} from '@angular/router';
-import {NexusStore} from '../store/nexus.store';
+import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 import {Notificacao} from '../types/models';
 import {ListaNotificacoes} from '../components/lista-notificacoes/lista-notificacoes';
@@ -35,7 +35,7 @@ import {ListaNotificacoes} from '../components/lista-notificacoes/lista-notifica
   `,
 })
 export class R17Notificacoes {
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
   private readonly router = inject(Router);
 
   readonly usuario = computed(() => this.store.usuarioLogado());

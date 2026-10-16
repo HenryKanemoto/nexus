@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
 import {RouterLink} from '@angular/router';
-import {NexusStore} from '../store/nexus.store';
+import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 import {formatDateShort} from '../lib/date-utils';
 import {Item, Ocorrencia} from '../types/models';
@@ -20,7 +20,7 @@ interface ItemManutencaoLinha {
   templateUrl: './R12Manutencao.html',
 })
 export class R12Manutencao {
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
 
   readonly mensagemSucesso = signal<string | null>(null);
 

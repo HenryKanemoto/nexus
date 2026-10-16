@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, computed, inject} from '@angular/core';
 import {iconeCategoria} from '../lib/categoria-utils';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {NexusStore} from '../store/nexus.store';
+import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 import {formatDateShort} from '../lib/date-utils';
 import {ItemThumb} from '../components/item-thumb/item-thumb';
@@ -16,7 +16,7 @@ import {iniciais} from '../lib/texto-utils';
 export class R5Retirada {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
 
   readonly iniciais = iniciais;
 

@@ -10,7 +10,7 @@ import {
   Usuario,
 } from '../types/models';
 
-export interface NexusState {
+export interface ProtemState {
   agora: string; // ISO date string do relógio simulado
   usuarioLogadoId: string | null;
   configuracao: Configuracao;
@@ -25,7 +25,7 @@ export interface NexusState {
 
 /** Resultado de uma regra de negócio: o novo estado e o que deve voltar para a tela. */
 export interface Transicao<R> {
-  estado: NexusState;
+  estado: ProtemState;
   resultado: R;
 }
 
@@ -52,6 +52,6 @@ export function novaNotificacao(
   };
 }
 
-export function responsaveis(s: NexusState): Usuario[] {
+export function responsaveis(s: ProtemState): Usuario[] {
   return s.usuarios.filter((u) => u.perfil === 'responsavel');
 }

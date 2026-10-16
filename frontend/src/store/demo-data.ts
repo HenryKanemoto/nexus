@@ -1,4 +1,4 @@
-import {NexusState} from './estado';
+import {ProtemState} from './estado';
 import {addDays, addHours, toDateInputValue} from '../lib/date-utils';
 import {Categoria, Emprestimo, Item, Notificacao, Ocorrencia, Solicitacao, Usuario} from '../types/models';
 
@@ -15,7 +15,7 @@ import {Categoria, Emprestimo, Item, Notificacao, Ocorrencia, Solicitacao, Usuar
  * Os 15 itens são os mesmos da migration SeedItensDemonstracao do back-end. No modo api,
  * um navegador sem dados salvos envia este seed ao banco (veja FonteApi).
  */
-export function getInitialDemoState(): NexusState {
+export function getInitialDemoState(): ProtemState {
   // Relógio simulado começa hoje às 09:00
   const agora = new Date();
   agora.setHours(9, 0, 0, 0);

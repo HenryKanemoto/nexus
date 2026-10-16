@@ -1,4 +1,4 @@
-import {NexusState} from './estado';
+import {ProtemState} from './estado';
 import {getInitialDemoState} from './demo-data';
 
 const CHAVE = 'protem:v1';
@@ -9,7 +9,7 @@ const LISTAS = ['usuarios', 'categorias', 'itens', 'solicitacoes', 'emprestimos'
 const POLITICAS = ['simples', 'intermediaria', 'rigida'];
 
 export interface EstadoCarregado {
-  estado: NexusState;
+  estado: ProtemState;
   /** true quando não havia dados válidos salvos e o estado veio do seed de demonstração. */
   doSeed: boolean;
 }
@@ -27,7 +27,7 @@ export function carregarEstado(): EstadoCarregado {
   return {estado: getInitialDemoState(), doSeed: true};
 }
 
-export function salvarEstado(estado: NexusState): ResultadoGravacao {
+export function salvarEstado(estado: ProtemState): ResultadoGravacao {
   try {
     localStorage.setItem(CHAVE, JSON.stringify(estado));
     return 'ok';
@@ -46,7 +46,7 @@ function ler(chave: string): string | null {
 }
 
 /** Confere a forma do estado salvo; qualquer coisa estranha é tratada como corrompida. */
-function validar(texto: string): NexusState | null {
+function validar(texto: string): ProtemState | null {
   try {
     const salvo = JSON.parse(texto) as Record<string, unknown> | null;
     if (!salvo || typeof salvo !== 'object') return null;
@@ -55,7 +55,7 @@ function validar(texto: string): NexusState | null {
     const configuracao = salvo['configuracao'] as {politicaAtraso?: string} | undefined;
     if (!POLITICAS.includes(configuracao?.politicaAtraso ?? '')) return null;
 
-    const estado = salvo as unknown as NexusState;
+    const estado = salvo as unknown as ProtemState;
     // Garante que todos os usuários tenham a senha padrão '123456'
     estado.usuarios = estado.usuarios.map((u) => ({
       ...u,

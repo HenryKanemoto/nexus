@@ -2,7 +2,7 @@ import {Injectable, computed, inject, signal} from '@angular/core';
 import {addHours, parseDate} from '../lib/date-utils';
 import {Categoria, Item, PoliticaAtraso, Solicitacao} from '../types/models';
 import {getInitialDemoState} from './demo-data';
-import {NexusState, Transicao} from './estado';
+import {ProtemState, Transicao} from './estado';
 import {FONTE_DE_DADOS} from './fonte-de-dados';
 import * as acervo from './regras/acervo';
 import * as contas from './regras/contas';
@@ -10,7 +10,7 @@ import * as emprestimos from './regras/emprestimos';
 import {executarRotinaAutomatica} from './regras/rotina';
 import * as solicitacoes from './regras/solicitacoes';
 
-export type {NexusState} from './estado';
+export type {ProtemState} from './estado';
 export type {StatusConexao} from './fonte-de-dados';
 
 /**
@@ -24,9 +24,9 @@ export type {StatusConexao} from './fonte-de-dados';
 @Injectable({
   providedIn: 'root',
 })
-export class NexusStore {
+export class ProtemStore {
   private readonly fonte = inject(FONTE_DE_DADOS);
-  private readonly state = signal<NexusState>(this.fonte.carregar());
+  private readonly state = signal<ProtemState>(this.fonte.carregar());
 
   // Situação da gravação: 'local' no modo local; conectando/online/offline no modo api
   readonly conexao = this.fonte.conexao;
@@ -90,7 +90,7 @@ export class NexusStore {
   // ==========================================
 
   /** Aplica uma mudança de estado e entrega para a fonte de dados gravar. */
-  private atualizar(fn: (s: NexusState) => NexusState) {
+  private atualizar(fn: (s: ProtemState) => ProtemState) {
     const antes = this.state();
     const depois = fn(antes);
     if (depois === antes) return;
@@ -99,7 +99,7 @@ export class NexusStore {
   }
 
   /** Igual a atualizar(), para regras que também devolvem um resultado para a tela. */
-  private executar<R>(fn: (s: NexusState) => Transicao<R>): R {
+  private executar<R>(fn: (s: ProtemState) => Transicao<R>): R {
     let resultado!: R;
     this.atualizar((s) => {
       const transicao = fn(s);

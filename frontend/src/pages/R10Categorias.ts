@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {iconeCategoria, plural} from '../lib/categoria-utils';
 import {RouterLink} from '@angular/router';
-import {NexusStore} from '../store/nexus.store';
+import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 
 @Component({
@@ -11,7 +11,7 @@ import {MatIconModule} from '@angular/material/icon';
   templateUrl: './R10Categorias.html',
 })
 export class R10Categorias {
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
 
   readonly plural = plural;
 

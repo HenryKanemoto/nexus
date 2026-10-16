@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
 import {MatIconModule} from '@angular/material/icon';
-import {NexusStore} from '../../store/nexus.store';
+import {ProtemStore} from '../../store/protem.store';
 
 /**
  * Faixa que avisa quando algo não foi salvo: no modo api, backend fora do ar ou alteração
@@ -31,5 +31,5 @@ import {NexusStore} from '../../store/nexus.store';
   `,
 })
 export class AvisoApi {
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
 }

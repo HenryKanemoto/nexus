@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
 import {RouterLink} from '@angular/router';
-import {NexusStore} from '../store/nexus.store';
+import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 import {Solicitacao} from '../types/models';
 import {differenceInHours, formatDateShort, parseDate} from '../lib/date-utils';
@@ -12,7 +12,7 @@ import {Modal} from '../components/modal/modal';
   templateUrl: './R2Solicitacoes.html',
 })
 export class R2Solicitacoes {
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
 
   readonly feedbackMensagem = signal<string | null>(null);
   readonly solicitacaoParaRecusar = signal<Solicitacao | null>(null);

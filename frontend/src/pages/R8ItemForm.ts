@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { NexusStore } from '../store/nexus.store';
+import { ProtemStore } from '../store/protem.store';
 import { MatIconModule } from '@angular/material/icon';
 import { Item } from '../types/models';
 import { plural } from '../lib/categoria-utils';
@@ -15,7 +15,7 @@ import { reduzirImagem } from '../lib/imagem-utils';
 export class R8ItemForm {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
 
   readonly plural = plural;
 
