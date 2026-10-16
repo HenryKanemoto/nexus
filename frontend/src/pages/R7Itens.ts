@@ -19,6 +19,11 @@ export class R7Itens {
   readonly termoBusca = signal('');
   readonly categoriaSelecionada = signal('todas');
   readonly situacaoSelecionada = signal('todas');
+  readonly filtrosAbertos = signal(false);
+  /** Quantos filtros (além da busca) estão em uso, para mostrar no botão. */
+  readonly filtrosAtivos = computed(
+    () => Number(this.categoriaSelecionada() !== 'todas') + Number(this.situacaoSelecionada() !== 'todas'),
+  );
 
   readonly situacoes = [
     {valor: 'disponivel', rotulo: 'Disponível'},
