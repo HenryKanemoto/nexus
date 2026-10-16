@@ -5,7 +5,6 @@ import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 import {formatDateShort} from '../lib/date-utils';
 import {ItemThumb} from '../components/item-thumb/item-thumb';
-import {iniciais} from '../lib/texto-utils';
 
 @Component({
   selector: 'app-r5-retirada',
@@ -18,7 +17,6 @@ export class R5Retirada {
   private readonly router = inject(Router);
   readonly store = inject(ProtemStore);
 
-  readonly iniciais = iniciais;
 
   readonly itemId = computed(() => this.route.snapshot.paramMap.get('itemId') || '');
 

@@ -9,45 +9,25 @@
       @let user = getUsuario(solic.solicitanteId);
 
       <header>
-        <p class="page-eyebrow">Pedido aprovado</p>
-        <h1 class="page-title mt-1">Confirmar retirada</h1>
-        <p class="page-subtitle">Entregue o equipamento ao solicitante. O prazo de devolução começa a contar agora.</p>
+        <h1 class="page-title">Confirmar retirada</h1>
+        <p class="page-subtitle" title="O prazo de devolução começa a contar na confirmação (RN05).">Entregue o item e confirme.</p>
       </header>
 
-      <section class="card overflow-hidden">
-        <div class="flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:p-6">
-          <app-item-thumb [item]="i" [tamanhoIcone]="40" class="size-24 shrink-0 rounded-control" />
-          <div class="min-w-0">
-            <h2 class="font-display text-2xl font-semibold leading-tight">{{ i.nome }}</h2>
-            <p class="mt-2 flex flex-wrap gap-2">
-              <span class="tag">{{ i.patrimonio }}</span>
-              <span class="tag">{{ i.codigoQr }}</span>
-            </p>
-          </div>
-        </div>
-
-        <dl class="grid border-t border-border sm:grid-cols-2">
-          <div class="flex items-center gap-3 border-b border-border p-5 sm:border-b-0 sm:border-r sm:p-6">
-            <span class="avatar size-10 text-sm">{{ iniciais(user?.nome) }}</span>
-            <div class="min-w-0">
-              <dt class="text-xs text-text-muted">Solicitante</dt>
-              <dd class="truncate font-medium">{{ user?.nome }}</dd>
-              <dd class="text-xs capitalize text-text-muted">{{ user?.perfil }} · <span class="font-mono">{{ user?.matricula }}</span></dd>
-            </div>
-          </div>
-          <div class="p-5 sm:p-6">
-            <dt class="text-xs text-text-muted">Devolver até</dt>
-            <dd class="mt-1 font-display text-2xl font-semibold">{{ formatarData(solic.devolucaoDesejada) }}</dd>
-          </div>
+      <section class="card flex items-center gap-4 p-5 sm:p-6">
+        <app-item-thumb [item]="i" [tamanhoIcone]="32" class="size-16 shrink-0 rounded-control" />
+        <dl class="min-w-0 flex-1">
+          <dt class="sr-only">Item</dt>
+          <dd class="font-display text-xl font-semibold leading-tight">{{ i.nome }}</dd>
+          <dt class="sr-only">Solicitante e prazo</dt>
+          <dd class="mt-1 text-sm text-text-muted">
+            {{ user?.nome }} · devolver até {{ formatarData(solic.devolucaoDesejada) }} · {{ i.patrimonio }}
+          </dd>
         </dl>
       </section>
 
       <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-        <a routerLink="/painel/leitor" class="btn btn-secondary btn-lg">Cancelar</a>
-        <button type="button" (click)="executarConfirmacaoRetirada()" class="btn btn-primary btn-lg">
-          <mat-icon class="icon-sm" svgIcon="check" />
-          Confirmar retirada
-        </button>
+        <a routerLink="/painel/leitor" class="btn btn-ghost btn-lg">Cancelar</a>
+        <button type="button" (click)="executarConfirmacaoRetirada()" class="btn btn-primary btn-lg">Confirmar retirada</button>
       </div>
     } @else {
       <div class="card empty">
