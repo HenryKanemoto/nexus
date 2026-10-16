@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
+import {RouterLink} from '@angular/router';
 import {MatIconModule} from '@angular/material/icon';
-import {NexusStore} from '../store/nexus.store';
+import {ProtemStore} from '../store/protem.store';
 import {formatDateShort} from '../lib/date-utils';
 
 type TipoHistorico = 'todos' | 'solicitacao' | 'emprestimo' | 'devolucao' | 'manutencao' | 'cadastro';
@@ -18,15 +19,20 @@ interface RegistroHistorico {
 @Component({
   selector: 'app-r18-historico',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatIconModule],
+  imports: [MatIconModule, RouterLink],
   templateUrl: './R18Historico.html',
 })
 export class R18Historico {
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
   readonly tipo = signal<TipoHistorico>('todos');
   readonly busca = signal('');
   readonly dataInicio = signal('');
   readonly dataFim = signal('');
+  readonly filtrosAbertos = signal(false);
+  /** Quantos filtros (além da busca) estão em uso, para mostrar no botão. */
+  readonly filtrosAtivos = computed(
+    () => Number(this.tipo() !== 'todos') + Number(!!this.dataInicio()) + Number(!!this.dataFim()),
+  );
 
   readonly registros = computed<RegistroHistorico[]>(() => {
     const usuarios = this.store.usuarios();
@@ -97,7 +103,6 @@ export class R18Historico {
   contarEmprestimosDevolucoes() { return this.registros().filter(r => r.tipo === 'emprestimo' || r.tipo === 'devolucao').length; }
   formatarData(iso: string) { return iso ? formatDateShort(iso) : 'Data não registrada'; }
   icone(tipo: Exclude<TipoHistorico, 'todos'>) { return ({solicitacao:'assignment', emprestimo:'outbox', devolucao:'move_to_inbox', manutencao:'build', cadastro:'inventory_2'})[tipo]; }
-  classeIcone(tipo: Exclude<TipoHistorico, 'todos'>) { return ({solicitacao:'bg-info-soft text-info', emprestimo:'bg-accent-soft text-warn', devolucao:'bg-ok-soft text-ok', manutencao:'bg-maint-soft text-maint', cadastro:'bg-sunken text-ink-soft'})[tipo]; }
   rotuloStatusSolicitacao(status: string) { return ({pendente:'Pendente', aprovada:'Aprovada', recusada:'Recusada', expirada:'Expirada', concluida:'Concluída'} as Record<string,string>)[status] || status; }
   limparFiltros() { this.tipo.set('todos'); this.busca.set(''); this.dataInicio.set(''); this.dataFim.set(''); }
 }

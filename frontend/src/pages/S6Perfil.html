@@ -5,7 +5,7 @@
       <div class="min-w-0 flex-1">
         <p class="page-eyebrow">{{ perfil() }}</p>
         <h1 class="page-title mt-1">{{ u.nome }}</h1>
-        <p class="mt-1 flex flex-wrap items-center gap-2 text-sm text-ink-soft">
+        <p class="mt-1 flex flex-wrap items-center gap-2 text-sm text-text-muted">
           {{ u.email }}
           <span class="tag">{{ u.matricula }}</span>
         </p>
@@ -24,7 +24,7 @@
       @switch (u.status) {
         @case ('bloqueada') {
           @let atrasado = itemAtrasadoInfo();
-          <mat-icon class="icon-sm">lock</mat-icon>
+          <mat-icon class="icon-sm" svgIcon="lock" />
           <div class="flex-1">
             <p class="font-semibold">Conta bloqueada</p>
             <p class="mt-0.5">
@@ -37,12 +37,12 @@
             </p>
             <a routerLink="/meus-emprestimos" [queryParams]="{aba: 'ativos'}" class="mt-2 inline-flex items-center gap-1 font-semibold underline underline-offset-4">
               Ver item atrasado
-              <mat-icon class="icon-xs">arrow_forward</mat-icon>
+              <mat-icon class="icon-xs" svgIcon="arrow_forward" />
             </a>
           </div>
         }
         @case ('suspensa') {
-          <mat-icon class="icon-sm">hourglass_empty</mat-icon>
+          <mat-icon class="icon-sm" svgIcon="hourglass_empty" />
           <div>
             <p class="font-semibold">Suspensa até {{ formatarData(u.suspensoAte) }}</p>
             <p class="mt-0.5">
@@ -51,11 +51,11 @@
           </div>
         }
         @case ('ativa') {
-          <mat-icon class="icon-sm">verified</mat-icon>
+          <mat-icon class="icon-sm" svgIcon="verified" />
           <p>Conta em dia. Você pode pedir equipamentos dentro dos limites de cada categoria.</p>
         }
         @default {
-          <mat-icon class="icon-sm">hourglass_top</mat-icon>
+          <mat-icon class="icon-sm" svgIcon="hourglass_top" />
           <p>Cadastro esperando a aprovação de um responsável do acervo.</p>
         }
       }
@@ -66,7 +66,7 @@
       <div class="card-header">
         <div>
           <h2 class="card-title">Ocorrências</h2>
-          <p class="text-sm text-ink-muted">Defeitos registrados em devoluções feitas por você.</p>
+          <p class="text-sm text-text-muted">Defeitos registrados em devoluções feitas por você.</p>
         </div>
       </div>
       @if (ocorrencias().length > 0) {
@@ -85,23 +85,23 @@
                 <tr>
                   <td>
                     <p class="font-medium">{{ it?.nome || 'Equipamento' }}</p>
-                    <p class="font-mono text-xs text-ink-muted">{{ it?.patrimonio }}</p>
+                    <p class="font-mono text-xs text-text-muted">{{ it?.patrimonio }}</p>
                   </td>
                   <td class="whitespace-nowrap tabular-nums">{{ formatarData(ocorr.criadoEm) }}</td>
-                  <td class="text-ink-soft">{{ ocorr.descricao }}</td>
+                  <td class="text-text-muted">{{ ocorr.descricao }}</td>
                 </tr>
               }
             </tbody>
           </table>
         </div>
       } @else {
-        <p class="px-6 py-10 text-center text-sm text-ink-muted">Nenhuma ocorrência registrada.</p>
+        <p class="px-6 py-10 text-center text-sm text-text-muted">Nenhuma ocorrência registrada.</p>
       }
     </section>
 
     <div>
       <button type="button" (click)="sair()" class="btn btn-danger-ghost">
-        <mat-icon class="icon-sm">logout</mat-icon>
+        <mat-icon class="icon-sm" svgIcon="logout" />
         Sair da conta
       </button>
     </div>

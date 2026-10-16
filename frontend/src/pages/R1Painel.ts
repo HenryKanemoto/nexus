@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
-import {NexusStore} from '../store/nexus.store';
+import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 import {formatDateShort, parseDate} from '../lib/date-utils';
 import {StatusBadge} from '../components/status-badge/status-badge';
@@ -15,13 +15,15 @@ type FiltroListaPainel = 'todos' | 'atrasados' | 'ativos' | 'aprovados';
   templateUrl: './R1Painel.html',
 })
 export class R1Painel {
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
   private readonly router = inject(Router);
 
   readonly filtroAtivo = signal<FiltroListaPainel>('todos');
   readonly mensagemSucesso = signal<string | null>(null);
 
   readonly plural = plural;
+  /** Quantas linhas cada lista mostra antes do "Ver todos". */
+  readonly limite = 5;
 
   readonly primeiroNome = computed(() => this.store.usuarioLogado()?.nome.split(' ')[0] ?? '');
 

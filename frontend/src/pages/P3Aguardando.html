@@ -1,14 +1,14 @@
 <div class="flex min-h-screen flex-col px-5 py-8 sm:px-8">
   <header class="mx-auto w-full max-w-md">
-    <app-logo [tamanho]="30" />
+    <app-brand-logo [tamanho]="30" />
   </header>
 
   <main class="mx-auto flex w-full max-w-md flex-1 flex-col justify-center py-10">
     <div
       class="flex size-14 items-center justify-center rounded-card"
-      [class]="estaAprovada() ? 'bg-ok-soft text-ok' : 'bg-accent-soft text-warn'"
+      [class]="estaAprovada() ? 'bg-ok-soft text-ok' : 'bg-brand-soft text-warn'"
     >
-      <mat-icon class="icon-lg">{{ estaAprovada() ? 'verified' : 'hourglass_top' }}</mat-icon>
+      <mat-icon class="icon-lg" [svgIcon]="estaAprovada() ? 'verified' : 'hourglass_top'" />
     </div>
 
     @if (estaAprovada()) {
@@ -22,23 +22,23 @@
       </p>
     }
 
-    <dl class="card mt-8 divide-y divide-line text-sm">
+    <dl class="card mt-8 divide-y divide-border text-sm">
       <div class="flex items-center justify-between gap-4 px-5 py-3">
-        <dt class="text-ink-muted">Nome</dt>
+        <dt class="text-text-muted">Nome</dt>
         <dd class="truncate font-medium">{{ nomeExibido() }}</dd>
       </div>
       <div class="flex items-center justify-between gap-4 px-5 py-3">
-        <dt class="text-ink-muted">E-mail</dt>
+        <dt class="text-text-muted">E-mail</dt>
         <dd class="truncate">{{ emailExibido() }}</dd>
       </div>
       @if (matriculaExibida()) {
         <div class="flex items-center justify-between gap-4 px-5 py-3">
-          <dt class="text-ink-muted">Matrícula</dt>
+          <dt class="text-text-muted">Matrícula</dt>
           <dd class="tag">{{ matriculaExibida() }}</dd>
         </div>
       }
       <div class="flex items-center justify-between gap-4 px-5 py-3">
-        <dt class="text-ink-muted">Situação</dt>
+        <dt class="text-text-muted">Situação</dt>
         <dd><app-status-badge [status]="estaAprovada() ? 'ativa' : 'pendente'" /></dd>
       </div>
     </dl>
@@ -47,20 +47,20 @@
       @if (estaAprovada()) {
         <a routerLink="/catalogo" class="btn btn-primary btn-lg btn-block">
           Ir para o catálogo
-          <mat-icon class="icon-sm">arrow_forward</mat-icon>
+          <mat-icon class="icon-sm" svgIcon="arrow_forward" />
         </a>
       }
       <button type="button" (click)="voltarAoLogin()" class="btn btn-secondary btn-lg btn-block">Voltar ao login</button>
     </div>
 
     @if (!estaAprovada()) {
-      <section class="mt-8 rounded-card border border-dashed border-line-strong p-4">
+      <section class="mt-8 rounded-card border border-dashed border-border-input p-4">
         <p class="page-eyebrow">Atalho de demonstração</p>
-        <p class="mt-2 text-sm text-ink-soft">
+        <p class="mt-2 text-sm text-text-muted">
           Para testar o fluxo sem entrar como responsável, aprove esta conta agora.
         </p>
-        <button type="button" (click)="simularAprovacao()" class="btn btn-sm btn-accent mt-3">
-          <mat-icon class="icon-sm">check</mat-icon>
+        <button type="button" (click)="simularAprovacao()" class="btn btn-sm btn-secondary mt-3">
+          <mat-icon class="icon-sm" svgIcon="check" />
           Simular aprovação
         </button>
       </section>

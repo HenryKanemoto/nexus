@@ -1,0 +1,12 @@
+{
+  "name": "protem",
+  "private": true,
+  "description": "Atalhos para rodar o front-end a partir da raiz do repositório (modo local, sem back-end).",
+  "scripts": {
+    "postinstall": "npm install --prefix frontend",
+    "start": "npm start --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "servir": "npm run servir --prefix frontend",
+    "test": "npm test --prefix frontend -- --watch=false"
+  }
+}

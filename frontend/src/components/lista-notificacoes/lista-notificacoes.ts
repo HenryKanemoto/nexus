@@ -9,7 +9,7 @@ const ICONES: Record<TipoNotificacao, {icone: string; classe: string}> = {
   expiracao: {icone: 'timer_off', classe: 'bg-warn-soft text-warn'},
   prazo_proximo: {icone: 'event', classe: 'bg-info-soft text-info'},
   atraso: {icone: 'priority_high', classe: 'bg-danger-soft text-danger'},
-  lembrete: {icone: 'notifications_active', classe: 'bg-accent-soft text-warn'},
+  lembrete: {icone: 'notifications_active', classe: 'bg-warn-soft text-warn'},
   novo_pedido: {icone: 'add', classe: 'bg-info-soft text-info'},
   nova_conta: {icone: 'person_add', classe: 'bg-maint-soft text-maint'},
 };
@@ -21,34 +21,34 @@ const ICONES: Record<TipoNotificacao, {icone: string; classe: string}> = {
   imports: [MatIconModule],
   template: `
     @if (notificacoes().length > 0) {
-      <ul class="card divide-y divide-line overflow-hidden">
+      <ul class="card divide-y divide-border overflow-hidden">
         @for (n of notificacoes(); track n.id) {
           @let tipo = icones[n.tipo];
           <li>
             <button
               type="button"
               (click)="abrir.emit(n)"
-              class="group flex w-full items-start gap-4 px-4 py-4 text-left transition-colors hover:bg-paper sm:px-5"
-              [class.bg-accent-soft]="!n.lida"
+              class="group flex w-full items-start gap-4 px-4 py-4 text-left transition-colors hover:bg-bg sm:px-5"
+              [class.bg-brand-soft]="!n.lida"
             >
               <span class="flex size-9 shrink-0 items-center justify-center rounded-full {{ tipo.classe }}">
-                <mat-icon class="icon-sm">{{ tipo.icone }}</mat-icon>
+                <mat-icon class="icon-sm" [svgIcon]="tipo.icone" />
               </span>
               <span class="min-w-0 flex-1">
                 <span class="block text-sm leading-snug" [class.font-semibold]="!n.lida">{{ n.mensagem }}</span>
-                <span class="mt-1 flex items-center gap-2 text-xs text-ink-muted">
+                <span class="mt-1 flex items-center gap-2 text-xs text-text-muted">
                   {{ tempoRelativo(n.criadoEm) }}
                   @if (!n.lida) {
-                    <span class="inline-flex items-center gap-1 font-medium text-ink">
-                      <span class="size-1.5 rounded-full bg-accent-strong"></span>
+                    <span class="inline-flex items-center gap-1 font-medium text-text">
+                      <span class="size-1.5 rounded-full bg-primary"></span>
                       nova
                     </span>
                   }
                 </span>
               </span>
-              <span class="hidden shrink-0 items-center gap-1 self-center text-xs font-medium text-ink-muted group-hover:text-ink sm:flex">
+              <span class="hidden shrink-0 items-center gap-1 self-center text-xs font-medium text-text-muted group-hover:text-text sm:flex">
                 {{ rotuloDestino()(n) }}
-                <mat-icon class="icon-sm">arrow_forward</mat-icon>
+                <mat-icon class="icon-sm" svgIcon="arrow_forward" />
               </span>
             </button>
           </li>
@@ -56,7 +56,7 @@ const ICONES: Record<TipoNotificacao, {icone: string; classe: string}> = {
       </ul>
     } @else {
       <div class="card empty">
-        <mat-icon class="icon-xl">notifications_off</mat-icon>
+        <mat-icon class="icon-xl" svgIcon="notifications_off" />
         <p class="empty-title">Nenhuma notificação</p>
         <p class="empty-text">{{ textoVazio() }}</p>
       </div>

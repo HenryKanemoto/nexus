@@ -1,25 +1,47 @@
-# Nexus
+# Protem
 
-Sistema de empréstimo de equipamentos escolares: alunos e professores pedem itens pelo catálogo, e o responsável pelo acervo aprova, registra a retirada e a devolução pelo QR code de cada item.
+**Plataforma Web de Empréstimos.** *PROTEM: Plataforma Web para Gerenciamento de Empréstimos de Itens em Instituições Acadêmicas.*
+
+Alunos e professores pedem itens (equipamentos e materiais) pelo catálogo, e o responsável pelo acervo aprova, registra a retirada e a devolução pelo QR code de cada item. Projeto Integrador do curso de Programador Full Stack (SENAI Macapá).
+
+> O projeto se chamava **Nexus**. Alguns nomes técnicos ainda guardam o nome antigo, como o banco `nexus_db` e o prefixo `NX-` dos códigos de patrimônio e QR.
 
 | Pasta | Stack | Porta |
 |-------|-------|-------|
 | `backend/` | NestJS + TypeORM + MySQL | 3001 |
 | `frontend/` | Angular 21 + Tailwind 4 | 3000 |
 
-## Como funciona hoje
+## Como rodar (só com o Angular)
 
-- **Itens do acervo → banco de dados.** O backend guarda os itens (nome, categoria, patrimônio, QR, foto e situação) no MySQL. Toda mudança num item, seja cadastro, edição ou troca de situação por empréstimo, é enviada para a API.
-- **O resto → navegador.** Usuários, login, categorias, pedidos, empréstimos, notificações e o relógio de demonstração ficam no `localStorage`. O login é de demonstração, sem segurança.
-- O frontend chama a API em `/api/...`. Em desenvolvimento, o Angular repassa essas chamadas para `http://localhost:3001` ([frontend/proxy.conf.json](frontend/proxy.conf.json)), sem precisar de CORS.
-- Se o backend estiver desligado, o app continua funcionando só no navegador e mostra um aviso no topo com o botão "Tentar de novo".
+Basta ter o [Node.js](https://nodejs.org/) LTS (testado com 24). **Não precisa de Docker, MySQL nem back-end.**
 
-## Pré-requisitos
+```bash
+cd frontend
+npm install
+npm start
+```
 
-- [Node.js](https://nodejs.org/) LTS recente (testado com 24) e npm
-- [Docker](https://www.docker.com/) para o MySQL
+Acesse **<http://localhost:4200>** (ou use `npm run dev` para abrir em <http://localhost:3000>).
 
-## Primeira vez
+Também dá para rodar da raiz do repositório: `npm install` (instala o front-end) e `npm start`.
+
+## Fonte de dados: local ou api
+
+O app tem uma camada de dados com duas implementações ([frontend/src/store/fonte-de-dados](frontend/src/store/fonte-de-dados)). As telas não sabem qual está em uso.
+
+| Modo | Onde ficam os dados | Como rodar |
+|------|---------------------|------------|
+| **`local`** (padrão) | Tudo no navegador (`localStorage`, chave `protem:v1`). Nenhuma requisição de rede. | `npm start` ou `npm run dev` |
+| **`api`** | Itens do acervo no MySQL, via back-end; o resto no navegador. | `npm run dev:api` (veja abaixo) |
+
+- Nos dois modos, as regras de negócio rodam no navegador, em funções puras ([frontend/src/store/regras](frontend/src/store/regras)), cobertas por testes.
+- A escolha fica em [frontend/src/environments/environment.ts](frontend/src/environments/environment.ts) (`fonteDeDados: 'local'`). A configuração `api` do Angular troca esse arquivo por `environment.api.ts` e liga o proxy de `/api` para `http://localhost:3001` ([frontend/proxy.conf.json](frontend/proxy.conf.json)).
+- O estado é recarregado ao abrir a página. Se os dados salvos estiverem corrompidos, o app volta para os dados de demonstração.
+- O login é de demonstração, sem segurança.
+
+## Modo api (com back-end e Docker)
+
+O back-end e o Docker continuam no repositório e funcionando; só deixaram de ser o padrão.
 
 **1. Banco de dados** (na raiz do projeto):
 
@@ -45,16 +67,7 @@ DB_NAME=nexus_db
 PORT=3001
 ```
 
-**3. Frontend:**
-
-```bash
-cd frontend
-npm install
-```
-
-## Rodando os dois ao mesmo tempo
-
-Abra **dois terminais**:
+**3. Suba os dois**, em dois terminais:
 
 ```bash
 cd backend
@@ -63,14 +76,33 @@ npm run start:dev
 
 ```bash
 cd frontend
-npm run dev
+npm run dev:api
 ```
 
 Acesse **<http://localhost:3000>**.
 
 Na primeira subida, o backend roda as migrations sozinho: cria a tabela `itens` e cadastra os 15 equipamentos de demonstração. Para conferir a API direto: <http://localhost:3001/api/item>.
 
-> Usa o Claude Code no app desktop? O arquivo [.claude/launch.json](.claude/launch.json) já tem as duas configurações (`frontend` e `backend`).
+- Toda mudança num item (cadastro, edição ou troca de situação por empréstimo) é enviada para a API.
+- Ao abrir, os itens do banco valem sobre os do navegador. Exceção: um navegador sem dados salvos (ou com o banco vazio) envia os itens de demonstração ao banco, para ficarem coerentes com os empréstimos de demonstração. "Reiniciar dados" faz o mesmo. Nos dois casos, as fotos que já estão no banco são mantidas.
+- Se o backend estiver desligado, o app continua funcionando no navegador e mostra um aviso no topo com o botão "Tentar de novo".
+- Build de produção no modo api: `npm run build:api` (o servidor precisa responder em `/api`).
+
+> Usa o Claude Code no app desktop? O arquivo [.claude/launch.json](.claude/launch.json) tem as configurações `frontend` (modo local), `frontend-api` e `backend`.
+
+## Build estático (para abrir por um link)
+
+```bash
+cd frontend
+npm run build
+npm run servir
+```
+
+`npm run build` gera `frontend/dist/app/browser`, que funciona em qualquer servidor estático com fallback para `index.html` nas rotas internas. `npm run servir` serve essa pasta em <http://localhost:4300> só com o Node, para testar.
+
+- **Vercel:** [frontend/vercel.json](frontend/vercel.json) já tem o build, a pasta de saída e o fallback. Na Vercel, use `frontend` como *Root Directory*.
+- **Netlify e similares:** o arquivo `public/_redirects` vai junto no build.
+- O app precisa ficar na raiz do domínio (`<base href="/">`).
 
 ## Usando a aplicação
 
@@ -95,7 +127,10 @@ O botão escuro no canto inferior direito abre o **modo demonstração**:
 
 - **+1 hora / +1 dia / +3 dias:** avança o relógio do sistema e dispara as rotinas automáticas, como pedidos aprovados que expiram, atrasos, bloqueios e lembretes.
 - **Entrar como:** troca de usuário sem fazer login.
-- **Reiniciar dados de demonstração:** volta tudo ao estado inicial, inclusive os itens no banco.
+- **Reiniciar dados de demonstração:** volta tudo ao estado inicial (no modo api, inclusive os itens no banco).
+- Os dados ficam salvos **neste navegador**: outro navegador ou outro computador começa do zero.
+
+Os dados de demonstração já trazem uma situação de cada tipo: pedido pendente e aprovado, empréstimo ativo e atrasado, item em manutenção, contas pendente (Diego), bloqueada (Bruno) e suspensa (Elisa), e histórico. São todos fictícios.
 
 ### Regras de negócio
 
@@ -127,6 +162,13 @@ Todas as rotas ficam sob `/api`.
 
 Patrimônio e código QR são únicos (`409` se repetirem). Campos obrigatórios: `nome`, `categoriaId`, `patrimonio`, `codigoQr`.
 
+## Ícones e fontes
+
+Nada vem de CDN: o app abre igual sem internet ou com domínios externos bloqueados.
+
+- **Fontes** (Geist, Geist Mono e Bricolage Grotesque): pacotes `@fontsource-variable/*`, ligados em `styles` no [frontend/angular.json](frontend/angular.json). Os arquivos `.woff2` vão junto no build.
+- **Ícones**: SVGs do Material Icons (variante *round*) embutidos em [frontend/src/app/icones.ts](frontend/src/app/icones.ts) e registrados no `MatIconRegistry`. Nos templates, use `<mat-icon svgIcon="nome" />`. Ao usar um ícone novo, rode `npm run icones` para regerar o arquivo (nomes em <https://fonts.google.com/icons>). O `mat-icon` já sai com `aria-hidden="true"`; botão só com ícone precisa de `aria-label`.
+
 ## Estrutura do frontend
 
 ```
@@ -135,12 +177,14 @@ frontend/src/
 ├── layouts/        layout do responsável (menu lateral) e do solicitante (barra superior)
 ├── pages/          uma tela por arquivo: P* acesso, S* solicitante, R* responsável (.ts + .html)
 ├── components/     peças reutilizáveis: modal, status-badge, item-thumb, qr-code, logo...
+├── environments/   escolha da fonte de dados (local ou api)
 ├── store/
-│   ├── nexus.store.ts   fachada usada pelas telas (estado + sincronização com a API)
-│   ├── regras/          regras de negócio em funções puras, por assunto
+│   ├── protem.store.ts  fachada usada pelas telas (estado + regras)
+│   ├── fonte-de-dados/  FonteLocal (só navegador) e FonteApi (itens no back-end)
+│   ├── regras/          regras de negócio em funções puras, por assunto, com testes
 │   ├── demo-data.ts     dados iniciais de demonstração
-│   └── persistencia.ts  leitura e gravação no localStorage
-├── services/       chamadas HTTP (itens-api.service.ts)
+│   └── persistencia.ts  leitura e gravação no localStorage (chave protem:v1)
+├── services/       chamadas HTTP do modo api (itens-api.service.ts)
 ├── lib/            utilitários de data, texto, imagem e categoria
 └── styles.css      sistema visual: cores, fontes e classes (.btn, .card, .input, .table...)
 ```
@@ -157,15 +201,20 @@ frontend/src/
 
 | Frontend (`frontend/`) | |
 |---|---|
-| `npm run dev` | Sobe em <http://localhost:3000> |
-| `npm run build` | Build de produção |
-| `npm test` | Testes |
+| `npm start` | Sobe em <http://localhost:4200>, modo local |
+| `npm run dev` | Sobe em <http://localhost:3000>, modo local |
+| `npm run dev:api` | Sobe em <http://localhost:3000>, modo api (precisa do back-end) |
+| `npm run build` | Build de produção estático, modo local |
+| `npm run build:api` | Build de produção, modo api |
+| `npm run servir` | Serve o build em <http://localhost:4300>, com fallback de rotas |
+| `npm run icones` | Regera `src/app/icones.ts` depois de usar um ícone novo |
+| `npm test` | Testes (regras de negócio, seed e persistência) |
 | `npm run lint` | Lint |
 
 ## Problemas comuns
 
-- **`ENOENT ... package.json`**: o `npm install` deve ser rodado dentro de `backend/` e `frontend/`, não na raiz.
-- **Aviso "Sem conexão com o backend"**: o backend não está rodando na porta 3001. Suba com `npm run start:dev` e clique em "Tentar de novo".
+- **`ENOENT ... package.json`**: rode o `npm install` dentro de `frontend/` (ou na raiz, que instala o front-end) e dentro de `backend/` para o modo api.
+- **Aviso "Sem conexão com o backend"** (só no modo api): o backend não está rodando na porta 3001. Suba com `npm run start:dev` e clique em "Tentar de novo", ou use o modo local (`npm start`).
 - **`EADDRINUSE` no backend**: já existe algo na porta 3001, provavelmente um backend antigo aberto. Feche esse processo ou mude o `PORT` no `.env`.
 - **Erro de conexão com o banco**: confira se o container está rodando (`docker ps`) e se o `backend/.env` bate com o `docker-compose.yml`.
 - **Câmera do leitor de QR não abre**: o navegador precisa de permissão e só libera câmera em `localhost` ou HTTPS. Sem câmera, digite o código no campo abaixo dela.

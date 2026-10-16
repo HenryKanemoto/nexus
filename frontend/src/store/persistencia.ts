@@ -1,35 +1,68 @@
-import {Usuario} from '../types/models';
+import {ProtemState} from './estado';
 import {getInitialDemoState} from './demo-data';
-import {NexusState} from './estado';
 
-const STORAGE_KEY = 'nexus_app_state_v2';
-const STORAGE_KEY_ANTIGA = 'nexus_app_state_v1';
+const CHAVE = 'protem:v1';
+/** Chaves de antes da troca de nome. Só são lidas se ainda não houver dados na chave nova. */
+const CHAVES_ANTIGAS = ['nexus_app_state_v2', 'nexus_app_state_v1'];
 
-export function carregarEstado(): NexusState {
-  try {
-    // Fallback: se não tiver v2, verifica v1 para não perder dados criados
-    const saved = localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(STORAGE_KEY_ANTIGA);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (parsed && parsed.usuarios && parsed.itens) {
-        // Garante que todos os usuários tenham a senha padrão '123456'
-        parsed.usuarios = parsed.usuarios.map((u: Usuario) => ({
-          ...u,
-          senha: !u.senha || u.senha === '123' ? '123456' : u.senha,
-        }));
-        return parsed;
-      }
-    }
-  } catch {
-    // localStorage indisponível ou corrompido: volta para a demonstração
-  }
-  return getInitialDemoState();
+const LISTAS = ['usuarios', 'categorias', 'itens', 'solicitacoes', 'emprestimos', 'ocorrencias', 'notificacoes'];
+const POLITICAS = ['simples', 'intermediaria', 'rigida'];
+
+export interface EstadoCarregado {
+  estado: ProtemState;
+  /** true quando não havia dados válidos salvos e o estado veio do seed de demonstração. */
+  doSeed: boolean;
 }
 
-export function salvarEstado(estado: NexusState) {
+export type ResultadoGravacao = 'ok' | 'cota' | 'indisponivel';
+
+export function carregarEstado(): EstadoCarregado {
+  for (const chave of [CHAVE, ...CHAVES_ANTIGAS]) {
+    const texto = ler(chave);
+    if (texto === null) continue;
+    // Dados corrompidos na chave mais recente: volta para o seed em vez de tentar as antigas
+    const estado = validar(texto);
+    return estado ? {estado, doSeed: false} : {estado: getInitialDemoState(), doSeed: true};
+  }
+  return {estado: getInitialDemoState(), doSeed: true};
+}
+
+export function salvarEstado(estado: ProtemState): ResultadoGravacao {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
+    localStorage.setItem(CHAVE, JSON.stringify(estado));
+    return 'ok';
+  } catch (erro) {
+    return erro instanceof DOMException && erro.name === 'QuotaExceededError' ? 'cota' : 'indisponivel';
+  }
+}
+
+function ler(chave: string): string | null {
+  try {
+    return localStorage.getItem(chave);
   } catch {
-    // Ignora cota de armazenamento cheia
+    // localStorage bloqueado (modo privado, política do navegador)
+    return null;
+  }
+}
+
+/** Confere a forma do estado salvo; qualquer coisa estranha é tratada como corrompida. */
+function validar(texto: string): ProtemState | null {
+  try {
+    const salvo = JSON.parse(texto) as Record<string, unknown> | null;
+    if (!salvo || typeof salvo !== 'object') return null;
+    if (LISTAS.some((lista) => !Array.isArray(salvo[lista]))) return null;
+    if (typeof salvo['agora'] !== 'string' || isNaN(new Date(salvo['agora']).getTime())) return null;
+    const configuracao = salvo['configuracao'] as {politicaAtraso?: string} | undefined;
+    if (!POLITICAS.includes(configuracao?.politicaAtraso ?? '')) return null;
+
+    const estado = salvo as unknown as ProtemState;
+    // Garante que todos os usuários tenham a senha padrão '123456'
+    estado.usuarios = estado.usuarios.map((u) => ({
+      ...u,
+      senha: !u.senha || u.senha === '123' ? '123456' : u.senha,
+    }));
+    return estado;
+  } catch {
+    return null;
   }
 }

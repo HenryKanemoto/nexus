@@ -1,19 +1,19 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
-import {NexusStore} from '../store/nexus.store';
+import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 import {RelogioFlutuante} from '../components/relogio-flutuante/relogio-flutuante';
 import {StatusBadge} from '../components/status-badge/status-badge';
-import {Logo} from '../components/logo/logo';
+import {BrandLogo} from '../components/brand-logo/brand-logo';
 
 @Component({
   selector: 'app-p3-aguardando',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, MatIconModule, RelogioFlutuante, StatusBadge, Logo],
+  imports: [RouterLink, MatIconModule, RelogioFlutuante, StatusBadge, BrandLogo],
   templateUrl: './P3Aguardando.html',
 })
 export class P3Aguardando {
-  private readonly store = inject(NexusStore);
+  private readonly store = inject(ProtemStore);
   private readonly router = inject(Router);
 
   // Recupera dados passados pela navegação de P2 caso existam

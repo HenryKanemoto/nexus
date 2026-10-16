@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, computed, inject} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
-import {NexusStore} from '../store/nexus.store';
+import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 import {formatDateShort} from '../lib/date-utils';
 import {StatusBadge} from '../components/status-badge/status-badge';
@@ -14,7 +14,7 @@ import {plural} from '../lib/categoria-utils';
   templateUrl: './S6Perfil.html',
 })
 export class S6Perfil {
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
   private readonly router = inject(Router);
 
   readonly usuario = computed(() => this.store.usuarioLogado());

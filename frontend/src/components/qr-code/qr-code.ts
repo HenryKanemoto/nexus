@@ -10,7 +10,7 @@ import QRCode from 'qrcode';
     @if (url()) {
       <img [src]="url()" [alt]="'QR code ' + valor()" [width]="tamanho()" [height]="tamanho()" class="block" />
     } @else {
-      <div class="animate-pulse rounded-md bg-sunken" [style.width.px]="tamanho()" [style.height.px]="tamanho()"></div>
+      <div class="animate-pulse rounded-md bg-brand-soft" [style.width.px]="tamanho()" [style.height.px]="tamanho()"></div>
     }
   `,
 })
@@ -24,9 +24,15 @@ export class QrCode {
     effect(() => {
       const valor = this.valor();
       // Gera em resolução dobrada para ficar nítido em telas de alta densidade
-      QRCode.toDataURL(valor, {width: this.tamanho() * 2, margin: 1, color: {dark: '#16181d', light: '#ffffff'}})
+      QRCode.toDataURL(valor, {width: this.tamanho() * 2, margin: 1, color: {dark: corDoToken('--color-brand-navy'), light: '#ffffff'}})
         .then((url) => this.url.set(url))
         .catch(() => this.url.set(''));
     });
   }
+}
+
+/** Lê uma cor do tema (styles.css) para a biblioteca de QR, que precisa do valor em hex. */
+function corDoToken(variavel: string): string {
+  const valor = getComputedStyle(document.documentElement).getPropertyValue(variavel).trim();
+  return /^#[0-9a-f]{6}$/i.test(valor) ? valor : '#000000';
 }

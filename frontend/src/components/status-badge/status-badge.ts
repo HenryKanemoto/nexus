@@ -1,31 +1,33 @@
 import {ChangeDetectionStrategy, Component, computed, input} from '@angular/core';
 import {StatusItem, StatusUsuario} from '../../types/models';
 
-type Tom = 'ok' | 'warn' | 'info' | 'danger' | 'maint' | 'neutro';
+/** Cores dos estados de item (tokens em styles.css); contas reaproveitam a mais próxima. */
+type Tom = 'disponivel' | 'solicitado' | 'reservado' | 'emprestado' | 'atrasado' | 'manutencao' | 'neutro';
 
 const STATUS: Record<string, {label: string; tom: Tom}> = {
   // Itens
-  disponivel: {label: 'Disponível', tom: 'ok'},
-  solicitado: {label: 'Solicitado', tom: 'warn'},
-  reservado: {label: 'Reservado', tom: 'warn'},
-  emprestado: {label: 'Emprestado', tom: 'info'},
-  atrasado: {label: 'Atrasado', tom: 'danger'},
-  manutencao: {label: 'Manutenção', tom: 'maint'},
+  disponivel: {label: 'Disponível', tom: 'disponivel'},
+  solicitado: {label: 'Solicitado', tom: 'solicitado'},
+  reservado: {label: 'Reservado', tom: 'reservado'},
+  emprestado: {label: 'Emprestado', tom: 'emprestado'},
+  atrasado: {label: 'Atrasado', tom: 'atrasado'},
+  manutencao: {label: 'Em manutenção', tom: 'manutencao'},
   // Usuários
-  ativa: {label: 'Ativa', tom: 'ok'},
-  pendente: {label: 'Pendente', tom: 'warn'},
-  bloqueada: {label: 'Bloqueada', tom: 'danger'},
-  suspensa: {label: 'Suspensa', tom: 'maint'},
+  ativa: {label: 'Ativa', tom: 'disponivel'},
+  pendente: {label: 'Pendente', tom: 'solicitado'},
+  bloqueada: {label: 'Bloqueada', tom: 'atrasado'},
+  suspensa: {label: 'Suspensa', tom: 'manutencao'},
   recusada: {label: 'Recusada', tom: 'neutro'},
 };
 
 const CLASSES: Record<Tom, string> = {
-  ok: 'bg-ok-soft text-ok',
-  warn: 'bg-warn-soft text-warn',
-  info: 'bg-info-soft text-info',
-  danger: 'bg-danger-soft text-danger',
-  maint: 'bg-maint-soft text-maint',
-  neutro: 'bg-sunken text-ink-soft',
+  disponivel: 'bg-disponivel-bg text-disponivel',
+  solicitado: 'bg-solicitado-bg text-solicitado',
+  reservado: 'bg-reservado-bg text-reservado',
+  emprestado: 'bg-emprestado-bg text-emprestado',
+  atrasado: 'bg-atrasado-bg text-atrasado',
+  manutencao: 'bg-manutencao-bg text-manutencao',
+  neutro: 'bg-bg text-text-muted',
 };
 
 @Component({

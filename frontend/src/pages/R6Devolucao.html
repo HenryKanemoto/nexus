@@ -1,6 +1,6 @@
 <div class="page max-w-3xl">
   <a routerLink="/painel/leitor" class="back-link">
-    <mat-icon class="icon-sm">arrow_back</mat-icon>
+    <mat-icon class="icon-sm" svgIcon="arrow_back" />
     Leitor de QR
   </a>
 
@@ -11,93 +11,75 @@
       @let politica = store.configuracao().politicaAtraso;
 
       <header>
-        <p class="page-eyebrow">Empréstimo em andamento</p>
-        <h1 class="page-title mt-1">Registrar devolução</h1>
-        <p class="page-subtitle">Confira o estado do equipamento antes de encerrar o empréstimo.</p>
+        <h1 class="page-title">Registrar devolução</h1>
+        <p class="page-subtitle">Confira o estado do item antes de encerrar o empréstimo.</p>
       </header>
 
       <section class="card overflow-hidden">
-        <div class="flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:p-6">
-          <app-item-thumb [item]="i" [tamanhoIcone]="40" class="size-24 shrink-0 rounded-control" />
+        <div class="flex items-center gap-4 p-5 sm:p-6">
+          <app-item-thumb [item]="i" [tamanhoIcone]="32" class="size-16 shrink-0 rounded-control" />
           <div class="min-w-0 flex-1">
-            <h2 class="font-display text-2xl font-semibold leading-tight">{{ i.nome }}</h2>
-            <p class="mt-1 text-sm text-ink-soft">
-              {{ user?.nome }} · retirado em {{ formatarData(emp.retiradoEm) }} · devolver até {{ formatarData(emp.devolucaoPrevista) }}
+            <h2 class="font-display text-xl font-semibold leading-tight">{{ i.nome }}</h2>
+            <p class="mt-1 text-sm text-text-muted">
+              {{ user?.nome }} · devolver até {{ formatarData(emp.devolucaoPrevista) }}@if (diasAtrasoAtual <= 0) { · no prazo}
             </p>
-            <span class="tag mt-2">{{ i.patrimonio }}</span>
           </div>
         </div>
 
-        <!-- Situação do prazo e consequência pela política (RN06) -->
+        <!-- Atraso e consequência pela política (RN06) -->
         @if (diasAtrasoAtual > 0) {
-          <div class="flex items-start gap-3 border-t border-warn/25 bg-warn-soft px-5 py-4 text-[#7d4500] sm:px-6">
-            <mat-icon class="icon-sm mt-0.5">warning</mat-icon>
-            <div>
-              <p class="font-semibold">{{ plural(diasAtrasoAtual, 'dia') }} de atraso</p>
-              <p class="text-sm">
-                @if (politica === 'rigida') {
-                  Pela política rígida, a conta será suspensa por {{ plural(diasAtrasoAtual, 'dia') }}.
-                } @else if (politica === 'intermediaria') {
-                  Pela política intermediária, a conta é desbloqueada após a entrega.
-                } @else {
-                  Pela política simples, não há suspensão.
-                }
-              </p>
-            </div>
-          </div>
-        } @else {
-          <div class="flex items-center gap-3 border-t border-ok/20 bg-ok-soft px-5 py-4 text-[#11612e] sm:px-6">
-            <mat-icon class="icon-sm">verified</mat-icon>
-            <p class="text-sm font-medium">Dentro do prazo. Nenhuma penalidade.</p>
-          </div>
-        }
-      </section>
-
-      <!-- Defeito (RN07) -->
-      <section class="card card-pad flex flex-col gap-4">
-        <label class="flex cursor-pointer items-start gap-3">
-          <input
-            type="checkbox"
-            [checked]="comDefeito()"
-            (change)="comDefeito.set($any($event.target).checked)"
-            class="mt-0.5 size-5 shrink-0 cursor-pointer accent-ink"
-          />
-          <span>
-            <span class="block font-medium">O item voltou com defeito</span>
-            <span class="block text-sm text-ink-muted">Ele vai para a manutenção, sai do catálogo e uma ocorrência é registrada.</span>
-          </span>
-        </label>
-
-        @if (comDefeito()) {
-          <div class="field">
-            <label for="descricaoDefeito" class="label">Descreva o defeito</label>
-            <textarea
-              id="descricaoDefeito"
-              rows="3"
-              class="textarea"
-              [class.input-invalid]="erroValidacao()"
-              [value]="descricaoDefeito()"
-              (input)="descricaoDefeito.set($any($event.target).value); erroValidacao.set(null)"
-              placeholder="Lente trincada, botão de ligar travado..."
-              required
-            ></textarea>
-            @if (erroValidacao()) {
-              <p class="field-error">{{ erroValidacao() }}</p>
+          <div class="border-t border-border bg-atrasado-bg px-5 py-3 text-sm text-atrasado sm:px-6">
+            <span class="font-semibold">{{ plural(diasAtrasoAtual, 'dia') }} de atraso.</span>
+            @if (politica === 'rigida') {
+              A conta será suspensa por {{ plural(diasAtrasoAtual, 'dia') }}.
+            } @else if (politica === 'intermediaria') {
+              A conta é desbloqueada após a entrega.
+            } @else {
+              Sem suspensão (política simples).
             }
           </div>
         }
+
+        <!-- Avaria (RN07) -->
+        <div class="flex flex-col gap-4 border-t border-border p-5 sm:p-6">
+          <label class="flex cursor-pointer items-center gap-3" title="O item vai para a manutenção, sai do catálogo e uma ocorrência é registrada.">
+            <input
+              type="checkbox"
+              [checked]="comDefeito()"
+              (change)="comDefeito.set($any($event.target).checked)"
+              class="size-5 shrink-0 cursor-pointer accent-primary"
+            />
+            <span class="font-medium">Voltou com avaria</span>
+          </label>
+
+          @if (comDefeito()) {
+            <div class="field">
+              <label for="descricaoDefeito" class="label">Descreva a avaria</label>
+              <textarea
+                id="descricaoDefeito"
+                rows="3"
+                class="textarea"
+                [class.input-invalid]="erroValidacao()"
+                [value]="descricaoDefeito()"
+                (input)="descricaoDefeito.set($any($event.target).value); erroValidacao.set(null)"
+                placeholder="Lente trincada, botão de ligar travado..."
+                required
+              ></textarea>
+              @if (erroValidacao()) {
+                <p class="field-error">{{ erroValidacao() }}</p>
+              }
+            </div>
+          }
+        </div>
       </section>
 
       <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-        <a routerLink="/painel/leitor" class="btn btn-secondary btn-lg">Cancelar</a>
-        <button type="button" (click)="executarConfirmacaoDevolucao()" class="btn btn-primary btn-lg">
-          <mat-icon class="icon-sm">done_all</mat-icon>
-          Confirmar devolução
-        </button>
+        <a routerLink="/painel/leitor" class="btn btn-ghost btn-lg">Cancelar</a>
+        <button type="button" (click)="executarConfirmacaoDevolucao()" class="btn btn-primary btn-lg">Confirmar devolução</button>
       </div>
     } @else {
       <div class="card empty">
-        <mat-icon class="icon-xl">check_circle</mat-icon>
+        <mat-icon class="icon-xl" svgIcon="check_circle" />
         <p class="empty-title">Nenhum empréstimo em aberto</p>
         <p class="empty-text">"{{ i.nome }}" ({{ i.patrimonio }}) já foi devolvido ou está disponível.</p>
         <a routerLink="/painel/leitor" class="btn btn-secondary btn-sm mt-3">Voltar ao leitor</a>
@@ -105,7 +87,7 @@
     }
   } @else {
     <div class="card empty">
-      <mat-icon class="icon-xl">help_outline</mat-icon>
+      <mat-icon class="icon-xl" svgIcon="help_outline" />
       <p class="empty-title">Item não encontrado</p>
       <a routerLink="/painel/leitor" class="btn btn-secondary btn-sm mt-3">Voltar ao leitor</a>
     </div>

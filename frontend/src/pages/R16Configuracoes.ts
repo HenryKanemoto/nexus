@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
-import {NexusStore} from '../store/nexus.store';
+import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 import {PoliticaAtraso} from '../types/models';
 
@@ -10,7 +10,7 @@ import {PoliticaAtraso} from '../types/models';
   templateUrl: './R16Configuracoes.html',
 })
 export class R16Configuracoes {
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
 
   readonly politicaAtual = computed(() => this.store.configuracao().politicaAtraso);
   readonly politicaSelecionada = signal<PoliticaAtraso>('rigida');

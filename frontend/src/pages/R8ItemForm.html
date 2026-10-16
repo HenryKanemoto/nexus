@@ -1,6 +1,6 @@
 <div class="page max-w-5xl">
   <a [routerLink]="modoEdicao() ? ['/painel/itens', itemId()] : ['/painel/itens']" class="back-link">
-    <mat-icon class="icon-sm">arrow_back</mat-icon>
+    <mat-icon class="icon-sm" svgIcon="arrow_back" />
     {{ modoEdicao() ? 'Ficha do item' : 'Itens' }}
   </a>
 
@@ -13,10 +13,10 @@
 
   @if (erroValidacao()) {
     <div role="alert" class="alert alert-danger">
-      <mat-icon class="icon-sm">error_outline</mat-icon>
+      <mat-icon class="icon-sm" svgIcon="error_outline" />
       <p class="flex-1">{{ erroValidacao() }}</p>
       <button type="button" (click)="erroValidacao.set(null)" class="btn-icon size-8" aria-label="Fechar aviso">
-        <mat-icon class="icon-sm">close</mat-icon>
+        <mat-icon class="icon-sm" svgIcon="close" />
       </button>
     </div>
   }
@@ -37,7 +37,7 @@
       </div>
 
       <div class="field">
-        <label for="descricao" class="label">Descrição <span class="font-normal text-ink-muted">(opcional)</span></label>
+        <label for="descricao" class="label">Descrição <span class="font-normal text-text-muted">(opcional)</span></label>
         <textarea
           id="descricao"
           rows="4"
@@ -73,10 +73,10 @@
         </div>
       </div>
 
-      <div class="flex flex-col-reverse gap-3 border-t border-line pt-5 sm:flex-row sm:justify-end">
+      <div class="flex flex-col-reverse gap-3 border-t border-border pt-5 sm:flex-row sm:justify-end">
         <button type="button" (click)="cancelar()" class="btn btn-secondary">Cancelar</button>
         <button type="submit" class="btn btn-primary">
-          <mat-icon class="icon-sm">save</mat-icon>
+          <mat-icon class="icon-sm" svgIcon="save" />
           Salvar item
         </button>
       </div>
@@ -85,27 +85,27 @@
     <!-- Foto -->
     <section class="card card-pad flex flex-col gap-3" aria-labelledby="titulo-foto">
       <p id="titulo-foto" class="label">Foto</p>
-      <div class="relative aspect-square overflow-hidden rounded-control border-2 border-dashed border-line-strong bg-paper">
+      <div class="relative aspect-square overflow-hidden rounded-control border-2 border-dashed border-border-input bg-bg">
         @if (fotoDataUrl()) {
           <img [src]="fotoDataUrl()" alt="Foto do item" class="size-full object-cover" />
           <button
             type="button"
             (click)="fotoDataUrl.set(null)"
-            class="btn-icon absolute right-2 top-2 bg-ink/70 text-white hover:bg-danger hover:text-white"
+            class="btn-icon absolute right-2 top-2 bg-brand-navy/70 text-white hover:bg-danger hover:text-white"
             aria-label="Remover foto"
           >
-            <mat-icon class="icon-sm">close</mat-icon>
+            <mat-icon class="icon-sm" svgIcon="close" />
           </button>
         } @else {
-          <div class="flex size-full flex-col items-center justify-center gap-2 text-ink-muted">
-            <mat-icon class="icon-xl opacity-50">add_photo_alternate</mat-icon>
+          <div class="flex size-full flex-col items-center justify-center gap-2 text-text-muted">
+            <mat-icon class="icon-xl opacity-50" svgIcon="add_photo_alternate" />
             <p class="text-xs">Nenhuma foto</p>
           </div>
         }
       </div>
       <input type="file" #fileInput accept="image/*" (change)="onFotoSelecionada($event)" class="hidden" />
       <button type="button" (click)="fileInput.click()" class="btn btn-secondary btn-block" [disabled]="processandoFoto()">
-        <mat-icon class="icon-sm">upload</mat-icon>
+        <mat-icon class="icon-sm" svgIcon="upload" />
         {{ processandoFoto() ? 'Processando...' : fotoDataUrl() ? 'Trocar foto' : 'Escolher foto' }}
       </button>
       <p class="hint text-center">A imagem é reduzida para até 800 px antes de salvar.</p>

@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
-import {NexusStore} from '../store/nexus.store';
+import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 import {RelogioFlutuante} from '../components/relogio-flutuante/relogio-flutuante';
-import {Logo} from '../components/logo/logo';
+import {BrandLogo} from '../components/brand-logo/brand-logo';
 
 interface ErrosFormulario {
   nome?: string;
@@ -18,11 +18,11 @@ interface ErrosFormulario {
 @Component({
   selector: 'app-p2-cadastro',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, MatIconModule, RelogioFlutuante, Logo],
+  imports: [RouterLink, MatIconModule, RelogioFlutuante, BrandLogo],
   templateUrl: './P2Cadastro.html',
 })
 export class P2Cadastro {
-  private readonly store = inject(NexusStore);
+  private readonly store = inject(ProtemStore);
   private readonly router = inject(Router);
 
   readonly nome = signal('');

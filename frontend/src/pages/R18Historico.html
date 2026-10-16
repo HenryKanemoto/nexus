@@ -1,33 +1,54 @@
 <div class="page">
+  <a routerLink="/painel/relatorios" class="back-link">
+    <mat-icon class="icon-sm" svgIcon="arrow_back" />
+    Relatórios
+  </a>
+
   <header class="page-header">
     <div>
-      <h1 class="page-title">Histórico</h1>
-      <p class="page-subtitle">Todas as movimentações do acervo: pedidos, retiradas, devoluções e manutenção.</p>
+      <h1 class="page-title" title="Montado a partir dos registros que o sistema guarda. Alterações antigas de cadastro que não foram registradas não podem ser reconstruídas.">
+        Histórico
+      </h1>
+      <p class="page-subtitle">Pedidos, retiradas, devoluções e manutenção.</p>
     </div>
   </header>
 
-  <div class="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
+  <div class="grid grid-cols-3 gap-3 lg:gap-4">
     <div class="stat">
       <span class="stat-label">Solicitações</span>
       <span class="stat-value">{{ contar('solicitacao') }}</span>
     </div>
     <div class="stat">
-      <span class="stat-label">Retiradas e devoluções</span>
+      <span class="stat-label">Empréstimos</span>
       <span class="stat-value">{{ contarEmprestimosDevolucoes() }}</span>
     </div>
     <div class="stat">
       <span class="stat-label">Ocorrências</span>
       <span class="stat-value">{{ store.ocorrencias().length }}</span>
     </div>
-    <div class="stat">
-      <span class="stat-label">Itens no acervo</span>
-      <span class="stat-value">{{ store.itens().length }}</span>
-    </div>
   </div>
 
-  <!-- Filtros em uma linha -->
-  <section class="card card-pad" aria-label="Filtros">
-    <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-[1fr_1.4fr_1fr_1fr_auto] xl:items-end">
+  <!-- Busca sempre visível; tipo e datas atrás do botão Filtros -->
+  <div class="flex gap-2">
+    <div class="input-group flex-1 sm:max-w-sm">
+      <mat-icon class="icon-sm" svgIcon="search" />
+      <input type="search" class="input" [value]="busca()" (input)="busca.set($any($event.target).value)" placeholder="Pessoa, item ou patrimônio" aria-label="Buscar movimentação" />
+    </div>
+    <button
+      type="button"
+      (click)="filtrosAbertos.set(!filtrosAbertos())"
+      class="btn btn-secondary shrink-0"
+      [attr.aria-expanded]="filtrosAbertos()"
+      aria-controls="filtros-historico"
+    >
+      <mat-icon class="icon-sm" svgIcon="tune" />
+      Filtros{{ filtrosAtivos() ? ' (' + filtrosAtivos() + ')' : '' }}
+    </button>
+  </div>
+
+  @if (filtrosAbertos()) {
+  <section id="filtros-historico" class="card card-pad" aria-label="Filtros">
+    <div class="grid gap-3 sm:grid-cols-[1fr_1fr_1fr_auto] sm:items-end">
       <div class="field">
         <label for="filtro-tipo" class="label">Tipo</label>
         <select id="filtro-tipo" class="select" [value]="tipo()" (change)="tipo.set($any($event.target).value)">
@@ -40,10 +61,6 @@
         </select>
       </div>
       <div class="field">
-        <label for="filtro-busca" class="label">Pessoa ou item</label>
-        <input id="filtro-busca" type="search" class="input" [value]="busca()" (input)="busca.set($any($event.target).value)" placeholder="Nome, patrimônio ou descrição" />
-      </div>
-      <div class="field">
         <label for="filtro-inicio" class="label">De</label>
         <input id="filtro-inicio" type="date" class="input" [value]="dataInicio()" (change)="dataInicio.set($any($event.target).value)" />
       </div>
@@ -54,41 +71,38 @@
       <button type="button" (click)="limparFiltros()" class="btn btn-ghost">Limpar</button>
     </div>
   </section>
+  }
 
   <section class="card overflow-hidden" aria-labelledby="titulo-movimentacoes">
     <div class="card-header">
       <h2 id="titulo-movimentacoes" class="card-title">Movimentações</h2>
-      <span class="text-xs text-ink-muted">{{ registrosFiltrados().length }} registros · mais recentes primeiro</span>
+      <span class="text-sm text-text-muted">{{ registrosFiltrados().length }} registros</span>
     </div>
     @if (registrosFiltrados().length > 0) {
-      <ul class="divide-y divide-line">
+      <ul class="divide-y divide-border">
         @for (r of registrosFiltrados(); track r.id) {
           <li class="flex items-start gap-4 px-5 py-3.5 sm:px-6">
-            <span class="flex size-9 shrink-0 items-center justify-center rounded-full {{ classeIcone(r.tipo) }}">
-              <mat-icon class="icon-sm">{{ icone(r.tipo) }}</mat-icon>
+            <span class="flex size-9 shrink-0 items-center justify-center rounded-full bg-bg text-text-muted">
+              <mat-icon class="icon-sm" [svgIcon]="icone(r.tipo)" />
             </span>
             <div class="min-w-0 flex-1">
               <p class="flex flex-wrap items-baseline justify-between gap-x-3">
                 <span class="font-medium">{{ r.titulo }}</span>
-                <span class="font-mono text-xs text-ink-muted">{{ formatarData(r.data) }}</span>
+                <span class="text-sm text-text-muted">{{ formatarData(r.data) }}</span>
               </p>
-              <p class="mt-0.5 text-sm text-ink-soft">{{ r.pessoa }} · {{ r.item }}</p>
-              <p class="mt-0.5 text-xs text-ink-muted">{{ r.detalhe }} · <span class="font-medium">{{ r.status }}</span></p>
+              <p class="mt-0.5 text-sm text-text-muted">{{ r.pessoa }} · {{ r.item }}</p>
+              <p class="mt-0.5 text-sm text-text-muted">{{ r.detalhe }} · {{ r.status }}</p>
             </div>
           </li>
         }
       </ul>
     } @else {
       <div class="empty">
-        <mat-icon class="icon-xl">manage_search</mat-icon>
+        <mat-icon class="icon-xl" svgIcon="manage_search" />
         <p class="empty-title">Nenhuma movimentação encontrada</p>
         <p class="empty-text">Tente mudar os filtros.</p>
       </div>
     }
   </section>
 
-  <p class="text-xs text-ink-muted">
-    O histórico é montado a partir dos registros que o sistema guarda. Alterações antigas de cadastro que não foram registradas
-    não podem ser reconstruídas.
-  </p>
 </div>

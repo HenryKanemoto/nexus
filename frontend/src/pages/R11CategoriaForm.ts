@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { NexusStore } from '../store/nexus.store';
+import { ProtemStore } from '../store/protem.store';
 import { MatIconModule } from '@angular/material/icon';
 import { Categoria } from '../types/models';
 
@@ -13,7 +13,7 @@ import { Categoria } from '../types/models';
 export class R11CategoriaForm {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
 
   readonly catId = computed(() => this.route.snapshot.paramMap.get('id') || '');
   readonly modoEdicao = computed(() => !!this.catId());

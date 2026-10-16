@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { NexusStore } from '../store/nexus.store';
+import { ProtemStore } from '../store/protem.store';
 import { MatIconModule } from '@angular/material/icon';
 import { StatusBadge } from '../components/status-badge/status-badge';
 import { iniciais, rotuloPerfil } from '../lib/texto-utils';
@@ -12,7 +12,7 @@ import { iniciais, rotuloPerfil } from '../lib/texto-utils';
   templateUrl: './R13Usuarios.html',
 })
 export class R13Usuarios {
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
   private readonly router = inject(Router);
 
   readonly termoBusca = signal('');

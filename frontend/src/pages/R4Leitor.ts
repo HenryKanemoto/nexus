@@ -2,46 +2,55 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  ElementRef,
   afterNextRender,
   computed,
   inject,
   signal,
+  viewChild,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { NexusStore } from '../store/nexus.store';
+import { ProtemStore } from '../store/protem.store';
 import { MatIconModule } from '@angular/material/icon';
 import { Html5Qrcode } from 'html5-qrcode';
-import { StatusBadge } from '../components/status-badge/status-badge';
 import { StatusItem } from '../types/models';
 
 @Component({
   selector: 'app-r4-leitor',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatIconModule, StatusBadge],
+  imports: [MatIconModule],
   templateUrl: './R4Leitor.html',
 })
 export class R4Leitor {
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly codigoDigitado = signal('');
   readonly mensagemAviso = signal<string | null>(null);
   readonly cameraAtiva = signal(false);
-  readonly cameraStatusTexto = signal('Aguardando a câmera...');
+  readonly cameraStatusTexto = signal('Ligando a câmera...');
+  private readonly campoCodigo = viewChild.required<ElementRef<HTMLInputElement>>('campoCodigo');
 
   private html5QrCode: Html5Qrcode | null = null;
 
   /**
    * Atalhos para testar sem câmera: um item de cada situação que o leitor trata
    * (reservado → retirada, emprestado/atrasado → devolução, disponível → aviso).
+   * Aparecem como sugestões do campo de código.
    */
   readonly itensExemplo = computed(() => {
     const ordem: StatusItem[] = ['reservado', 'emprestado', 'atrasado', 'disponivel'];
+    const rotulos: Partial<Record<StatusItem, string>> = {
+      reservado: 'reservado: abre a retirada',
+      emprestado: 'emprestado: abre a devolução',
+      atrasado: 'atrasado: abre a devolução',
+      disponivel: 'disponível: mostra um aviso',
+    };
     return ordem
       .map((status) => this.store.itens().find((i) => i.status === status))
       .filter((i) => !!i)
-      .map((i) => ({ codigo: i.codigoQr, status: i.status }));
+      .map((i) => ({ codigo: i.codigoQr, rotulo: `${i.nome} (${rotulos[i.status]})` }));
   });
 
   constructor() {
@@ -62,7 +71,7 @@ export class R4Leitor {
 
       const devices = await Html5Qrcode.getCameras().catch(() => []);
       if (!devices || devices.length === 0) {
-        this.cameraStatusTexto.set('Nenhuma câmera encontrada. Digite o código abaixo.');
+        this.usarDigitacao('Sem câmera aqui. Digite o código abaixo.');
         return;
       }
 
@@ -89,9 +98,16 @@ export class R4Leitor {
       this.cameraAtiva.set(true);
       this.cameraStatusTexto.set('Câmera ativa');
     } catch {
-      this.cameraAtiva.set(false);
-      this.cameraStatusTexto.set('Câmera bloqueada ou indisponível. Digite o código abaixo.');
+      // Sem permissão, câmera em uso ou página fora de HTTPS/localhost: nada de erro técnico
+      this.usarDigitacao('Câmera indisponível. Digite o código abaixo.');
     }
+  }
+
+  /** Câmera falhou: mensagem curta e o foco vai para o campo de código. */
+  private usarDigitacao(mensagem: string) {
+    this.cameraAtiva.set(false);
+    this.cameraStatusTexto.set(mensagem);
+    this.campoCodigo().nativeElement.focus();
   }
 
   private async pararCamera() {
@@ -113,11 +129,6 @@ export class R4Leitor {
     this.rotearCodigo(this.codigoDigitado());
   }
 
-  testarCodigo(codigo: string) {
-    this.codigoDigitado.set(codigo);
-    this.rotearCodigo(codigo);
-  }
-
   /**
    * Regra de Roteamento do Wireframe R4:
    * - item "reservado" -> leva a /painel/retirada/:itemId (R5)
@@ -127,7 +138,7 @@ export class R4Leitor {
   private rotearCodigo(codigo: string) {
     const trimmed = (codigo || '').trim().toUpperCase();
     if (!trimmed) {
-      this.mensagemAviso.set('Informe um código QR ou patrimônio válido.');
+      this.mensagemAviso.set('Digite o código QR ou o patrimônio do item.');
       return;
     }
 
@@ -136,9 +147,7 @@ export class R4Leitor {
     );
 
     if (!item) {
-      this.mensagemAviso.set(
-        `Nenhum equipamento cadastrado com o código "${codigo}". Confira o patrimônio impresso no item.`
-      );
+      this.mensagemAviso.set(`Nenhum item com o código "${codigo}". Confira o patrimônio na etiqueta.`);
       return;
     }
 
@@ -151,21 +160,13 @@ export class R4Leitor {
       this.pararCamera();
       this.router.navigate(['/painel/devolucao', item.id]);
     } else if (item.status === 'disponivel') {
-      this.mensagemAviso.set(
-        `"${item.nome}" (${item.patrimonio}) está disponível no catálogo. Não há retirada marcada nem empréstimo para devolver.`
-      );
+      this.mensagemAviso.set(`"${item.nome}" está disponível: não há retirada nem devolução para registrar.`);
     } else if (item.status === 'solicitado') {
-      this.mensagemAviso.set(
-        `"${item.nome}" (${item.patrimonio}) tem um pedido ainda em análise. Aprove-o primeiro em Solicitações.`
-      );
+      this.mensagemAviso.set(`"${item.nome}" tem um pedido em análise. Aprove-o em Solicitações antes da retirada.`);
     } else if (item.status === 'manutencao') {
-      this.mensagemAviso.set(
-        `"${item.nome}" (${item.patrimonio}) está em manutenção e não pode ser retirado.`
-      );
+      this.mensagemAviso.set(`"${item.nome}" está em manutenção e não pode ser retirado.`);
     } else {
-      this.mensagemAviso.set(
-        `"${item.nome}" (${item.patrimonio}) está com status "${item.status}".`
-      );
+      this.mensagemAviso.set(`"${item.nome}" está com a situação "${item.status}".`);
     }
   }
 }

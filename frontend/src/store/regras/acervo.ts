@@ -1,5 +1,5 @@
 import {Categoria, Item, PoliticaAtraso, StatusItem} from '../../types/models';
-import {NexusState} from '../estado';
+import {ProtemState} from '../estado';
 
 function upsert<T extends {id: string}>(lista: T[], registro: T): T[] {
   return lista.some((r) => r.id === registro.id)
@@ -7,19 +7,19 @@ function upsert<T extends {id: string}>(lista: T[], registro: T): T[] {
     : [registro, ...lista];
 }
 
-export function salvarItem(s: NexusState, item: Item): NexusState {
+export function salvarItem(s: ProtemState, item: Item): ProtemState {
   return {...s, itens: upsert(s.itens, item)};
 }
 
-export function removerItem(s: NexusState, itemId: string): NexusState {
+export function removerItem(s: ProtemState, itemId: string): ProtemState {
   return {...s, itens: s.itens.filter((i) => i.id !== itemId)};
 }
 
-export function salvarCategoria(s: NexusState, cat: Categoria): NexusState {
+export function salvarCategoria(s: ProtemState, cat: Categoria): ProtemState {
   return {...s, categorias: upsert(s.categorias, cat)};
 }
 
-export function resolverOcorrencia(s: NexusState, ocorrenciaId: string, itemRetornarDisponivel = true): NexusState {
+export function resolverOcorrencia(s: ProtemState, ocorrenciaId: string, itemRetornarDisponivel = true): ProtemState {
   const ocorr = s.ocorrencias.find((o) => o.id === ocorrenciaId);
   if (!ocorr) return s;
 
@@ -34,14 +34,14 @@ export function resolverOcorrencia(s: NexusState, ocorrenciaId: string, itemReto
   };
 }
 
-export function alterarPoliticaAtraso(s: NexusState, politicaAtraso: PoliticaAtraso): NexusState {
+export function alterarPoliticaAtraso(s: ProtemState, politicaAtraso: PoliticaAtraso): ProtemState {
   return {...s, configuracao: {...s.configuracao, politicaAtraso}};
 }
 
-export function marcarNotificacaoComoLida(s: NexusState, notificacaoId: string): NexusState {
+export function marcarNotificacaoComoLida(s: ProtemState, notificacaoId: string): ProtemState {
   return {...s, notificacoes: s.notificacoes.map((n) => (n.id === notificacaoId ? {...n, lida: true} : n))};
 }
 
-export function marcarTodasNotificacoesComoLidas(s: NexusState, usuarioId: string): NexusState {
+export function marcarTodasNotificacoesComoLidas(s: ProtemState, usuarioId: string): ProtemState {
   return {...s, notificacoes: s.notificacoes.map((n) => (n.usuarioId === usuarioId ? {...n, lida: true} : n))};
 }

@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {NexusStore} from '../store/nexus.store';
+import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 import {addDays, formatDateShort, toDateInputValue} from '../lib/date-utils';
 import {iconeCategoria, plural} from '../lib/categoria-utils';
@@ -24,7 +24,7 @@ interface DiaCalendario {
 export class S3Solicitar {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
 
   readonly itemId = computed(() => this.route.snapshot.paramMap.get('id') || '');
 

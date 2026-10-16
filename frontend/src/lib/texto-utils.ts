@@ -1,6 +1,6 @@
 /** Iniciais para avatar: "Camila Cristina" → "CC", "Enzo" → "EN". */
 export function iniciais(nome: string | null | undefined): string {
-  const partes = (nome || 'Nexus').trim().split(/\s+/);
+  const partes = (nome || 'Protem').trim().split(/\s+/);
   if (partes.length >= 2) {
     return (partes[0][0] + partes[1][0]).toUpperCase();
   }

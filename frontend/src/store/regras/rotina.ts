@@ -1,5 +1,5 @@
 import {calculateDiasAtraso, formatDateShort, isDayEnded, parseDate} from '../../lib/date-utils';
-import {NexusState, novaNotificacao, responsaveis} from '../estado';
+import {ProtemState, novaNotificacao, responsaveis} from '../estado';
 
 /**
  * Rotina automática executada ao avançar o relógio:
@@ -11,7 +11,7 @@ import {NexusState, novaNotificacao, responsaveis} from '../estado';
  * 4. Encerrar suspensões vencidas (se usuario.suspensoAte <= agora, volta a ativa).
  * Dias de atraso = dias inteiros depois do prazo (mínimo 1).
  */
-export function executarRotinaAutomatica(s: NexusState, clockNow: Date): NexusState {
+export function executarRotinaAutomatica(s: ProtemState, clockNow: Date): ProtemState {
   const agoraIso = clockNow.toISOString();
   const itens = [...s.itens];
   let usuarios = [...s.usuarios];

@@ -2,10 +2,10 @@
   <header class="page-header">
     <div>
       <h1 class="page-title">Usuários</h1>
-      <p class="page-subtitle">Alunos, professores e responsáveis. Abra uma pessoa para ver o histórico dela.</p>
+      <p class="page-subtitle">Abra uma pessoa para ver o histórico dela.</p>
     </div>
     <div class="input-group w-full sm:w-80">
-      <mat-icon class="icon-sm">search</mat-icon>
+      <mat-icon class="icon-sm" svgIcon="search" />
       <input
         type="search"
         class="input"
@@ -17,31 +17,42 @@
     </div>
   </header>
 
+  @if (store.contasPendentesCount() > 0) {
+    <a routerLink="/painel/contas" class="card flex items-center gap-3 border-primary bg-brand-soft px-5 py-3.5 text-primary-strong transition-colors hover:bg-surface">
+      <mat-icon class="icon-sm" svgIcon="how_to_reg" />
+      <span class="flex-1 text-sm font-medium">
+        {{ store.contasPendentesCount() === 1 ? '1 cadastro aguarda' : store.contasPendentesCount() + ' cadastros aguardam' }} aprovação
+      </span>
+      <span class="text-sm font-medium">Revisar</span>
+      <mat-icon class="icon-sm" svgIcon="chevron_right" />
+    </a>
+  }
+
   <section class="card overflow-hidden">
     @if (usuariosFiltrados().length > 0) {
-      <ul class="divide-y divide-line">
+      <ul class="divide-y divide-border">
         @for (user of usuariosFiltrados(); track user.id) {
           <li>
             <a
               [routerLink]="['/painel/usuarios', user.id]"
-              class="flex items-center gap-4 px-4 py-3 transition-colors hover:bg-paper sm:px-5"
+              class="flex items-center gap-4 px-4 py-3 transition-colors hover:bg-bg sm:px-5"
             >
               <span class="avatar size-10 text-sm">{{ getIniciais(user.nome) }}</span>
               <span class="min-w-0 flex-1">
                 <span class="block truncate font-medium">{{ user.nome }}</span>
-                <span class="block truncate text-xs text-ink-muted">{{ user.email }}</span>
+                <span class="block truncate text-xs text-text-muted">{{ user.email }}</span>
               </span>
               <span class="hidden w-32 sm:block"><span class="tag">{{ user.matricula }}</span></span>
-              <span class="hidden w-28 text-sm text-ink-soft md:block">{{ rotuloPerfil(user.perfil) }}</span>
+              <span class="hidden w-28 text-sm text-text-muted md:block">{{ rotuloPerfil(user.perfil) }}</span>
               <app-status-badge [status]="user.status" />
             </a>
           </li>
         }
       </ul>
-      <p class="border-t border-line px-5 py-3 text-xs text-ink-muted">{{ usuariosFiltrados().length }} de {{ store.usuarios().length }} pessoas</p>
+      <p class="border-t border-border px-5 py-3 text-xs text-text-muted">{{ usuariosFiltrados().length }} de {{ store.usuarios().length }} pessoas</p>
     } @else {
       <div class="empty">
-        <mat-icon class="icon-xl">person_search</mat-icon>
+        <mat-icon class="icon-xl" svgIcon="person_search" />
         <p class="empty-title">Ninguém encontrado</p>
         <p class="empty-text">Tente outro nome ou matrícula.</p>
       </div>

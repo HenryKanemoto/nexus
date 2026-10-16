@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { NexusStore } from '../store/nexus.store';
+import { RouterLink } from '@angular/router';
+import { ProtemStore } from '../store/protem.store';
 import { MatIconModule } from '@angular/material/icon';
 import { Usuario } from '../types/models';
 import { formatDateShort } from '../lib/date-utils';
@@ -8,11 +9,11 @@ import {Modal} from '../components/modal/modal';
 @Component({
   selector: 'app-r3-contas',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatIconModule, Modal],
+  imports: [MatIconModule, Modal, RouterLink],
   templateUrl: './R3Contas.html',
 })
 export class R3Contas {
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
 
   readonly feedbackMensagem = signal<string | null>(null);
   readonly usuarioParaRecusar = signal<Usuario | null>(null);

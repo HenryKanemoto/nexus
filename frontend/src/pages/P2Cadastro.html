@@ -1,8 +1,8 @@
 <div class="min-h-screen px-5 py-8 sm:px-8">
   <header class="mx-auto flex max-w-xl items-center justify-between">
-    <a routerLink="/login" aria-label="Nexus, voltar para o login"><app-logo [tamanho]="30" /></a>
+    <a routerLink="/login" aria-label="Protem, voltar para o login"><app-brand-logo [tamanho]="30" /></a>
     <a routerLink="/login" class="back-link">
-      <mat-icon class="icon-sm">arrow_back</mat-icon>
+      <mat-icon class="icon-sm" svgIcon="arrow_back" />
       Voltar ao login
     </a>
   </header>
@@ -16,7 +16,7 @@
 
     @if (erros().geral) {
       <div role="alert" class="alert alert-danger mt-6">
-        <mat-icon class="icon-sm">error_outline</mat-icon>
+        <mat-icon class="icon-sm" svgIcon="error_outline" />
         <p>{{ erros().geral }}</p>
       </div>
     }
@@ -27,8 +27,8 @@
         <div class="grid grid-cols-2 gap-3">
           @for (opcao of perfis; track opcao.valor) {
             <label
-              class="flex cursor-pointer items-center gap-3 rounded-control border px-4 py-3 transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ink"
-              [class]="perfil() === opcao.valor ? 'border-ink bg-ink text-white' : 'border-line-strong hover:border-ink'"
+              class="flex cursor-pointer items-center gap-3 rounded-control border px-4 py-3 transition-colors has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-primary"
+              [class]="perfil() === opcao.valor ? 'border-primary bg-brand-soft text-primary-strong' : 'border-border-input hover:border-primary'"
             >
               <input
                 type="radio"
@@ -38,7 +38,7 @@
                 [checked]="perfil() === opcao.valor"
                 (change)="perfil.set(opcao.valor)"
               />
-              <mat-icon [class.text-accent]="perfil() === opcao.valor">{{ opcao.icone }}</mat-icon>
+              <mat-icon [class.text-primary]="perfil() === opcao.valor" [svgIcon]="opcao.icone" />
               <span class="text-sm font-medium">{{ opcao.rotulo }}</span>
             </label>
           }
@@ -123,7 +123,7 @@
               class="btn-icon absolute right-0.5 top-0.5"
               [attr.aria-label]="mostrarSenha() ? 'Ocultar senhas' : 'Mostrar senhas'"
             >
-              <mat-icon class="icon-sm">{{ mostrarSenha() ? 'visibility_off' : 'visibility' }}</mat-icon>
+              <mat-icon class="icon-sm" [svgIcon]="mostrarSenha() ? 'visibility_off' : 'visibility'" />
             </button>
           </div>
           @if (erros().senha) {
@@ -154,9 +154,9 @@
       <button type="submit" class="btn btn-primary btn-lg btn-block mt-2">Criar conta</button>
     </form>
 
-    <p class="mt-6 text-center text-sm text-ink-soft">
+    <p class="mt-6 text-center text-sm text-text-muted">
       Já tem conta?
-      <a routerLink="/login" class="font-medium text-ink underline decoration-accent decoration-2 underline-offset-4 hover:decoration-ink">
+      <a routerLink="/login" class="font-medium text-primary-hover underline decoration-primary/40 decoration-2 underline-offset-4 hover:decoration-primary">
         Entrar
       </a>
     </p>

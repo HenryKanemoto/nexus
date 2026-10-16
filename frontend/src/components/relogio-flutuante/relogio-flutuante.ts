@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, computed, inject, input, signal} from '@angular/core';
 import {Router} from '@angular/router';
-import {NexusStore} from '../../store/nexus.store';
+import {ProtemStore} from '../../store/protem.store';
 import {formatDateTime} from '../../lib/date-utils';
 import {MatIconModule} from '@angular/material/icon';
 
@@ -11,7 +11,7 @@ import {MatIconModule} from '@angular/material/icon';
   templateUrl: './relogio-flutuante.html',
 })
 export class RelogioFlutuante {
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
   private readonly router = inject(Router);
 
   /** No celular, sobe o botão para não ficar em cima da navegação inferior. */

@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, computed, inject, signal} from '@angular/core';
 import {iconeCategoria, plural} from '../lib/categoria-utils';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {NexusStore} from '../store/nexus.store';
+import {ProtemStore} from '../store/protem.store';
 import {MatIconModule} from '@angular/material/icon';
 import {calculateDiasAtraso, formatDateShort} from '../lib/date-utils';
 import {ItemThumb} from '../components/item-thumb/item-thumb';
@@ -15,7 +15,7 @@ import {ItemThumb} from '../components/item-thumb/item-thumb';
 export class R6Devolucao {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  readonly store = inject(NexusStore);
+  readonly store = inject(ProtemStore);
 
   readonly comDefeito = signal(false);
   readonly descricaoDefeito = signal('');
@@ -62,7 +62,7 @@ export class R6Devolucao {
 
     this.erroValidacao.set(null);
     if (this.comDefeito() && !this.descricaoDefeito().trim()) {
-      this.erroValidacao.set('Por favor, informe a descrição do defeito identificado no equipamento.');
+      this.erroValidacao.set('Descreva a avaria para registrar a ocorrência.');
       return;
     }
 

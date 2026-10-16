@@ -8,14 +8,12 @@ import {Item} from '../../types/models';
   selector: 'app-item-thumb',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatIconModule],
-  host: {class: 'flex items-center justify-center overflow-hidden bg-sunken text-ink-soft'},
+  host: {class: 'flex items-center justify-center overflow-hidden bg-brand-soft text-text-muted'},
   template: `
     @if (item().foto; as foto) {
       <img [src]="foto" [alt]="item().nome" class="size-full object-cover" loading="lazy" />
     } @else {
-      <mat-icon [style.font-size.px]="tamanhoIcone()" [style.width.px]="tamanhoIcone()" [style.height.px]="tamanhoIcone()">
-        {{ icone() }}
-      </mat-icon>
+      <mat-icon [style.font-size.px]="tamanhoIcone()" [style.width.px]="tamanhoIcone()" [style.height.px]="tamanhoIcone()" [svgIcon]="icone()" />
     }
   `,
 })
