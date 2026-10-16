@@ -12,7 +12,7 @@
   <header class="page-header">
     <div>
       <h1 class="page-title">Meus empréstimos</h1>
-      <p class="page-subtitle">Acompanhe pedidos em análise, itens com você e o que já foi encerrado.</p>
+      <p class="page-subtitle">Pedidos, itens com você e histórico.</p>
     </div>
     <a routerLink="/catalogo" class="btn btn-primary self-start sm:self-auto">
       <mat-icon class="icon-sm" svgIcon="add" />
@@ -47,12 +47,11 @@
           }
           <div class="min-w-0 flex-1">
             <p class="font-semibold">{{ item?.nome }}</p>
-            <p class="mt-0.5 text-sm text-text-muted">
-              Aprovado às {{ formatarHora(solic.avaliadoEm || solic.criadoEm) }} · retire no setor de materiais antes do fim do dia
+            <p class="mt-0.5 text-sm text-text-muted" title="Retire no setor de materiais antes do fim do dia, senão o pedido expira.">
+              Aprovado às {{ formatarHora(solic.avaliadoEm || solic.criadoEm) }}
             </p>
           </div>
-          <span class="inline-flex shrink-0 items-center gap-1.5 self-start rounded-full bg-reservado-bg px-3 py-1 text-xs font-semibold text-reservado sm:self-auto">
-            <mat-icon class="icon-xs" svgIcon="schedule" />
+          <span class="inline-flex shrink-0 self-start rounded-full bg-reservado-bg px-2.5 py-0.5 text-xs font-medium text-reservado sm:self-auto">
             Retire hoje
           </span>
         </li>
@@ -68,21 +67,15 @@
           <div class="min-w-0 flex-1">
             <p class="font-semibold">{{ item?.nome }}</p>
             <p class="mt-0.5 text-sm text-text-muted">
-              Em análise · {{ getTempoDecorrido(solic.criadoEm) }} · devolução pretendida {{ formatarData(solic.devolucaoDesejada) }}
+              Em análise · {{ getTempoDecorrido(solic.criadoEm) }} · até {{ formatarData(solic.devolucaoDesejada) }}
             </p>
           </div>
           <div class="shrink-0">
             @if (solic.lembreteEnviadoEm) {
-              <span class="inline-flex items-center gap-1.5 text-sm text-ok">
-                <mat-icon class="icon-sm" svgIcon="done" />
-                Lembrete enviado
-              </span>
+              <span class="text-sm text-text-muted">Lembrete enviado</span>
             } @else if (podeLembrar) {
               <!-- RN10: liberado após 2 h sem análise, uma única vez -->
-              <button type="button" (click)="lembrarResponsavel(solic.id)" class="btn btn-secondary btn-sm">
-                <mat-icon class="icon-sm" svgIcon="notifications_active" />
-                Lembrar responsável
-              </button>
+              <button type="button" (click)="lembrarResponsavel(solic.id)" class="btn btn-ghost btn-sm">Enviar lembrete</button>
             } @else {
               <span class="text-xs text-text-muted" title="Disponível 2 horas depois do pedido">
                 Lembrete liberado em {{ getHorasRestantesParaLembrete(solic.criadoEm) }}
@@ -113,10 +106,7 @@
             <app-item-thumb [item]="item" class="size-14 shrink-0 rounded-control" />
           }
           <div class="min-w-0 flex-1">
-            <p class="flex flex-wrap items-center gap-2 font-semibold">
-              {{ item?.nome }}
-              <span class="tag">{{ item?.patrimonio }}</span>
-            </p>
+            <p class="font-semibold">{{ item?.nome }}</p>
             <p class="mt-0.5 text-sm text-text-muted">Retirado em {{ formatarData(emp.retiradoEm) }}</p>
           </div>
           <div class="shrink-0 sm:text-right">
@@ -125,8 +115,7 @@
               {{ formatarData(emp.devolucaoPrevista) }}
             </p>
             @if (estaAtrasado) {
-              <p class="mt-1 inline-flex items-center gap-1 rounded-full bg-danger px-2.5 py-0.5 text-xs font-semibold text-white">
-                <mat-icon class="icon-xs" svgIcon="warning" />
+              <p class="mt-1 inline-flex rounded-full bg-atrasado-bg px-2.5 py-0.5 text-xs font-medium text-atrasado">
                 Atrasado há {{ plural(emp.diasAtraso, 'dia') }}
               </p>
             } @else {
@@ -152,17 +141,12 @@
           @let sit = situacoes[hist.situacaoFinal];
           <li class="flex flex-col gap-2 px-4 py-3.5 sm:flex-row sm:items-center sm:gap-4 sm:px-5">
             <div class="min-w-0 flex-1">
-              <p class="font-medium">{{ hist.item?.nome || 'Equipamento' }}</p>
-              <p class="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-text-muted">
-                <span class="font-mono">{{ hist.item?.patrimonio }}</span>
-                <span>{{ formatarData(hist.dataEvento) }}</span>
-                @if (hist.detalhe) {
-                  <span>· {{ hist.detalhe }}</span>
-                }
+              <p class="font-medium">{{ hist.item?.nome || 'Item' }}</p>
+              <p class="mt-0.5 text-sm text-text-muted">
+                {{ formatarData(hist.dataEvento) }}@if (hist.detalhe) { · {{ hist.detalhe }}}
               </p>
             </div>
-            <span class="inline-flex shrink-0 items-center gap-1.5 self-start rounded-full px-2.5 py-0.5 text-xs font-medium sm:self-auto {{ sit.classe }}">
-              <mat-icon class="icon-xs" [svgIcon]="sit.icone" />
+            <span class="inline-flex shrink-0 self-start rounded-full px-2.5 py-0.5 text-xs font-medium sm:self-auto {{ sit.classe }}">
               {{ hist.rotuloSituacao }}
             </span>
           </li>
