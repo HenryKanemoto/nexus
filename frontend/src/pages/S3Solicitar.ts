@@ -209,7 +209,7 @@ export class S3Solicitar {
       // Redireciona para /meus-emprestimos com a aba 'pendentes' ativa e mensagem de sucesso
       this.router.navigate(['/meus-emprestimos'], {
         queryParams: { aba: 'pendentes' },
-        state: { sucesso: 'Solicitação enviada com sucesso! Aguarde a aprovação do responsável.' },
+        state: { sucesso: 'Solicitação enviada com sucesso! Aguarde a aprovação do responsável.', },
       });
     } else {
       this.mensagemErro.set(resultado.mensagem);

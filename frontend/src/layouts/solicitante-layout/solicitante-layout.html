@@ -59,6 +59,15 @@
                 <mat-icon class="icon-sm text-text-muted" svgIcon="person_outline" />
                 Meu perfil
               </a>
+              <a
+                routerLink="/codigos"
+                (click)="menuAberto.set(false)"
+                role="menuitem"
+                class="flex items-center gap-2.5 px-4 py-2.5 text-sm hover:bg-brand-soft"
+              >
+                <mat-icon class="icon-sm text-text-muted" svgIcon="tag" />
+                Meus Códigos
+              </a>
               <button
                 type="button"
                 (click)="sair()"

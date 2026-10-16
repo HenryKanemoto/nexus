@@ -33,6 +33,7 @@ export class SolicitanteLayout {
     {rotulo: 'Empréstimos', rota: '/meus-emprestimos', icone: 'assignment'},
     {rotulo: 'Avisos', rota: '/notificacoes', icone: 'notifications_none'},
     {rotulo: 'Perfil', rota: '/perfil', icone: 'person_outline'},
+    {rotulo: 'Códigos', rota: '/codigos', icone: 'tag'},
   ];
 
   toggleMenu() {

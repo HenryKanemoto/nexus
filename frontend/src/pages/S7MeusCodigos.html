@@ -1,0 +1,41 @@
+<div class="page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">Meus códigos</h1>
+      <p class="page-subtitle">
+        Códigos de autenticação para retirada dos itens.
+      </p>
+    </div>
+    <a routerLink="/catalogo" class="btn btn-primary self-start sm:self-auto">
+      <mat-icon class="icon-sm" svgIcon="add" />
+      Novo pedido
+    </a>
+  </header>
+
+  <ul class="flex flex-col gap-3">
+    @for (emp of listaEmprestimosAtivos(); track emp.id) { @let item =
+    getItem(emp.itemId);
+    <li class="card flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:p-5">
+      @if (item) {
+      <app-item-thumb [item]="item" class="size-14 shrink-0 rounded-control" />
+      }
+      <div class="min-w-0 flex-1">
+        <p class="font-semibold">{{ item?.nome }}</p>
+        <p class="mt-0.5 text-sm text-text-muted">
+          Retirado em {{ formatarData(emp.retiradoEm) }}
+        </p>
+      </div>
+      <div class="shrink-0 sm:text-right">
+        <p class="text-xs text-text-muted">Código de Retirada:</p>
+        <p class="font-display text-lg font-semibold text-[#f59e0b]">Código</p>
+      </div>
+    </li>
+    } @empty {
+    <li class="card empty">
+      <mat-icon class="icon-xl" svgIcon="check_circle_outline" />
+      <p class="empty-title">Nenhum código gerado</p>
+      <p class="empty-text">Você não precisa retirar nenhum material</p>
+    </li>
+    }
+  </ul>
+</div>

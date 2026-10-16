@@ -69,6 +69,11 @@ export const routes: Routes = [
         title: 'Perfil · Protem',
         loadComponent: () => import('../pages/S6Perfil').then((m) => m.S6Perfil),
       },
+      {
+        path: 'codigos',
+        title: 'Meus códigos · Protem',
+        loadComponent: () => import('../pages/S7MeusCodigos').then((m) => m.S7MeusCodigos),
+      },
     ],
   },
 
