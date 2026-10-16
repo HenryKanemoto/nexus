@@ -21,12 +21,14 @@
 
   <header class="page-header">
     <div>
-      <p class="page-eyebrow">{{ store.itensCatalogo().length }} itens disponíveis</p>
-      <h1 class="page-title mt-1">Catálogo</h1>
-      <p class="page-subtitle">Escolha um equipamento para ver os detalhes e pedir emprestado.</p>
+      <h1 class="page-title">Catálogo</h1>
+      <p class="page-subtitle">{{ plural(store.itensCatalogo().length, 'item disponível', 'itens disponíveis') }}</p>
     </div>
+  </header>
 
-    <div class="input-group w-full sm:w-80">
+  <!-- Busca sempre visível; categorias atrás do botão Filtros -->
+  <div class="flex gap-2">
+    <div class="input-group flex-1 sm:max-w-sm">
       <mat-icon class="icon-sm" svgIcon="search" />
       <input
         type="search"
@@ -37,10 +39,20 @@
         aria-label="Buscar no catálogo"
       />
     </div>
-  </header>
+    <button
+      type="button"
+      (click)="filtrosAbertos.set(!filtrosAbertos())"
+      class="btn btn-secondary shrink-0"
+      [attr.aria-expanded]="filtrosAbertos()"
+      aria-controls="filtros-catalogo"
+    >
+      <mat-icon class="icon-sm" svgIcon="tune" />
+      {{ categoriaAtual() ? categoriaAtual() : 'Filtros' }}
+    </button>
+  </div>
 
-  <!-- Filtro por categoria -->
-  <div class="sem-rolagem -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0" role="group" aria-label="Filtrar por categoria">
+  @if (filtrosAbertos()) {
+  <div id="filtros-catalogo" class="sem-rolagem -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0" role="group" aria-label="Filtrar por categoria">
     @for (opcao of filtros(); track opcao.id) {
       <button
         type="button"
@@ -58,6 +70,7 @@
       </button>
     }
   </div>
+  }
 
   @if (itensFiltrados().length > 0) {
     <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -68,17 +81,10 @@
             [routerLink]="['/item', item.id]"
             class="card group flex h-full flex-col overflow-hidden transition-colors hover:border-primary"
           >
-            <div class="relative">
-              <app-item-thumb [item]="item" [tamanhoIcone]="44" class="aspect-[16/10] transition-colors group-hover:bg-brand-soft" />
-              <span class="tag absolute left-3 top-3 bg-surface">{{ item.patrimonio }}</span>
-            </div>
+            <app-item-thumb [item]="item" [tamanhoIcone]="44" class="aspect-[16/10]" />
             <div class="flex flex-1 flex-col gap-1 p-4">
               <h2 class="font-sans text-[0.9375rem] font-semibold leading-snug tracking-normal">{{ item.nome }}</h2>
-              <p class="text-sm text-text-muted">{{ cat?.nome || 'Geral' }}</p>
-              <p class="mt-auto flex items-center gap-1.5 pt-3 text-xs text-text-muted">
-                <mat-icon class="icon-xs" svgIcon="schedule" />
-                até {{ plural(cat?.prazoMaxDias, 'dia') }} de empréstimo
-              </p>
+              <p class="text-sm text-text-muted">{{ cat?.nome || 'Geral' }} · até {{ plural(cat?.prazoMaxDias, 'dia') }}</p>
             </div>
           </a>
         </li>
