@@ -62,7 +62,7 @@ export class R6Devolucao {
 
     this.erroValidacao.set(null);
     if (this.comDefeito() && !this.descricaoDefeito().trim()) {
-      this.erroValidacao.set('Por favor, informe a descrição do defeito identificado no equipamento.');
+      this.erroValidacao.set('Descreva a avaria para registrar a ocorrência.');
       return;
     }
 
