@@ -1,6 +1,10 @@
-# Nexus
+# Protem
 
-Sistema de empréstimo de equipamentos escolares: alunos e professores pedem itens pelo catálogo, e o responsável pelo acervo aprova, registra a retirada e a devolução pelo QR code de cada item.
+**Plataforma Web de Empréstimos.** *PROTEM: Plataforma Web para Gerenciamento de Empréstimos de Itens em Instituições Acadêmicas.*
+
+Alunos e professores pedem itens (equipamentos e materiais) pelo catálogo, e o responsável pelo acervo aprova, registra a retirada e a devolução pelo QR code de cada item. Projeto Integrador do curso de Programador Full Stack (SENAI Macapá).
+
+> O projeto se chamava **Nexus**. Alguns nomes técnicos ainda guardam o nome antigo, como o banco `nexus_db` e o prefixo `NX-` dos códigos de patrimônio e QR.
 
 | Pasta | Stack | Porta |
 |-------|-------|-------|
@@ -175,7 +179,7 @@ frontend/src/
 ├── components/     peças reutilizáveis: modal, status-badge, item-thumb, qr-code, logo...
 ├── environments/   escolha da fonte de dados (local ou api)
 ├── store/
-│   ├── nexus.store.ts   fachada usada pelas telas (estado + regras)
+│   ├── protem.store.ts  fachada usada pelas telas (estado + regras)
 │   ├── fonte-de-dados/  FonteLocal (só navegador) e FonteApi (itens no back-end)
 │   ├── regras/          regras de negócio em funções puras, por assunto, com testes
 │   ├── demo-data.ts     dados iniciais de demonstração
