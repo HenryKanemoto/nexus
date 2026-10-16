@@ -100,6 +100,15 @@ describe('regras de solicitação', () => {
       expect(estado.notificacoes[0]).toMatchObject({usuarioId: 'aluna', tipo: 'aprovacao'});
     });
 
+    it('aprovar gera o código de retirada e avisa só quem pediu', () => {
+      const s = estadoDeTeste({solicitacoes: [solicitacao('p', 'a1')]});
+      const {estado} = aprovarPedido(s, 'p', 'resp');
+      const codigo = buscar.solicitacao(estado, 'p').codigoRetirada!;
+      expect(codigo).toMatch(/^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{6}$/);
+      const comCodigo = estado.notificacoes.filter((n) => n.mensagem.includes(codigo));
+      expect(comCodigo.map((n) => n.usuarioId)).toEqual(['aluna']);
+    });
+
     it('não aprova duas vezes', () => {
       const s = estadoDeTeste({solicitacoes: [solicitacao('p', 'a1', {status: 'aprovada'})]});
       expect(aprovarPedido(s, 'p', 'resp').resultado.sucesso).toBe(false);

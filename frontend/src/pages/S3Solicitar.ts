@@ -5,7 +5,6 @@ import {MatIconModule} from '@angular/material/icon';
 import {addDays, formatDateShort, toDateInputValue} from '../lib/date-utils';
 import {iconeCategoria, plural} from '../lib/categoria-utils';
 import {ItemThumb} from '../components/item-thumb/item-thumb';
-import { GeradorCodigo } from '../services/gerador-codigo.service';
 
 interface DiaCalendario {
   dataIso: string;

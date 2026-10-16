@@ -61,4 +61,10 @@ describe('seed de demonstração', () => {
   it('usa só dados fictícios do domínio da escola', () => {
     expect(seed.usuarios.every((u) => u.email.endsWith('@escola.edu.br'))).toBe(true);
   });
+
+  it('todo pedido aprovado já tem código de retirada', () => {
+    const aprovados = seed.solicitacoes.filter((s) => s.status === 'aprovada');
+    expect(aprovados.length).toBeGreaterThan(0);
+    expect(aprovados.every((s) => /^[A-Z2-9]{6}$/.test(s.codigoRetirada ?? ''))).toBe(true);
+  });
 });

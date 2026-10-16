@@ -241,6 +241,7 @@ export function getInitialDemoState(): ProtemState {
       status: 'aprovada',
       criadoEm: em(0, 8, 10),
       avaliadoEm: em(0, 8, 30),
+      codigoRetirada: 'K7PM4X',
     },
     {
       id: 'solic-02',

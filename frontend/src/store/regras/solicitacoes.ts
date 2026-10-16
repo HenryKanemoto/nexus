@@ -1,7 +1,7 @@
 import {addDays, differenceInHours, formatDateShort, parseDate} from '../../lib/date-utils';
-import { GeradorCodigo } from '../../services/gerador-codigo.service';
 import {Item, Solicitacao, StatusItem, Usuario} from '../../types/models';
 import {ProtemState, ResultadoAcao, Transicao, novaNotificacao, responsaveis} from '../estado';
+import {codigosEmUso, gerarCodigoRetirada} from './codigos';
 
 export interface PermissaoSolicitacao {
   pode: boolean;
@@ -160,6 +160,7 @@ export function solicitarEmprestimo(
 /**
  * RN01 & RN04: Aprovado o pedido, a retirada deve acontecer no mesmo dia;
  * se o dia terminar sem retirada, expira. Item passa para 'reservado'.
+ * Gera o código de retirada que só quem pediu recebe (ver ./codigos).
  */
 export function aprovarPedido(s: ProtemState, solicitacaoId: string, responsavelId: string): Transicao<ResultadoAcao> {
   const solic = s.solicitacoes.find((sol) => sol.id === solicitacaoId);
@@ -167,7 +168,7 @@ export function aprovarPedido(s: ProtemState, solicitacaoId: string, responsavel
   if (solic.status !== 'pendente') return {estado: s, resultado: {sucesso: false, mensagem: 'Solicitação já foi avaliada.'}};
 
   const item = s.itens.find((i) => i.id === solic.itemId);
-  const codigoRetirada = GeradorCodigo.gerar();
+  const codigoRetirada = gerarCodigoRetirada(codigosEmUso(s));
   const notif = novaNotificacao(
     solic.solicitanteId,
     'aprovacao',
