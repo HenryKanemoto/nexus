@@ -1,0 +1,14 @@
+{
+  "name": "Protem · Plataforma Web de Empréstimos",
+  "short_name": "Protem",
+  "description": "Empréstimo de itens em escolas e instituições acadêmicas.",
+  "lang": "pt-BR",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F6F8FC",
+  "theme_color": "#0E1A3A",
+  "icons": [
+    {"src": "brand/protem_logos/protem_3_prazo_icone.svg", "sizes": "any", "type": "image/svg+xml"},
+    {"src": "brand/protem_logos/protem_3_prazo_icone.png", "sizes": "1024x1024", "type": "image/png"}
+  ]
+}
